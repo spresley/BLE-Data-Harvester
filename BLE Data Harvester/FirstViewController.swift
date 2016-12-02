@@ -9,11 +9,19 @@
 import UIKit
 import CoreBluetooth
 
-var centralManager:CBCentralManager!
-var sensorTag:CBPeripheral?
+class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDelegate {
 
-class FirstViewController: UIViewController {
-
+    // define our scanning parameters
+    let timerPauseInterval:TimeInterval = 10.0
+    let timerScanInterval:TimeInterval = 2.0
+    var keepScanning = false
+    var pauseScan = false
+    
+    var centralManager:CBCentralManager!
+    var sensorTag:CBPeripheral?
+    var lightLevelCharacteristic:CBCharacteristic?
+    var activityLevelCharacteristic:CBCharacteristic?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
@@ -24,28 +32,51 @@ class FirstViewController: UIViewController {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-
-
-}
-
-func centralManagerDidUpdateState(central: CBCentralManager){
-    switch central.state {
-    case .PoweredOn:
-        // 1
-        keepScanning = true
-        // 2
-        _ = NSTimer(timeInterval: timerScanInterval, target: self, selector: #selector(pauseScan), userInfo: nil, repeats: false)
-        // 3
-        centralManager.scanForPeripheralsWithServices(nil, options: nil)
-    case .PoweredOff:
-        state = "Bluetooth on this device is currently powered off."
-    case .Unsupported:
-        state = "This device does not support Bluetooth Low Energy."
-    case .Unauthorized:
-        state = "This app is not authorized to use Bluetooth Low Energy."
-    case .Resetting:
-        state = "The BLE Manager is resetting; a state update is pending."
-    case .Unknown:
-        state = "The state of the BLE Manager is unknown."
+    
+    func centralManagerDidUpdateState(_ central: CBCentralManager) {
+        var showAlert = true
+        var message = ""
+        
+        switch central.state {
+        case .poweredOff:
+            message = "Bluetooth on this device is currently powered off."
+        case .unsupported:
+            message = "This device does not support Bluetooth Low Energy."
+        case .unauthorized:
+            message = "This app is not authorized to use Bluetooth Low Energy."
+        case .resetting:
+            message = "The BLE Manager is resetting; a state update is pending."
+        case .unknown:
+            message = "The state of the BLE Manager is unknown."
+        case .poweredOn:
+            showAlert = false
+            message = "Bluetooth LE is turned on and ready for communication."
+            
+            print(message)
+            keepScanning = true
+            _ = Timer(timeInterval: timerScanInterval, target: self, selector: #selector(getter: pauseScan), userInfo: nil, repeats: false)
+            
+            // Initiate Scan for Peripherals
+            //Option 1: Scan for all devices
+            let roomMonitorServiceUUID = CBUUID(string: Device.RoomMonitorServiceUUID)
+            centralManager.scanForPeripherals(withServices: [roomMonitorServiceUUID], options: nil)
+            
+            // Option 2: Scan for devices that have the service you're interested in...
+            //let sensorTagAdvertisingUUID = CBUUID(string: Device.SensorTagAdvertisingUUID)
+            //print("Scanning for SensorTag adverstising with UUID: \(sensorTagAdvertisingUUID)")
+            //centralManager.scanForPeripherals(withServices: [sensorTagAdvertisingUUID], options: nil)
+            
+        }
+        
+        if showAlert {
+            let alertController = UIAlertController(title: "Central Manager State", message: message, preferredStyle: UIAlertControllerStyle.alert)
+            let okAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.cancel, handler: nil)
+            alertController.addAction(okAction)
+            self.show(alertController, sender: self)
+        }
     }
+
+
 }
+
+
