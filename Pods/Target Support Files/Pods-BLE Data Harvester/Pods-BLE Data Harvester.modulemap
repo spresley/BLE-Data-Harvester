@@ -1,0 +1,6 @@
+framework module Pods_BLE_Data_Harvester {
+  umbrella header "Pods-BLE Data Harvester-umbrella.h"
+
+  export *
+  module * { export * }
+}

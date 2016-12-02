@@ -15,6 +15,9 @@
 		6703D0831DF214EB005220CC /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6703D0811DF214EB005220CC /* LaunchScreen.storyboard */; };
 		6703D08E1DF214EB005220CC /* BLE_Data_HarvesterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6703D08D1DF214EB005220CC /* BLE_Data_HarvesterTests.swift */; };
 		6703D0991DF214EB005220CC /* BLE_Data_HarvesterUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6703D0981DF214EB005220CC /* BLE_Data_HarvesterUITests.swift */; };
+		9429E5DA2E694619D3A87C88 /* Pods_BLE_Data_HarvesterUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5D38BE2A45A37B0864AF1354 /* Pods_BLE_Data_HarvesterUITests.framework */; };
+		B680C29F02EA7F7AC68156A1 /* Pods_BLE_Data_HarvesterTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F1181EFAFAB06B512533764 /* Pods_BLE_Data_HarvesterTests.framework */; };
+		F38639A14ECBAAB91FA5B20A /* Pods_BLE_Data_Harvester.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA5BE9288338DC569A94D1A0 /* Pods_BLE_Data_Harvester.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -35,6 +38,11 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		1EC0A5396E6B65C88FC5943F /* Pods-BLE Data HarvesterUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BLE Data HarvesterUITests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-BLE Data HarvesterUITests/Pods-BLE Data HarvesterUITests.debug.xcconfig"; sourceTree = "<group>"; };
+		3F1181EFAFAB06B512533764 /* Pods_BLE_Data_HarvesterTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BLE_Data_HarvesterTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		54DF17604FCA1940BE551415 /* Pods-BLE Data Harvester.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BLE Data Harvester.release.xcconfig"; path = "Pods/Target Support Files/Pods-BLE Data Harvester/Pods-BLE Data Harvester.release.xcconfig"; sourceTree = "<group>"; };
+		5D38BE2A45A37B0864AF1354 /* Pods_BLE_Data_HarvesterUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BLE_Data_HarvesterUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		5EE5E64D640BA97D0DFCFC7D /* Pods-BLE Data HarvesterUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BLE Data HarvesterUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-BLE Data HarvesterUITests/Pods-BLE Data HarvesterUITests.release.xcconfig"; sourceTree = "<group>"; };
 		6703D0731DF214EB005220CC /* BLE Data Harvester.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "BLE Data Harvester.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6703D0761DF214EB005220CC /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		6703D0781DF214EB005220CC /* FirstViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstViewController.swift; sourceTree = "<group>"; };
@@ -49,6 +57,10 @@
 		6703D0941DF214EB005220CC /* BLE Data HarvesterUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "BLE Data HarvesterUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6703D0981DF214EB005220CC /* BLE_Data_HarvesterUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLE_Data_HarvesterUITests.swift; sourceTree = "<group>"; };
 		6703D09A1DF214EB005220CC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A35B1B2F42526347435986F3 /* Pods-BLE Data HarvesterTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BLE Data HarvesterTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-BLE Data HarvesterTests/Pods-BLE Data HarvesterTests.release.xcconfig"; sourceTree = "<group>"; };
+		B4C09D880669FE02CDD87DFE /* Pods-BLE Data Harvester.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BLE Data Harvester.debug.xcconfig"; path = "Pods/Target Support Files/Pods-BLE Data Harvester/Pods-BLE Data Harvester.debug.xcconfig"; sourceTree = "<group>"; };
+		DD1165D67839D45FA3FB6DF7 /* Pods-BLE Data HarvesterTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BLE Data HarvesterTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-BLE Data HarvesterTests/Pods-BLE Data HarvesterTests.debug.xcconfig"; sourceTree = "<group>"; };
+		FA5BE9288338DC569A94D1A0 /* Pods_BLE_Data_Harvester.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BLE_Data_Harvester.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,6 +68,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F38639A14ECBAAB91FA5B20A /* Pods_BLE_Data_Harvester.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -63,6 +76,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B680C29F02EA7F7AC68156A1 /* Pods_BLE_Data_HarvesterTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -70,6 +84,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9429E5DA2E694619D3A87C88 /* Pods_BLE_Data_HarvesterUITests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -83,6 +98,8 @@
 				6703D08C1DF214EB005220CC /* BLE Data HarvesterTests */,
 				6703D0971DF214EB005220CC /* BLE Data HarvesterUITests */,
 				6703D0741DF214EB005220CC /* Products */,
+				95CE096A7AD2CBC4B6658625 /* Pods */,
+				9797326267102FE88B22E942 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -128,6 +145,29 @@
 			path = "BLE Data HarvesterUITests";
 			sourceTree = "<group>";
 		};
+		95CE096A7AD2CBC4B6658625 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				B4C09D880669FE02CDD87DFE /* Pods-BLE Data Harvester.debug.xcconfig */,
+				54DF17604FCA1940BE551415 /* Pods-BLE Data Harvester.release.xcconfig */,
+				DD1165D67839D45FA3FB6DF7 /* Pods-BLE Data HarvesterTests.debug.xcconfig */,
+				A35B1B2F42526347435986F3 /* Pods-BLE Data HarvesterTests.release.xcconfig */,
+				1EC0A5396E6B65C88FC5943F /* Pods-BLE Data HarvesterUITests.debug.xcconfig */,
+				5EE5E64D640BA97D0DFCFC7D /* Pods-BLE Data HarvesterUITests.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		9797326267102FE88B22E942 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				FA5BE9288338DC569A94D1A0 /* Pods_BLE_Data_Harvester.framework */,
+				3F1181EFAFAB06B512533764 /* Pods_BLE_Data_HarvesterTests.framework */,
+				5D38BE2A45A37B0864AF1354 /* Pods_BLE_Data_HarvesterUITests.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -135,9 +175,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 6703D09D1DF214EB005220CC /* Build configuration list for PBXNativeTarget "BLE Data Harvester" */;
 			buildPhases = (
+				8086B0E988535311957781FA /* [CP] Check Pods Manifest.lock */,
 				6703D06F1DF214EB005220CC /* Sources */,
 				6703D0701DF214EB005220CC /* Frameworks */,
 				6703D0711DF214EB005220CC /* Resources */,
+				91132BF10FB4570A414A396F /* [CP] Embed Pods Frameworks */,
+				F32F0133617EE55FF77CC6AE /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -152,9 +195,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 6703D0A01DF214EB005220CC /* Build configuration list for PBXNativeTarget "BLE Data HarvesterTests" */;
 			buildPhases = (
+				9D522CD23886CC1E54E6DFC1 /* [CP] Check Pods Manifest.lock */,
 				6703D0851DF214EB005220CC /* Sources */,
 				6703D0861DF214EB005220CC /* Frameworks */,
 				6703D0871DF214EB005220CC /* Resources */,
+				3DE8E84B769DEA833ADA4BD9 /* [CP] Embed Pods Frameworks */,
+				A61ED9208DC50EC23873C915 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -170,9 +216,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 6703D0A31DF214EB005220CC /* Build configuration list for PBXNativeTarget "BLE Data HarvesterUITests" */;
 			buildPhases = (
+				AB79CB4E6395C837C6531749 /* [CP] Check Pods Manifest.lock */,
 				6703D0901DF214EB005220CC /* Sources */,
 				6703D0911DF214EB005220CC /* Frameworks */,
 				6703D0921DF214EB005220CC /* Resources */,
+				640DA1C192CF89ABE8744832 /* [CP] Embed Pods Frameworks */,
+				AD4635302700573B3A497C20 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -260,6 +309,144 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		3DE8E84B769DEA833ADA4BD9 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-BLE Data HarvesterTests/Pods-BLE Data HarvesterTests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		640DA1C192CF89ABE8744832 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-BLE Data HarvesterUITests/Pods-BLE Data HarvesterUITests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		8086B0E988535311957781FA /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		91132BF10FB4570A414A396F /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-BLE Data Harvester/Pods-BLE Data Harvester-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		9D522CD23886CC1E54E6DFC1 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		A61ED9208DC50EC23873C915 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-BLE Data HarvesterTests/Pods-BLE Data HarvesterTests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		AB79CB4E6395C837C6531749 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		AD4635302700573B3A497C20 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-BLE Data HarvesterUITests/Pods-BLE Data HarvesterUITests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		F32F0133617EE55FF77CC6AE /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-BLE Data Harvester/Pods-BLE Data Harvester-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		6703D06F1DF214EB005220CC /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -340,6 +527,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_SUSPICIOUS_MOVES = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -389,6 +577,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_SUSPICIOUS_MOVES = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -415,7 +604,9 @@
 		};
 		6703D09E1DF214EB005220CC /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = B4C09D880669FE02CDD87DFE /* Pods-BLE Data Harvester.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = Y4MW9SBU4B;
 				INFOPLIST_FILE = "BLE Data Harvester/Info.plist";
@@ -428,7 +619,9 @@
 		};
 		6703D09F1DF214EB005220CC /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 54DF17604FCA1940BE551415 /* Pods-BLE Data Harvester.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = Y4MW9SBU4B;
 				INFOPLIST_FILE = "BLE Data Harvester/Info.plist";
@@ -441,6 +634,7 @@
 		};
 		6703D0A11DF214EB005220CC /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = DD1165D67839D45FA3FB6DF7 /* Pods-BLE Data HarvesterTests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -456,6 +650,7 @@
 		};
 		6703D0A21DF214EB005220CC /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = A35B1B2F42526347435986F3 /* Pods-BLE Data HarvesterTests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -471,6 +666,7 @@
 		};
 		6703D0A41DF214EB005220CC /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 1EC0A5396E6B65C88FC5943F /* Pods-BLE Data HarvesterUITests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				DEVELOPMENT_TEAM = Y4MW9SBU4B;
@@ -485,6 +681,7 @@
 		};
 		6703D0A51DF214EB005220CC /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 5EE5E64D640BA97D0DFCFC7D /* Pods-BLE Data HarvesterUITests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				DEVELOPMENT_TEAM = Y4MW9SBU4B;
@@ -516,6 +713,7 @@
 				6703D09F1DF214EB005220CC /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		6703D0A01DF214EB005220CC /* Build configuration list for PBXNativeTarget "BLE Data HarvesterTests" */ = {
 			isa = XCConfigurationList;
@@ -524,6 +722,7 @@
 				6703D0A21DF214EB005220CC /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		6703D0A31DF214EB005220CC /* Build configuration list for PBXNativeTarget "BLE Data HarvesterUITests" */ = {
 			isa = XCConfigurationList;
@@ -532,6 +731,7 @@
 				6703D0A51DF214EB005220CC /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
