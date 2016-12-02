@@ -1,0 +1,6 @@
+framework module Pods_BLE_Data_HarvesterUITests {
+  umbrella header "Pods-BLE Data HarvesterUITests-umbrella.h"
+
+  export *
+  module * { export * }
+}
