@@ -15,12 +15,14 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
     let timerPauseInterval:TimeInterval = 10.0
     let timerScanInterval:TimeInterval = 2.0
     var keepScanning = false
-    var pauseScan = false
+    var pauseScanFlag = false
+    var resumeScanFlag = false
     
     var centralManager:CBCentralManager!
     var sensorTag:CBPeripheral?
     var lightLevelCharacteristic:CBCharacteristic?
     var activityLevelCharacteristic:CBCharacteristic?
+    let sensorTagName = "GH-SensorNode"
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -54,18 +56,12 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
             
             print(message)
             keepScanning = true
-            _ = Timer(timeInterval: timerScanInterval, target: self, selector: #selector(getter: pauseScan), userInfo: nil, repeats: false)
+            _ = Timer(timeInterval: timerScanInterval, target: self, selector: #selector(getter: pauseScanFlag), userInfo: nil, repeats: false)
             
             // Initiate Scan for Peripherals
-            //Option 1: Scan for all devices
             let roomMonitorServiceUUID = CBUUID(string: Device.RoomMonitorServiceUUID)
+            print("Scanning for SensorTag adverstising with UUID: \(roomMonitorServiceUUID)")
             centralManager.scanForPeripherals(withServices: [roomMonitorServiceUUID], options: nil)
-            
-            // Option 2: Scan for devices that have the service you're interested in...
-            //let sensorTagAdvertisingUUID = CBUUID(string: Device.SensorTagAdvertisingUUID)
-            //print("Scanning for SensorTag adverstising with UUID: \(sensorTagAdvertisingUUID)")
-            //centralManager.scanForPeripherals(withServices: [sensorTagAdvertisingUUID], options: nil)
-            
         }
         
         if showAlert {
@@ -75,7 +71,45 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
             self.show(alertController, sender: self)
         }
     }
-
+    
+    func centralManager(_ central: CBCentralManager, didDiscover peripheral: CBPeripheral, advertisementData: [String : Any], rssi RSSI: NSNumber) {
+        print("centralManager didDiscoverPeripheral - CBAdvertisementDataLocalNameKey is \"\(CBAdvertisementDataLocalNameKey)\"")
+        
+        // Retrieve the peripheral name from the advertisement data using the "kCBAdvDataLocalName" key
+        if let peripheralName = advertisementData[CBAdvertisementDataLocalNameKey] as? String {
+            print("NEXT PERIPHERAL NAME: \(peripheralName)")
+            print("NEXT PERIPHERAL UUID: \(peripheral.identifier.uuidString)")
+            
+            if peripheralName == sensorTagName {
+                print("SENSOR TAG FOUND! ADDING NOW!!!")
+                // to save power, stop scanning for other devices
+                keepScanning = false
+                
+                // save a reference to the sensor tag
+                sensorTag = peripheral
+                sensorTag!.delegate = self
+                
+                // Request a connection to the peripheral
+                centralManager.connect(sensorTag!, options: nil)
+            }
+        }
+    }
+    
+    func pauseScan() {
+        // Scanning uses up battery on phone, so pause the scan process for the designated interval.
+        print("*** PAUSING SCAN...")
+        _ = Timer(timeInterval: timerPauseInterval, target: self, selector: #selector(getter: resumeScanFlag), userInfo: nil, repeats: false)
+        centralManager.stopScan()
+    }
+    
+    func resumeScan() {
+        if keepScanning {
+            // Start scanning again...
+            print("*** RESUMING SCAN!")
+            _ = Timer(timeInterval: timerScanInterval, target: self, selector: #selector(getter: pauseScanFlag), userInfo: nil, repeats: false)
+            centralManager.scanForPeripherals(withServices: nil, options: nil)
+        }
+    }
 
 }
 
