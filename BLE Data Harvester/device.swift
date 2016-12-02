@@ -15,7 +15,7 @@ struct Device {
     
     static let RoomMonitorServiceUUID =      "AC8BA2AE-F020-4395-A301-6E833EBD4571"
     static let MostRecentLightLevelUUID =           "AC8B3A9A-F020-4395-A301-6E833EBD4571"
-    static let MostRecentActivityStateUUIN =        "AC8BA6D8-F020-4395-A301-6E833EBD4571"
+    static let MostRecentActivityStateUUID =        "AC8BA6D8-F020-4395-A301-6E833EBD4571"
     static let HistoricalLightLevelUUID =           "8C8794B9-EE0A-4747-B9CB-4E17B11FC3EC"
     static let HistoricalActivityStateUUID =        "8C8765DD-EE0A-4747-B9CB-4E17B11FC3EC"
     static let TimeOfMostRecentMeasurementUUID =    "8C87AEDD-EE0A-4747-B9CB-4E17B11FC3EC"

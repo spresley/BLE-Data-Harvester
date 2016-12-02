@@ -21,7 +21,7 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
     var centralManager:CBCentralManager!
     var sensorTag:CBPeripheral?
     var lightLevelCharacteristic:CBCharacteristic?
-    var activityLevelCharacteristic:CBCharacteristic?
+    var activityStateCharacteristic:CBCharacteristic?
     let sensorTagName = "GH-SensorNode"
     
     override func viewDidLoad() {
@@ -108,6 +108,70 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
             print("*** RESUMING SCAN!")
             _ = Timer(timeInterval: timerScanInterval, target: self, selector: #selector(getter: pauseScanFlag), userInfo: nil, repeats: false)
             centralManager.scanForPeripherals(withServices: nil, options: nil)
+        }
+    }
+    
+    func centralManager(_ central: CBCentralManager, didConnect peripheral: CBPeripheral) {
+        print("**** SUCCESSFULLY CONNECTED TO SENSOR TAG!!!")
+        
+        // Now that we've successfully connected to the SensorTag, let's discover the services.
+        // - NOTE:  we pass nil here to request ALL services be discovered.
+        //          If there was a subset of services we were interested in, we could pass the UUIDs here.
+        //          Doing so saves battery life and saves time.
+        peripheral.discoverServices(nil)
+    }
+    func centralManager(_ central: CBCentralManager, didFailToConnect peripheral: CBPeripheral, error: Error?) {
+        print("**** CONNECTION TO SENSOR TAG FAILED!!!")
+    }
+    
+    func centralManager(_ central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: Error?) {
+        print("**** DISCONNECTED FROM SENSOR TAG!!!")
+        if error != nil {
+            print("****** DISCONNECTION DETAILS: \(error!.localizedDescription)")
+        }
+        sensorTag = nil
+    }
+    
+    func peripheral(_ peripheral: CBPeripheral, didDiscoverServices error: Error?) {
+        if error != nil {
+            print("ERROR DISCOVERING SERVICES: \(error?.localizedDescription)")
+            return
+        }
+        
+        // Core Bluetooth creates an array of CBService objects —- one for each service that is discovered on the peripheral.
+        if let services = peripheral.services {
+            for service in services {
+                print("Discovered service \(service)")
+                // If we found either the temperature or the humidity service, discover the characteristics for those services.
+                if (service.uuid == CBUUID(string: Device.TemperatureServiceUUID)) ||
+                    (service.uuid == CBUUID(string: Device.HumidityServiceUUID)) {
+                    peripheral.discoverCharacteristics(nil, for: service)
+                }
+            }
+        }
+    }
+    
+    func peripheral(_ peripheral: CBPeripheral, didDiscoverCharacteristicsFor service: CBService, error: Error?) {
+        if error != nil {
+            print("ERROR DISCOVERING CHARACTERISTICS: \(error?.localizedDescription)")
+            return
+        }
+        
+        if let characteristics = service.characteristics {
+            
+            for characteristic in characteristics {
+
+                if characteristic.uuid == CBUUID(string: Device.MostRecentLightLevelUUID) {
+                    lightLevelCharacteristic = characteristic
+                    sensorTag?.setNotifyValue(false, for: characteristic)
+                }
+                
+                if characteristic.uuid == CBUUID(string: Device.MostRecentActivityStateUUID) {
+                    // Enable IR Temperature Sensor
+                    activityStateCharacteristic = characteristic
+                    sensorTag?.setNotifyValue(false, for: characteristic)
+                }
+            }
         }
     }
 
