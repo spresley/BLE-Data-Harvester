@@ -11,7 +11,11 @@ import CoreBluetooth
 
 class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDelegate {
 
-    // define our scanning parameters
+    // MARK: Properties
+    @IBOutlet weak var activityLevelLabel: UILabel!
+    @IBOutlet weak var lightLevelLabel: UILabel!
+    
+    // MARK: scanning parameters
     let timerPauseInterval:TimeInterval = 10.0
     let timerScanInterval:TimeInterval = 2.0
     var keepScanning = false
@@ -56,12 +60,12 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
             
             print(message)
             keepScanning = true
-            _ = Timer(timeInterval: timerScanInterval, target: self, selector: #selector(getter: pauseScanFlag), userInfo: nil, repeats: false)
+            //_ = Timer(timeInterval: timerScanInterval, target: self, selector: #selector(getter: pauseScanFlag), userInfo: nil, repeats: false)
             
             // Initiate Scan for Peripherals
             let roomMonitorServiceUUID = CBUUID(string: Device.RoomMonitorServiceUUID)
-            print("Scanning for SensorTag adverstising with UUID: \(roomMonitorServiceUUID)")
-            centralManager.scanForPeripherals(withServices: [roomMonitorServiceUUID], options: nil)
+            print("Scanning for SensorTag adverstising room monitor service \(roomMonitorServiceUUID)")
+            centralManager.scanForPeripherals(withServices: nil, options: nil)
         }
         
         if showAlert {
@@ -98,7 +102,7 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
     func pauseScan() {
         // Scanning uses up battery on phone, so pause the scan process for the designated interval.
         print("*** PAUSING SCAN...")
-        _ = Timer(timeInterval: timerPauseInterval, target: self, selector: #selector(getter: resumeScanFlag), userInfo: nil, repeats: false)
+        //_ = Timer(timeInterval: timerPauseInterval, target: self, selector: #selector(getter: resumeScanFlag), userInfo: nil, repeats: false)
         centralManager.stopScan()
     }
     
@@ -106,7 +110,7 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
         if keepScanning {
             // Start scanning again...
             print("*** RESUMING SCAN!")
-            _ = Timer(timeInterval: timerScanInterval, target: self, selector: #selector(getter: pauseScanFlag), userInfo: nil, repeats: false)
+            //_ = Timer(timeInterval: timerScanInterval, target: self, selector: #selector(getter: pauseScanFlag), userInfo: nil, repeats: false)
             centralManager.scanForPeripherals(withServices: nil, options: nil)
         }
     }
@@ -143,8 +147,7 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
             for service in services {
                 print("Discovered service \(service)")
                 // If we found either the temperature or the humidity service, discover the characteristics for those services.
-                if (service.uuid == CBUUID(string: Device.TemperatureServiceUUID)) ||
-                    (service.uuid == CBUUID(string: Device.HumidityServiceUUID)) {
+                if (service.uuid == CBUUID(string: Device.RoomMonitorServiceUUID)) {
                     peripheral.discoverCharacteristics(nil, for: service)
                 }
             }
@@ -164,13 +167,46 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
                 if characteristic.uuid == CBUUID(string: Device.MostRecentLightLevelUUID) {
                     lightLevelCharacteristic = characteristic
                     sensorTag?.setNotifyValue(false, for: characteristic)
+                    sensorTag?.readValue(for: characteristic)
+                    print("Discovered most recent light level")
                 }
                 
                 if characteristic.uuid == CBUUID(string: Device.MostRecentActivityStateUUID) {
                     // Enable IR Temperature Sensor
                     activityStateCharacteristic = characteristic
                     sensorTag?.setNotifyValue(false, for: characteristic)
+                    sensorTag?.readValue(for: characteristic)
+                    print("Discovered most recent activity level")
                 }
+            }
+        }
+    }
+    
+    func peripheral(_ peripheral: CBPeripheral, didUpdateValueFor characteristic: CBCharacteristic, error: Error?) {
+        if error != nil {
+            print("ERROR ON UPDATING VALUE FOR CHARACTERISTIC: \(characteristic) - \(error?.localizedDescription)")
+            return
+        }
+        
+        // extract the data from the characteristic's value property and display the value based on the characteristic type
+        if let dataBytes = characteristic.value {
+            if characteristic.uuid == CBUUID(string: Device.MostRecentLightLevelUUID) {
+                //update light level
+                let dataLength = dataBytes.count / MemoryLayout<UInt16>.size
+                var value = [UInt16](repeating:0, count: dataLength)
+                (dataBytes as NSData).getBytes(&value, length: dataLength * MemoryLayout<Int16>.size)
+                
+                let rawLightLevel:UInt16 = value[0]
+                lightLevelLabel.text = "\(rawLightLevel)"
+            } else if characteristic.uuid == CBUUID(string: Device.MostRecentActivityStateUUID) {
+                //update activity level
+                
+                let dataLength = dataBytes.count / MemoryLayout<UInt16>.size
+                var value = [UInt16](repeating:0, count: dataLength)
+                (dataBytes as NSData).getBytes(&value, length: dataLength * MemoryLayout<Int16>.size)
+                
+                let rawActivityLevel:UInt16 = value[0]
+                activityLevelLabel.text = "\(rawActivityLevel)"
             }
         }
     }
