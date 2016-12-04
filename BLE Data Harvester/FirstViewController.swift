@@ -32,6 +32,15 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
     var gotLight:Bool = false
     var gotActivity:Bool = false
     
+    // MARK: connection history parameters
+    let gatherDataInterval:TimeInterval = 60.0
+    struct roomSensorNode {
+        var UUID:String
+        var lastConnectionTime:NSDate
+    }
+     
+    var connectionHistory = [roomSensorNode]()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
@@ -92,15 +101,67 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
             
             if peripheralName == sensorTagName {
                 print("SENSOR TAG FOUND! ADDING NOW!!!")
+                
+                let currentTime = NSDate()
+                var foundInHistory = false
+                
                 // to save power, stop scanning for other devices
                 keepScanning = false
                 
+                /*
                 // save a reference to the sensor tag
                 sensorTag = peripheral
                 sensorTag!.delegate = self
                 
                 // Request a connection to the peripheral
                 centralManager.connect(sensorTag!, options: nil)
+                 */
+                
+                for index in 0..<connectionHistory.count {
+                    if connectionHistory[index].UUID == peripheral.identifier.uuidString {
+                        print("Found peripheral in connection history")
+                        print("Checking last connection time")
+                        foundInHistory = true
+                        let connectionTime = connectionHistory[index].lastConnectionTime
+                        let timeoutTime = connectionTime.addingTimeInterval(gatherDataInterval)
+                        if currentTime.compare(timeoutTime as Date) == ComparisonResult.orderedDescending {
+                            print("Current time is later than timeout time. Can collect data again")
+                            // save a reference to the sensor tag
+                            sensorTag = peripheral
+                            sensorTag!.delegate = self
+                            
+                            // Request a connection to the peripheral
+                            centralManager.connect(sensorTag!, options: nil)
+                            
+                            // Update peripheral in to connection history
+                            
+                            let thisPeripheral = roomSensorNode(UUID: peripheral.identifier.uuidString, lastConnectionTime: currentTime)
+                            connectionHistory.append(thisPeripheral)
+                            connectionHistory.remove(at: index)
+                            
+                            
+                        } else {
+                            print("Have scanned this peripheral recently. Ignore.")
+                            keepScanning = true
+                        }
+                    }
+                    
+                }
+                
+                if foundInHistory == false {
+                    print("DIDN'T find peripheral in connection history")
+                    // save a reference to the sensor tag
+                    sensorTag = peripheral
+                    sensorTag!.delegate = self
+                    
+                    // Request a connection to the peripheral
+                    centralManager.connect(sensorTag!, options: nil)
+                    
+                    // Put peripheral in to connection history
+                    
+                    let thisPeripheral = roomSensorNode(UUID: peripheral.identifier.uuidString, lastConnectionTime: currentTime)
+                    connectionHistory.append(thisPeripheral)
+                }
             }
         }
     }
