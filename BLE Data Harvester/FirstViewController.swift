@@ -21,12 +21,16 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
     var keepScanning = false
     var pauseScanFlag = false
     var resumeScanFlag = false
+    var timer = Timer()
     
     var centralManager:CBCentralManager!
     var sensorTag:CBPeripheral?
     var lightLevelCharacteristic:CBCharacteristic?
     var activityStateCharacteristic:CBCharacteristic?
     let sensorTagName = "GH-SensorNode"
+    
+    var gotLight:Bool = false
+    var gotActivity:Bool = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -60,7 +64,9 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
             
             print(message)
             keepScanning = true
-            //_ = Timer(timeInterval: timerScanInterval, target: self, selector: #selector(getter: pauseScanFlag), userInfo: nil, repeats: false)
+            timer = Timer.scheduledTimer(timeInterval: timerScanInterval, target:self, selector: #selector(FirstViewController.pauseScan), userInfo: nil, repeats: false)
+            
+            //(withTimeInterval: timerScanInterval, target: self, selector: #selector(FirstViewController.pauseScan), userInfo: nil, repeats: false)
             
             // Initiate Scan for Peripherals
             let roomMonitorServiceUUID = CBUUID(string: Device.RoomMonitorServiceUUID)
@@ -77,7 +83,7 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
     }
     
     func centralManager(_ central: CBCentralManager, didDiscover peripheral: CBPeripheral, advertisementData: [String : Any], rssi RSSI: NSNumber) {
-        print("centralManager didDiscoverPeripheral - CBAdvertisementDataLocalNameKey is \"\(CBAdvertisementDataLocalNameKey)\"")
+        //print("centralManager didDiscoverPeripheral - CBAdvertisementDataLocalNameKey is \"\(CBAdvertisementDataLocalNameKey)\"")
         
         // Retrieve the peripheral name from the advertisement data using the "kCBAdvDataLocalName" key
         if let peripheralName = advertisementData[CBAdvertisementDataLocalNameKey] as? String {
@@ -102,7 +108,7 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
     func pauseScan() {
         // Scanning uses up battery on phone, so pause the scan process for the designated interval.
         print("*** PAUSING SCAN...")
-        //_ = Timer(timeInterval: timerPauseInterval, target: self, selector: #selector(getter: resumeScanFlag), userInfo: nil, repeats: false)
+        timer = Timer.scheduledTimer(timeInterval: timerPauseInterval, target:self, selector: #selector(FirstViewController.resumeScan), userInfo: nil, repeats: false)
         centralManager.stopScan()
     }
     
@@ -110,7 +116,7 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
         if keepScanning {
             // Start scanning again...
             print("*** RESUMING SCAN!")
-            //_ = Timer(timeInterval: timerScanInterval, target: self, selector: #selector(getter: pauseScanFlag), userInfo: nil, repeats: false)
+            timer = Timer.scheduledTimer(timeInterval: timerScanInterval, target:self, selector: #selector(FirstViewController.pauseScan), userInfo: nil, repeats: false)
             centralManager.scanForPeripherals(withServices: nil, options: nil)
         }
     }
@@ -134,6 +140,7 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
             print("****** DISCONNECTION DETAILS: \(error!.localizedDescription)")
         }
         sensorTag = nil
+        keepScanning = true
     }
     
     func peripheral(_ peripheral: CBPeripheral, didDiscoverServices error: Error?) {
@@ -198,6 +205,14 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
                 
                 let rawLightLevel:UInt16 = value[0]
                 lightLevelLabel.text = "\(rawLightLevel)"
+                print("updated light level")
+                
+                gotLight = true
+                
+                if (gotActivity && gotLight) {
+                    centralManager.cancelPeripheralConnection(sensorTag!)
+                    print("DISCONNECTED FROM PERIPHERAL")
+                }
             } else if characteristic.uuid == CBUUID(string: Device.MostRecentActivityStateUUID) {
                 //update activity level
                 
@@ -207,6 +222,14 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
                 
                 let rawActivityLevel:UInt16 = value[0]
                 activityLevelLabel.text = "\(rawActivityLevel)"
+                print("updated activity level")
+                
+                gotActivity = true
+                
+                if (gotActivity && gotLight) {
+                    centralManager.cancelPeripheralConnection(sensorTag!)
+                    print("GOT DATA: DISCONNECTING FROM PERIPHERAL")
+                }
             }
         }
     }
