@@ -31,6 +31,8 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
     
     var gotLight:Bool = false
     var gotActivity:Bool = false
+    var rawActivityLevel:UInt16 = 0
+    var rawLightLevel:UInt16 = 0
     
     // MARK: connection history parameters
     let gatherDataInterval:TimeInterval = 60.0
@@ -264,7 +266,7 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
                 var value = [UInt16](repeating:0, count: dataLength)
                 (dataBytes as NSData).getBytes(&value, length: dataLength * MemoryLayout<Int16>.size)
                 
-                let rawLightLevel:UInt16 = value[0]
+                rawLightLevel = value[0]
                 lightLevelLabel.text = "\(rawLightLevel)"
                 print("updated light level")
                 
@@ -281,7 +283,7 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
                 var value = [UInt16](repeating:0, count: dataLength)
                 (dataBytes as NSData).getBytes(&value, length: dataLength * MemoryLayout<Int16>.size)
                 
-                let rawActivityLevel:UInt16 = value[0]
+                rawActivityLevel = value[0]
                 activityLevelLabel.text = "\(rawActivityLevel)"
                 print("updated activity level")
                 
