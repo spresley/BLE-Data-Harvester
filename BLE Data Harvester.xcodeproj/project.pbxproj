@@ -15,6 +15,9 @@
 		6703D0831DF214EB005220CC /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6703D0811DF214EB005220CC /* LaunchScreen.storyboard */; };
 		6703D08E1DF214EB005220CC /* BLE_Data_HarvesterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6703D08D1DF214EB005220CC /* BLE_Data_HarvesterTests.swift */; };
 		6703D0991DF214EB005220CC /* BLE_Data_HarvesterUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6703D0981DF214EB005220CC /* BLE_Data_HarvesterUITests.swift */; };
+		6703D0AC1DF22BE3005220CC /* CoreBluetooth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6703D0AB1DF22BE3005220CC /* CoreBluetooth.framework */; };
+		6703D0AE1DF22C31005220CC /* device.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6703D0AD1DF22C31005220CC /* device.swift */; };
+		6703D0B01DF2335E005220CC /* MQTT-config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6703D0AF1DF2335E005220CC /* MQTT-config.swift */; };
 		9429E5DA2E694619D3A87C88 /* Pods_BLE_Data_HarvesterUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5D38BE2A45A37B0864AF1354 /* Pods_BLE_Data_HarvesterUITests.framework */; };
 		B680C29F02EA7F7AC68156A1 /* Pods_BLE_Data_HarvesterTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F1181EFAFAB06B512533764 /* Pods_BLE_Data_HarvesterTests.framework */; };
 		F38639A14ECBAAB91FA5B20A /* Pods_BLE_Data_Harvester.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA5BE9288338DC569A94D1A0 /* Pods_BLE_Data_Harvester.framework */; };
@@ -57,6 +60,9 @@
 		6703D0941DF214EB005220CC /* BLE Data HarvesterUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "BLE Data HarvesterUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6703D0981DF214EB005220CC /* BLE_Data_HarvesterUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLE_Data_HarvesterUITests.swift; sourceTree = "<group>"; };
 		6703D09A1DF214EB005220CC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		6703D0AB1DF22BE3005220CC /* CoreBluetooth.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreBluetooth.framework; path = System/Library/Frameworks/CoreBluetooth.framework; sourceTree = SDKROOT; };
+		6703D0AD1DF22C31005220CC /* device.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = device.swift; sourceTree = "<group>"; };
+		6703D0AF1DF2335E005220CC /* MQTT-config.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "MQTT-config.swift"; sourceTree = "<group>"; };
 		A35B1B2F42526347435986F3 /* Pods-BLE Data HarvesterTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BLE Data HarvesterTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-BLE Data HarvesterTests/Pods-BLE Data HarvesterTests.release.xcconfig"; sourceTree = "<group>"; };
 		B4C09D880669FE02CDD87DFE /* Pods-BLE Data Harvester.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BLE Data Harvester.debug.xcconfig"; path = "Pods/Target Support Files/Pods-BLE Data Harvester/Pods-BLE Data Harvester.debug.xcconfig"; sourceTree = "<group>"; };
 		DD1165D67839D45FA3FB6DF7 /* Pods-BLE Data HarvesterTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BLE Data HarvesterTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-BLE Data HarvesterTests/Pods-BLE Data HarvesterTests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -68,6 +74,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6703D0AC1DF22BE3005220CC /* CoreBluetooth.framework in Frameworks */,
 				F38639A14ECBAAB91FA5B20A /* Pods_BLE_Data_Harvester.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -116,6 +123,8 @@
 		6703D0751DF214EB005220CC /* BLE Data Harvester */ = {
 			isa = PBXGroup;
 			children = (
+				6703D0AD1DF22C31005220CC /* device.swift */,
+				6703D0AF1DF2335E005220CC /* MQTT-config.swift */,
 				6703D0761DF214EB005220CC /* AppDelegate.swift */,
 				6703D0781DF214EB005220CC /* FirstViewController.swift */,
 				6703D07A1DF214EB005220CC /* SecondViewController.swift */,
@@ -161,6 +170,7 @@
 		9797326267102FE88B22E942 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				6703D0AB1DF22BE3005220CC /* CoreBluetooth.framework */,
 				FA5BE9288338DC569A94D1A0 /* Pods_BLE_Data_Harvester.framework */,
 				3F1181EFAFAB06B512533764 /* Pods_BLE_Data_HarvesterTests.framework */,
 				5D38BE2A45A37B0864AF1354 /* Pods_BLE_Data_HarvesterUITests.framework */,
@@ -452,7 +462,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6703D0AE1DF22C31005220CC /* device.swift in Sources */,
 				6703D07B1DF214EB005220CC /* SecondViewController.swift in Sources */,
+				6703D0B01DF2335E005220CC /* MQTT-config.swift in Sources */,
 				6703D0771DF214EB005220CC /* AppDelegate.swift in Sources */,
 				6703D0791DF214EB005220CC /* FirstViewController.swift in Sources */,
 			);
