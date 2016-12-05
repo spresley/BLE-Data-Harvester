@@ -22,13 +22,6 @@ class SecondViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-    @IBAction func connectButtonWasPressed(_ sender: Any) {
-        
-        setupConnection()
-        
-        
-        
-    }
     var mqtt:CocoaMQTT?
     var mqttmessage:CocoaMQTTMessage!
     var topic:String = ""
@@ -40,13 +33,11 @@ class SecondViewController: UIViewController {
         mqtt = CocoaMQTT(clientID: MQTTlogin.clientID, host: MQTTlogin.host, port: MQTTlogin.port)
         mqtt!.username = "use-token-auth"
         mqtt!.password = "test1234"
-        // mqtt.willMessage = CocoaMQTTWill(topic: "/will", message: "dieout")
         mqtt!.keepAlive = 90
         mqtt!.delegate = self
         mqtt!.connect()
     }
-    
-    @IBAction func sendButtonWasPressed(_ sender: Any) {
+    func sendAccelMessage(){
         var message = createAccelMessage(accel_x: 0, accel_y: 0, accel_z: 0, roll: 0, pitch: 0, yaw: 0, lat: 0, lon: 0)
         print("accel message: \(message)")
         
@@ -59,9 +50,22 @@ class SecondViewController: UIViewController {
         mqttmessage = CocoaMQTTMessage.init(topic: topic, string: message)
         
         mqtt!.publish(mqttmessage)
-
-        //mqtt!.publish("chat/room/animals/client/", withString: "test", qos: .qos1)
-
+    }
+    func sendRoomMonitorMessage(){
+        var message = createRoomMonitorMessage(activity_level: 0, light_level: 0)
+        message = "{\"d\":\(message)}"
+        topic = "iot-2/evt/room-data/fmt/json"
+        mqttmessage = CocoaMQTTMessage.init(topic: topic, string: message)
+        
+        mqtt!.publish(mqttmessage)
+    }
+    
+    @IBAction func connectButtonWasPressed(_ sender: Any) {
+        setupConnection()
+    }
+    @IBAction func sendButtonWasPressed(_ sender: Any) {
+        //sendAccelMessage()
+        sendRoomMonitorMessage()
     }
     @IBOutlet weak var connectivityState: UILabel!
     @IBOutlet weak var buttonLabel: UIButton!

@@ -9,6 +9,31 @@
 import Foundation
 
 
+// creates a room monitor message
+func createRoomMonitorMessage(activity_level: Double,
+                              light_level: Double) ->String
+{
+    let jsonObject: NSMutableDictionary = NSMutableDictionary()
+    
+    jsonObject.setValue(activity_level, forKey: "activity_level")
+    jsonObject.setValue(light_level, forKey: "light_level")
+    
+    let jsonData: NSData
+    
+    do {
+        jsonData = try JSONSerialization.data(withJSONObject: jsonObject, options: JSONSerialization.WritingOptions()) as NSData
+        let jsonString = NSString(data: jsonData as Data, encoding: String.Encoding.utf8.rawValue) as! String
+        print("json string = \(jsonString)")
+        return jsonString
+        
+    } catch _ {
+        print ("JSON Failure")
+        return "error"
+    }
+}
+
+
+
 // creates an accel message in the same format as the IBM IOT example for testing
 func createAccelMessage(accel_x: Double,
                         accel_y: Double,
@@ -45,3 +70,4 @@ func createAccelMessage(accel_x: Double,
         return "error"
     }
 }
+
