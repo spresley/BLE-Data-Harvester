@@ -14,6 +14,8 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
     // MARK: Properties
     @IBOutlet weak var activityLevelLabel: UILabel!
     @IBOutlet weak var lightLevelLabel: UILabel!
+    @IBOutlet weak var historyView: UITextView!
+    
     
     // MARK: scanning parameters
     let timerPauseInterval:TimeInterval = 10.0
@@ -40,13 +42,38 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
         var UUID:String
         var lastConnectionTime:NSDate
     }
-     
     var connectionHistory = [roomSensorNode]()
+    //let defaults = UserDefaults.standard
+    
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         centralManager = CBCentralManager(delegate: self, queue: nil)
+        /*if defaults.bool(forKey: "notFirstRun") {
+            print("not the first run")
+            // TODO: Load the history connection array
+        } else {
+            print("the first run")
+            defaults.set(true, forKey: "notFirstRun")
+            // TODO: Init the historic connection array
+        }*/
+        historyView.text = readDataFromStoredConnectionHistoryFile(file: "storedConnectionData.txt")
+    }
+    
+    func readDataFromStoredConnectionHistoryFile(file:String) -> String!{
+        guard let filePath = Bundle.main.path(forResource: file, ofType: "txt")
+            else {
+                return nil
+        }
+        do {
+            let contents = try String(contentsOfFile: filePath, encoding: String.Encoding.ascii)
+            return contents
+        } catch {
+            print("File read error for file \(filePath)")
+            return nil
+        }
     }
 
     override func didReceiveMemoryWarning() {
@@ -141,6 +168,7 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
                             connectionHistory.append(thisPeripheral)
                             connectionHistory.remove(at: index)
                             
+                            // TODO: Store the historic connection array
                             
                         } else {
                             print("Have scanned this peripheral recently. Ignore.")
@@ -163,6 +191,9 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
                     
                     let thisPeripheral = roomSensorNode(UUID: peripheral.identifier.uuidString, lastConnectionTime: currentTime)
                     connectionHistory.append(thisPeripheral)
+                    
+                    // TODO: Store the historic connection array
+                    
                 }
             }
         }
