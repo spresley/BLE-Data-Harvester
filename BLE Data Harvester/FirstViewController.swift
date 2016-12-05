@@ -40,19 +40,76 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
         var UUID:String
         var lastConnectionTime:NSDate
     }
+    
     // TODO: Make this persistant
     var connectionHistory = [roomSensorNode]()
+    var storedData:[[String:String]] = []
+    var columnTitles:[String] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         centralManager = CBCentralManager(delegate: self, queue: nil)
+        
+        /*connectionHistoryWritable = NSArray(contentsOfFile: "storedConnectionHistory.txt")!
+        connectionHistory = connectionHistoryWritable as Array
+        let message = connectionHistory[0].UUID as String
+        
+        let alertController = UIAlertController(title: "Loaded History", message: message, preferredStyle: UIAlertControllerStyle.alert)
+        let okAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.cancel, handler: nil)
+        alertController.addAction(okAction)
+        self.show(alertController, sender: self)*/
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+    
+    // MARK: File/storage handling functions
+    func getStringFieldsForRow(row:String, delimiter:String)-> [String]{
+        return row.components(separatedBy: delimiter)
+    }
+    
+    func convertCSV(file:String){
+        let rows = file.components(separatedBy: "\n")
+        if rows.count > 0 {
+            storedData = []
+            columnTitles = getStringFieldsForRow(row: rows.first!,delimiter:",")
+            for row in rows{
+                let fields = getStringFieldsForRow(row: row,delimiter: ",")
+                if fields.count != columnTitles.count {continue}
+                var dataRow = [String:String]()
+                for (index,field) in fields.enumerated(){
+                    let fieldName = columnTitles[index]
+                    dataRow[fieldName] = field
+                }
+                storedData = storedData+[dataRow]
+            }
+        } else {
+            print("No data in file")
+        }
+    }
+    
+    func printData(){
+        //convertCSV(storedConnectionHistory.txt)
+        var tableString = ""
+        var rowString = ""
+        print("data: \(storedData)")
+        for row in storedData{
+            rowString = ""
+            for fieldName in columnTitles{
+                guard let field = row[fieldName] else{
+                    print("field not found: \(fieldName)")
+                    continue
+                }
+                rowString += String(format:"%@     ",field)
+            }
+            tableString += rowString + "\n"
+        }
+        //textView.text = tableString
+    }
+    
     
     func centralManagerDidUpdateState(_ central: CBCentralManager) {
         var showAlert = true
@@ -110,15 +167,6 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
                 // to save power, stop scanning for other devices
                 keepScanning = false
                 
-                /*
-                // save a reference to the sensor tag
-                sensorTag = peripheral
-                sensorTag!.delegate = self
-                
-                // Request a connection to the peripheral
-                centralManager.connect(sensorTag!, options: nil)
-                 */
-                
                 for index in 0..<connectionHistory.count {
                     if connectionHistory[index].UUID == peripheral.identifier.uuidString {
                         print("Found peripheral in connection history")
@@ -140,8 +188,8 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
                             let thisPeripheral = roomSensorNode(UUID: peripheral.identifier.uuidString, lastConnectionTime: currentTime)
                             connectionHistory.append(thisPeripheral)
                             connectionHistory.remove(at: index)
-                            
-                            
+                            //connectionHistoryWritable = connectionHistory as NSArray
+                            //connectionHistoryWritable.write(toFile: "storedConnectionHistory.txt", atomically: true)
                         } else {
                             print("Have scanned this peripheral recently. Ignore.")
                             keepScanning = true
