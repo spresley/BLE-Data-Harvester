@@ -52,7 +52,9 @@ class SecondViewController: UIViewController {
         mqtt!.publish(mqttmessage)
     }
     func sendRoomMonitorMessage(){
-        var message = createRoomMonitorMessage(activity_level: 0, light_level: 0, time_stamp: "2016")
+        let stringFromDate = Date().iso8601    // "2016-06-18T05:18:27.935Z"
+
+        var message = createRoomMonitorMessage(activity_level: 0, light_level: 0, time_stamp: stringFromDate)
         message = "{\"d\":\(message)}"
         topic = "iot-2/evt/room-data/fmt/json"
         mqttmessage = CocoaMQTTMessage.init(topic: topic, string: message)
@@ -130,3 +132,34 @@ extension SecondViewController: CocoaMQTTDelegate {
     }
     
 }
+
+
+//
+// From: http://stackoverflow.com/questions/28016578/swift-how-to-create-a-date-time-stamp-and-format-as-iso-8601-rfc-3339-utc-tim
+//
+//
+
+extension Date {
+    struct Formatter {
+        static let iso8601: DateFormatter = {
+            let formatter = DateFormatter()
+            formatter.calendar = Calendar(identifier: .iso8601)
+            formatter.locale = Locale(identifier: "en_US_POSIX")
+            formatter.timeZone = TimeZone(secondsFromGMT: 0)
+            formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSXXXXX"
+            return formatter
+        }()
+    }
+    var iso8601: String {
+        return Formatter.iso8601.string(from: self)
+    }
+}
+
+
+extension String {
+    var dateFromISO8601: Date? {
+        return Date.Formatter.iso8601.date(from: self)
+    }
+}
+
+// END FROM
