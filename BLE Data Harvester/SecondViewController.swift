@@ -52,7 +52,7 @@ class SecondViewController: UIViewController {
         mqtt!.publish(mqttmessage)
     }
     func sendRoomMonitorMessage(){
-        var message = createRoomMonitorMessage(activity_level: 0, light_level: 0)
+        var message = createRoomMonitorMessage(activity_level: 0, light_level: 0, time_stamp: "2016")
         message = "{\"d\":\(message)}"
         topic = "iot-2/evt/room-data/fmt/json"
         mqttmessage = CocoaMQTTMessage.init(topic: topic, string: message)
