@@ -40,7 +40,7 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
         var UUID:String
         var lastConnectionTime:NSDate
     }
-     
+    // TODO: Make this persistant
     var connectionHistory = [roomSensorNode]()
     
     override func viewDidLoad() {
