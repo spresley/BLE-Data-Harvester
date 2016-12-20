@@ -34,82 +34,44 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
     var rawActivityLevel:UInt16 = 0
     var rawLightLevel:UInt16 = 0
     
+    var gotHistoricalActivity:Bool = false
+    var gotHistoricalLight:Bool = false
+    var rawHistoricalActivityLevel:UInt16 = 0
+    var rawHistoricalLightLevel:UInt16 = 0
+    var rawHistoricalTime:UInt16 = 0
+    
+    // MARK: Historical data collection
+    struct historicalData {
+        var historicalActivityLevel:UInt16
+        var historicalLightLevel:UInt16
+        var relativeTimeHistoricalMeasurement:UInt16
+        var actualTimeHistoricalMeasurement:Date
+    }
+    
+    var historicalDataTable = [historicalData]()
+    var collectingHistoricalData:Bool = false
+    var currentHistoricalData:historicalData?
+    
     // MARK: connection history parameters
     let gatherDataInterval:TimeInterval = 60.0
     struct roomSensorNode {
         var UUID:String
-        var lastConnectionTime:NSDate
+        var lastConnectionTime:Date
     }
     
     // TODO: Make this persistant
     var connectionHistory = [roomSensorNode]()
-    var storedData:[[String:String]] = []
-    var columnTitles:[String] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         centralManager = CBCentralManager(delegate: self, queue: nil)
-        
-        /*connectionHistoryWritable = NSArray(contentsOfFile: "storedConnectionHistory.txt")!
-        connectionHistory = connectionHistoryWritable as Array
-        let message = connectionHistory[0].UUID as String
-        
-        let alertController = UIAlertController(title: "Loaded History", message: message, preferredStyle: UIAlertControllerStyle.alert)
-        let okAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.cancel, handler: nil)
-        alertController.addAction(okAction)
-        self.show(alertController, sender: self)*/
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
-    // MARK: File/storage handling functions
-    func getStringFieldsForRow(row:String, delimiter:String)-> [String]{
-        return row.components(separatedBy: delimiter)
-    }
-    
-    func convertCSV(file:String){
-        let rows = file.components(separatedBy: "\n")
-        if rows.count > 0 {
-            storedData = []
-            columnTitles = getStringFieldsForRow(row: rows.first!,delimiter:",")
-            for row in rows{
-                let fields = getStringFieldsForRow(row: row,delimiter: ",")
-                if fields.count != columnTitles.count {continue}
-                var dataRow = [String:String]()
-                for (index,field) in fields.enumerated(){
-                    let fieldName = columnTitles[index]
-                    dataRow[fieldName] = field
-                }
-                storedData = storedData+[dataRow]
-            }
-        } else {
-            print("No data in file")
-        }
-    }
-    
-    func printData(){
-        //convertCSV(storedConnectionHistory.txt)
-        var tableString = ""
-        var rowString = ""
-        print("data: \(storedData)")
-        for row in storedData{
-            rowString = ""
-            for fieldName in columnTitles{
-                guard let field = row[fieldName] else{
-                    print("field not found: \(fieldName)")
-                    continue
-                }
-                rowString += String(format:"%@     ",field)
-            }
-            tableString += rowString + "\n"
-        }
-        //textView.text = tableString
-    }
-    
     
     func centralManagerDidUpdateState(_ central: CBCentralManager) {
         var showAlert = true
@@ -161,12 +123,13 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
             if peripheralName == sensorTagName {
                 print("SENSOR TAG FOUND! ADDING NOW!!!")
                 
-                let currentTime = NSDate()
+                let currentTime = Date()
                 var foundInHistory = false
                 
                 // to save power, stop scanning for other devices
                 keepScanning = false
                 
+                // Check if sensorNode has been scanned recently
                 for index in 0..<connectionHistory.count {
                     if connectionHistory[index].UUID == peripheral.identifier.uuidString {
                         print("Found peripheral in connection history")
@@ -174,7 +137,7 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
                         foundInHistory = true
                         let connectionTime = connectionHistory[index].lastConnectionTime
                         let timeoutTime = connectionTime.addingTimeInterval(gatherDataInterval)
-                        if currentTime.compare(timeoutTime as Date) == ComparisonResult.orderedDescending {
+                        if currentTime.compare(timeoutTime) == ComparisonResult.orderedDescending {
                             print("Current time is later than timeout time. Can collect data again")
                             // save a reference to the sensor tag
                             sensorTag = peripheral
@@ -241,6 +204,7 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
         //          Doing so saves battery life and saves time.
         peripheral.discoverServices(nil)
     }
+   
     func centralManager(_ central: CBCentralManager, didFailToConnect peripheral: CBPeripheral, error: Error?) {
         print("**** CONNECTION TO SENSOR TAG FAILED!!!")
     }
@@ -290,11 +254,33 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
                 }
                 
                 if characteristic.uuid == CBUUID(string: Device.MostRecentActivityStateUUID) {
-                    // Enable IR Temperature Sensor
                     activityStateCharacteristic = characteristic
                     sensorTag?.setNotifyValue(false, for: characteristic)
                     sensorTag?.readValue(for: characteristic)
                     print("Discovered most recent activity level")
+                }
+                
+                if characteristic.uuid == CBUUID(string: Device.HistoricalLightLevelUUID) {
+                    activityStateCharacteristic = characteristic
+                    sensorTag?.setNotifyValue(false, for: characteristic)
+                    sensorTag?.readValue(for: characteristic)
+                    print("Discovered most historical light level")
+                }
+                
+                if characteristic.uuid == CBUUID(string: Device.HistoricalActivityStateUUID) {
+                    activityStateCharacteristic = characteristic
+                    sensorTag?.setNotifyValue(false, for: characteristic)
+                    sensorTag?.readValue(for: characteristic)
+                    print("Discovered most historical activity level")
+                    collectingHistoricalData = true
+                }
+                
+                if characteristic.uuid == CBUUID(string: Device.TimeOfHistoricalMeasurementUUID) {
+                    activityStateCharacteristic = characteristic
+                    sensorTag?.setNotifyValue(false, for: characteristic)
+                    sensorTag?.readValue(for: characteristic)
+                    print("Discovered time of historical measurement")
+                    collectingHistoricalData = true
                 }
             }
         }
@@ -323,6 +309,7 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
                 if (gotActivity && gotLight) {
                     centralManager.cancelPeripheralConnection(sensorTag!)
                     print("DISCONNECTED FROM PERIPHERAL")
+                    gotLight = true
                 }
             } else if characteristic.uuid == CBUUID(string: Device.MostRecentActivityStateUUID) {
                 //update activity level
@@ -340,11 +327,84 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
                 if (gotActivity && gotLight) {
                     centralManager.cancelPeripheralConnection(sensorTag!)
                     print("GOT DATA: DISCONNECTING FROM PERIPHERAL")
+                    gotActivity = false
                 }
+                
+            // HISTORICAL DATA HANDLING
+                
+            } else if characteristic.uuid == CBUUID(string: Device.HistoricalActivityStateUUID) {
+                //update historical activity level
+                
+                let dataLength = dataBytes.count / MemoryLayout<UInt16>.size
+                var value = [UInt16](repeating:0, count: dataLength)
+                (dataBytes as NSData).getBytes(&value, length: dataLength * MemoryLayout<Int16>.size)
+                
+                rawHistoricalActivityLevel = value[0]
+                currentHistoricalData?.historicalActivityLevel = rawHistoricalActivityLevel
+                
+                print("updated historical activity level")
+                
+                gotHistoricalActivity = true
+
+            } else if characteristic.uuid == CBUUID(string: Device.HistoricalLightLevelUUID) {
+                //update historical light level
+                
+                let dataLength = dataBytes.count / MemoryLayout<UInt16>.size
+                var value = [UInt16](repeating:0, count: dataLength)
+                (dataBytes as NSData).getBytes(&value, length: dataLength * MemoryLayout<Int16>.size)
+                
+                rawHistoricalLightLevel = value[0]
+                currentHistoricalData?.historicalLightLevel = rawHistoricalLightLevel
+                
+                print("updated historical light level")
+                
+                gotHistoricalActivity = true
+                
+            } else if characteristic.uuid == CBUUID(string: Device.TimeOfHistoricalMeasurementUUID) {
+                let dataLength = dataBytes.count / MemoryLayout<UInt16>.size
+                var value = [UInt16](repeating:0, count: dataLength)
+                (dataBytes as NSData).getBytes(&value, length: dataLength * MemoryLayout<Int16>.size)
+                
+                rawHistoricalTime = value[0]
+                currentHistoricalData?.relativeTimeHistoricalMeasurement = rawHistoricalTime
+                print("updated relative historical time")
+                
+                // TODO: test if THM = 0 then quit collecting
+                
+                if (rawHistoricalTime == 0){ // if the historical time is 0 all data has been collected
+                    if (gotHistoricalActivity && gotHistoricalLight){
+                        centralManager.cancelPeripheralConnection(sensorTag!)
+                        print("GOT ALL HISTORICAL DATA: DISCONNECTING FROM PERIPHERAL")
+                        gotHistoricalLight = false
+                        gotHistoricalActivity = false
+                        calculateActualHistoricalTime()
+                    }
+                } else { // if the historical time isn't 0 then do this
+                    historicalDataTable.append(currentHistoricalData!) // add the most recently collected data to the table
+                }
+                
+                print("GOT ALL HISTORICAL DATA: DISCONNECTING FROM PERIPHERAL")
             }
         }
     }
-
+    
+    func calculateActualHistoricalTime(){
+        let maximumRelativeTime = historicalDataTable.map {$0.relativeTimeHistoricalMeasurement}.max()
+        let currentTime = Date()
+        print("activity,light,relative,actual")
+        
+        for index in 0..<historicalDataTable.count { // loop through the historical data table and calculate actual time
+            let relativeTime:UInt16 = historicalDataTable[index].relativeTimeHistoricalMeasurement
+            let subtractTime = TimeInterval(maximumRelativeTime! - relativeTime)
+            historicalDataTable[index].actualTimeHistoricalMeasurement = currentTime - subtractTime
+            print(historicalDataTable[index].historicalActivityLevel, ","
+                , historicalDataTable[index].historicalLightLevel, ","
+                , historicalDataTable[index].relativeTimeHistoricalMeasurement, ","
+                , historicalDataTable[index].actualTimeHistoricalMeasurement)
+        }
+        print("done")
+        collectingHistoricalData = false
+    }
 }
 
 
