@@ -26,11 +26,13 @@ class SecondViewController: UIViewController {
     var mqttmessage:CocoaMQTTMessage!
     var topic:String = ""
     var message:String = ""
-    
+
     func setupConnection(){
-        let clientID = "CocoaMQTT-" + String(ProcessInfo().processIdentifier)
+        //let clientID = "CocoaMQTT-" + String(ProcessInfo().processIdentifier)
+        print("Advertising ID:\(UIDevice.current.identifierForVendor!.uuidString)")
+        let clientID = "d:f6z0bl:iPhone:"+UIDevice.current.identifierForVendor!.uuidString
         print("Client ID = \(clientID)")
-        mqtt = CocoaMQTT(clientID: MQTTlogin.clientID, host: MQTTlogin.host, port: MQTTlogin.port)
+        mqtt = CocoaMQTT(clientID: clientID, host: MQTTlogin.host, port: MQTTlogin.port)
         mqtt!.username = "use-token-auth"
         mqtt!.password = "test1234"
         mqtt!.keepAlive = 90
