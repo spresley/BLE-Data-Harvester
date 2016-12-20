@@ -53,8 +53,10 @@ class SecondViewController: UIViewController {
     }
     func sendRoomMonitorMessage(){
         let stringFromDate = Date().iso8601    // "2016-06-18T05:18:27.935Z"
+        let rand = Double(arc4random_uniform(10))
+        let rand2 = Double(arc4random_uniform(2))
 
-        var message = createRoomMonitorMessage(activity_level: 0, light_level: 0, time_stamp: stringFromDate)
+        var message = createRoomMonitorMessage(activity_level: rand, light_level: rand2, time_stamp: stringFromDate)
         message = "{\"d\":\(message)}"
         topic = "iot-2/evt/room-data/fmt/json"
         mqttmessage = CocoaMQTTMessage.init(topic: topic, string: message)
