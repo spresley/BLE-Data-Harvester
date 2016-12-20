@@ -14,10 +14,10 @@ struct Device {
     static let SensorTagAdvertisingUUID = "GH-SensorNode"
     
     static let RoomMonitorServiceUUID =      "AC8BA2AE-F020-4395-A301-6E833EBD4571"
-    static let MostRecentLightLevelUUID =           "AC8B3A9A-F020-4395-A301-6E833EBD4571"
-    static let MostRecentActivityStateUUID =        "AC8BA6D8-F020-4395-A301-6E833EBD4571"
-    static let HistoricalLightLevelUUID =           "8C8794B9-EE0A-4747-B9CB-4E17B11FC3EC"
-    static let HistoricalActivityStateUUID =        "8C8765DD-EE0A-4747-B9CB-4E17B11FC3EC"
+    static let MostRecentLightLevelUUID =           "BC8B3A9A-F020-4395-A301-6E833EBD4571"
+    static let MostRecentActivityStateUUID =        "BC8BA6D8-F020-4395-A301-6E833EBD4571"
+    static let HistoricalLightLevelUUID =           "AC8B3A9A-F020-4395-A301-6E833EBD4571"
+    static let HistoricalActivityStateUUID =        "AC8BA6D8-F020-4395-A301-6E833EBD4571"
     static let TimeOfMostRecentMeasurementUUID =    "8C87AEDD-EE0A-4747-B9CB-4E17B11FC3EC"
-    static let TimeOfHistoricalMeasurementUUID =    "8C87BCD4-EE0A-4747-B9CB-4E17B11FC3EC"
+    static let TimeOfHistoricalMeasurementUUID =    "AC8BADD4-F020-4395-A301-6E833EBD4571"
 }

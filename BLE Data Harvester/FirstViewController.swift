@@ -36,6 +36,7 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
     
     var gotHistoricalActivity:Bool = false
     var gotHistoricalLight:Bool = false
+    var gotHistoricalTime:Bool = false
     var rawHistoricalActivityLevel:UInt16 = 0
     var rawHistoricalLightLevel:UInt16 = 0
     var rawHistoricalTime:UInt16 = 0
@@ -47,10 +48,11 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
         var relativeTimeHistoricalMeasurement:UInt16
         var actualTimeHistoricalMeasurement:Date
     }
+    var maximumRelativeTime:UInt16 = 0
     
     var historicalDataTable = [historicalData]()
     var collectingHistoricalData:Bool = false
-    var currentHistoricalData:historicalData?
+    var currentHistoricalData = historicalData(historicalActivityLevel: 0, historicalLightLevel: 0, relativeTimeHistoricalMeasurement: 0, actualTimeHistoricalMeasurement: Date())
     
     // MARK: connection history parameters
     let gatherDataInterval:TimeInterval = 60.0
@@ -58,6 +60,7 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
         var UUID:String
         var lastConnectionTime:Date
     }
+    var currentPeripheral:roomSensorNode?
     
     // TODO: Make this persistant
     var connectionHistory = [roomSensorNode]()
@@ -172,8 +175,9 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
                     
                     // Put peripheral in to connection history
                     
-                    let thisPeripheral = roomSensorNode(UUID: peripheral.identifier.uuidString, lastConnectionTime: currentTime)
-                    connectionHistory.append(thisPeripheral)
+                    //let thisPeripheral = roomSensorNode(UUID: peripheral.identifier.uuidString, lastConnectionTime: currentTime)
+                    currentPeripheral = roomSensorNode(UUID: peripheral.identifier.uuidString, lastConnectionTime: currentTime)
+                    //connectionHistory.append(thisPeripheral)
                 }
             }
         }
@@ -210,12 +214,14 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
     }
     
     func centralManager(_ central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: Error?) {
-        print("**** DISCONNECTED FROM SENSOR TAG!!!")
+        connectionHistory.append(currentPeripheral!)
+        print("**** DISCONNECTED FROM SENSOR TAG and stored in to history")
         if error != nil {
             print("****** DISCONNECTION DETAILS: \(error!.localizedDescription)")
         }
         sensorTag = nil
         keepScanning = true
+        
     }
     
     func peripheral(_ peripheral: CBPeripheral, didDiscoverServices error: Error?) {
@@ -340,7 +346,7 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
                 (dataBytes as NSData).getBytes(&value, length: dataLength * MemoryLayout<Int16>.size)
                 
                 rawHistoricalActivityLevel = value[0]
-                currentHistoricalData?.historicalActivityLevel = rawHistoricalActivityLevel
+                currentHistoricalData.historicalActivityLevel = rawHistoricalActivityLevel
                 
                 print("updated historical activity level")
                 
@@ -354,11 +360,11 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
                 (dataBytes as NSData).getBytes(&value, length: dataLength * MemoryLayout<Int16>.size)
                 
                 rawHistoricalLightLevel = value[0]
-                currentHistoricalData?.historicalLightLevel = rawHistoricalLightLevel
+                currentHistoricalData.historicalLightLevel = rawHistoricalLightLevel
                 
                 print("updated historical light level")
                 
-                gotHistoricalActivity = true
+                gotHistoricalLight = true
                 
             } else if characteristic.uuid == CBUUID(string: Device.TimeOfHistoricalMeasurementUUID) {
                 let dataLength = dataBytes.count / MemoryLayout<UInt16>.size
@@ -366,43 +372,58 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
                 (dataBytes as NSData).getBytes(&value, length: dataLength * MemoryLayout<Int16>.size)
                 
                 rawHistoricalTime = value[0]
-                currentHistoricalData?.relativeTimeHistoricalMeasurement = rawHistoricalTime
+                currentHistoricalData.relativeTimeHistoricalMeasurement = rawHistoricalTime
                 print("updated relative historical time")
-                
-                // TODO: test if THM = 0 then quit collecting
-                
-                if (rawHistoricalTime == 0){ // if the historical time is 0 all data has been collected
-                    if (gotHistoricalActivity && gotHistoricalLight){
-                        centralManager.cancelPeripheralConnection(sensorTag!)
-                        print("GOT ALL HISTORICAL DATA: DISCONNECTING FROM PERIPHERAL")
-                        gotHistoricalLight = false
-                        gotHistoricalActivity = false
-                        calculateActualHistoricalTime()
-                    }
-                } else { // if the historical time isn't 0 then do this
-                    historicalDataTable.append(currentHistoricalData!) // add the most recently collected data to the table
+                if (rawHistoricalTime>maximumRelativeTime){
+                    maximumRelativeTime = rawHistoricalTime
                 }
-                
-                print("GOT ALL HISTORICAL DATA: DISCONNECTING FROM PERIPHERAL")
+                gotHistoricalTime = true
             }
         }
+        //Historical data checking
+        if (gotHistoricalActivity && gotHistoricalLight && gotHistoricalTime){
+            print("save historical data")
+            historicalDataTable.append(currentHistoricalData) // add the most recently collected data to the table
+            gotHistoricalActivity = false
+            gotHistoricalLight = false
+            gotHistoricalTime = false
+            //rawHistoricalTime = 0 // enable for test only
+            
+            if (rawHistoricalTime == 0){ // if the historical time is 0 all data has been collected
+                print("historical time is 0")
+                
+                    centralManager.cancelPeripheralConnection(sensorTag!)
+                    print("GOT ALL HISTORICAL DATA: DISCONNECTING FROM PERIPHERAL")
+                    gotHistoricalLight = false
+                    gotHistoricalActivity = false
+                    calculateActualHistoricalTime()
+                
+            }
+        }
+        
+        
     }
     
     func calculateActualHistoricalTime(){
-        let maximumRelativeTime = historicalDataTable.map {$0.relativeTimeHistoricalMeasurement}.max()
+        print("calculating actual times")
+        print("max relative time:",maximumRelativeTime)
+        //let maximumRelativeTime:TimeInterval = 10 // for test only
         let currentTime = Date()
+        print("current time:",currentTime)
         print("activity,light,relative,actual")
-        
+        var subtractTime:TimeInterval = 0
         for index in 0..<historicalDataTable.count { // loop through the historical data table and calculate actual time
             let relativeTime:UInt16 = historicalDataTable[index].relativeTimeHistoricalMeasurement
-            let subtractTime = TimeInterval(maximumRelativeTime! - relativeTime)
-            historicalDataTable[index].actualTimeHistoricalMeasurement = currentTime - subtractTime
+            let timeDifference = maximumRelativeTime - relativeTime
+            subtractTime = TimeInterval(timeDifference)
+            historicalDataTable[index].actualTimeHistoricalMeasurement = (currentTime - subtractTime)
             print(historicalDataTable[index].historicalActivityLevel, ","
                 , historicalDataTable[index].historicalLightLevel, ","
                 , historicalDataTable[index].relativeTimeHistoricalMeasurement, ","
                 , historicalDataTable[index].actualTimeHistoricalMeasurement)
         }
         print("done")
+        maximumRelativeTime = 0
         collectingHistoricalData = false
     }
 }
