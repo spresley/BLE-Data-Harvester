@@ -28,7 +28,6 @@ class SecondViewController: UIViewController {
     var message:String = ""
 
     func setupConnection(){
-        //let clientID = "CocoaMQTT-" + String(ProcessInfo().processIdentifier)
         print("Advertising ID:\(UIDevice.current.identifierForVendor!.uuidString)")
         let clientID = "d:f6z0bl:iPhone:"+UIDevice.current.identifierForVendor!.uuidString
         print("Client ID = \(clientID)")
