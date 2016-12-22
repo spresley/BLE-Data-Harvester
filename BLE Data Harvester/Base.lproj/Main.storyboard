@@ -87,15 +87,26 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Graphing here" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="a6i-Ic-bJv">
-                                <rect key="frame" x="133" y="42" width="109" height="21"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <webView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mZv-sv-A4p" customClass="WKWebView">
+                                <rect key="frame" x="16" y="57" width="343" height="561"/>
+                                <color key="backgroundColor" red="0.36078431370000003" green="0.38823529410000002" blue="0.4039215686" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            </webView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Historical Data Graphing" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="a6i-Ic-bJv">
+                                <rect key="frame" x="94" y="28" width="187" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="mZv-sv-A4p" firstAttribute="top" secondItem="L7p-HK-0SC" secondAttribute="bottom" constant="37" id="HPJ-tQ-g0W"/>
+                            <constraint firstItem="a6i-Ic-bJv" firstAttribute="centerX" secondItem="QS5-Rx-YEW" secondAttribute="centerX" id="N5a-ri-Id6"/>
+                            <constraint firstAttribute="leadingMargin" secondItem="mZv-sv-A4p" secondAttribute="leading" id="TXq-cF-2kj"/>
+                            <constraint firstItem="Djb-ko-YwX" firstAttribute="top" secondItem="mZv-sv-A4p" secondAttribute="bottom" id="ajD-QD-ug0"/>
+                            <constraint firstItem="a6i-Ic-bJv" firstAttribute="top" secondItem="L7p-HK-0SC" secondAttribute="bottom" constant="8" id="fhX-3q-sUK"/>
+                            <constraint firstItem="mZv-sv-A4p" firstAttribute="centerX" secondItem="QS5-Rx-YEW" secondAttribute="centerX" id="gF7-ug-uKn"/>
+                        </constraints>
                     </view>
                     <tabBarItem key="tabBarItem" title="Second" image="second" id="cPa-gy-q4n"/>
                 </viewController>

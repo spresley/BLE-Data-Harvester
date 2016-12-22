@@ -8,21 +8,38 @@
 
 import UIKit
 import CocoaMQTT
+import WebKit
 
 
-class SecondViewController: UIViewController {
+class SecondViewController: UIViewController, WKUIDelegate {
     
+    var webView: WKWebView!
     
+    override func loadView() {
+        let webConfiguration = WKWebViewConfiguration()
+        webView = WKWebView(frame: .zero, configuration: webConfiguration)
+        webView.uiDelegate = self
+        view = webView
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
-
+        
+        let myURL = URL(string: "https://www.apple.com")
+        let myRequest = URLRequest(url: myURL!)
+        webView.load(myRequest)
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+    
+
+    
+
+    
+
+    
 }
 
 
