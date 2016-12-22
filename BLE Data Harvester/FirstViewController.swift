@@ -8,12 +8,14 @@
 
 import UIKit
 import CoreBluetooth
+import CoreData
 
 class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDelegate {
 
     // MARK: Properties
     @IBOutlet weak var activityLevelLabel: UILabel!
     @IBOutlet weak var lightLevelLabel: UILabel!
+    @IBOutlet weak var sensorTable: UITableView!
     
     // MARK: scanning parameters
     let timerPauseInterval:TimeInterval = 10.0
@@ -64,6 +66,7 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
     
     // TODO: Make this persistant
     var connectionHistory = [roomSensorNode]()
+    var persistantConnectionHistory = [NSManagedObject]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -132,7 +135,7 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
                 // to save power, stop scanning for other devices
                 keepScanning = false
                 
-                // Check if sensorNode has been scanned recently
+                // Check if sensorNode has been scanned recently (non persistant)
                 for index in 0..<connectionHistory.count {
                     if connectionHistory[index].UUID == peripheral.identifier.uuidString {
                         print("Found peripheral in connection history")
@@ -153,6 +156,7 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
                             
                             let thisPeripheral = roomSensorNode(UUID: peripheral.identifier.uuidString, lastConnectionTime: currentTime)
                             connectionHistory.append(thisPeripheral)
+                            //self.saveSensor(uuid: peripheral.identifier.uuidString, lastConnectionTime: currentTime)
                             connectionHistory.remove(at: index)
                             //connectionHistoryWritable = connectionHistory as NSArray
                             //connectionHistoryWritable.write(toFile: "storedConnectionHistory.txt", atomically: true)
@@ -426,6 +430,43 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
         maximumRelativeTime = 0
         collectingHistoricalData = false
     }
+    
+    // MARK: Persistance Methods and table
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
+        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell")
+        
+        let sensornode = persistantConnectionHistory[indexPath.row]
+        
+        cell!.textLabel!.text = sensornode.value(forKey: "uuid") as? String
+        
+        return cell!
+    }
+    
+    /*func saveSensor(uuid: String, lastConnectionTime: Date) {
+        //1
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        
+        let managedContext = appDelegate.persistentContainer.viewContext
+        
+        //2
+        let entity =  NSEntityDescription.entity(forEntityName: "Person",
+                                                 in:managedContext)
+        
+        let persistantConnectionHistory = NSManagedObject(entity: entity!,
+                                     insertInto: managedContext)
+        
+        //3
+        persistantConnectionHistory.setValue(uuid, forKey: "uuid")
+        
+        //4
+        do {
+            try managedContext.save()
+            //5
+            persistantConnectionHistory.append(RoomSensor)
+        } catch let error as NSError  {
+            print("Could not save \(error), \(error.userInfo)")
+        }
+    }*/
 }
-
-
