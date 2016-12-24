@@ -27,7 +27,6 @@ class GraphViewController: UIViewController {
         
         let cloudantUsername = keysdict?["cloudant-username"] as! String
         let cloudantPassword = keysdict?["cloudant-password"] as! String
-
         
        let url = URL(string: ("https://" + cloudantUsername + ":" + cloudantPassword + "@f810fc6b-39be-4c4c-9716-47f93c071d09-bluemix.cloudant.com/test-data/_design/design_doc/_view/by-date-minimised?limit=2"))!
         let task = URLSession.shared.dataTask(with: url){(data, response, error) in
@@ -47,19 +46,18 @@ class GraphViewController: UIViewController {
                             }
                             
                             if let rows = dictionary["rows"]{
-                                print(rows)
-                                print("Row 0:")
-                                print(rows[0])
-                                print("Row 1:")
-                                print(rows[1])
-
-                                
+//                                print(rows)
+//                                print("Row 0:")
+//                                print(rows[0])
+//                                print("Row 1:")
+//                                print(rows[1])
                                 
                                 for (row) in rows as! [AnyObject] {
-                                    print(row)
+//                                    print(row)
                                     if let value = row["value"] as? [String: AnyObject]{
                                         print(value)
-                                        print(value["activity_level"])
+//                                        print(value["activity_level"])
+                                        
                                     }
                                 
                                 }
