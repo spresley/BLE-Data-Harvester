@@ -17,6 +17,10 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
     @IBOutlet weak var lightLevelLabel: UILabel!
     @IBOutlet weak var sensorTable: UITableView!
     
+    // MARK: Debugging Flags
+    let debugHistoricalData = true
+    let usePersistance = true
+    
     // MARK: scanning parameters
     let timerPauseInterval:TimeInterval = 10.0
     let timerScanInterval:TimeInterval = 2.0
@@ -70,6 +74,7 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        title = "\"Sensor Nodes\""
         // Do any additional setup after loading the view, typically from a nib.
         centralManager = CBCentralManager(delegate: self, queue: nil)
         sensorTable.register(UITableViewCell.self, forCellReuseIdentifier: "Cell")
@@ -89,12 +94,11 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
         let managedContext = appDelegate.persistentContainer.viewContext
         
         //2
-        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Person")
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "RoomSensor")
         
         //3
         do {
-            let results =
-                try managedContext.fetch(fetchRequest)
+            let results = try managedContext.fetch(fetchRequest)
             persistantConnectionHistory = results as! [NSManagedObject]
         } catch let error as NSError {
             print("Could not fetch \(error), \(error.userInfo)")
@@ -158,62 +162,71 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
                 keepScanning = false
                 
                 // Check if sensorNode has been scanned recently (non persistant)
-                /*for index in 0..<connectionHistory.count {
-                    if connectionHistory[index].UUID == peripheral.identifier.uuidString {
-                        print("Found peripheral in connection history")
-                        print("Checking last connection time")
-                        foundInHistory = true
-                        let connectionTime = connectionHistory[index].lastConnectionTime
-                        let timeoutTime = connectionTime.addingTimeInterval(gatherDataInterval)
-                        if currentTime.compare(timeoutTime) == ComparisonResult.orderedDescending {
-                            print("Current time is later than timeout time. Can collect data again")
-                            // save a reference to the sensor tag
-                            sensorTag = peripheral
-                            sensorTag!.delegate = self
-                            
-                            // Request a connection to the peripheral
-                            centralManager.connect(sensorTag!, options: nil)
-                            
-                            // Update peripheral in to connection history
-                            
-                            let thisPeripheral = roomSensorNode(UUID: peripheral.identifier.uuidString, lastConnectionTime: currentTime)
-                            connectionHistory.append(thisPeripheral)
-                            //self.saveSensor(uuid: peripheral.identifier.uuidString, lastConnectionTime: currentTime)
-                            connectionHistory.remove(at: index)
-                            //connectionHistoryWritable = connectionHistory as NSArray
-                            //connectionHistoryWritable.write(toFile: "storedConnectionHistory.txt", atomically: true)
-                        } else {
-                            print("Have scanned this peripheral recently. Ignore.")
-                            keepScanning = true
+                if (usePersistance == false){
+                    for index in 0..<connectionHistory.count {
+                        if connectionHistory[index].UUID == peripheral.identifier.uuidString {
+                            print("Found peripheral in connection history")
+                            print("Checking last connection time")
+                            foundInHistory = true
+                            let connectionTime = connectionHistory[index].lastConnectionTime
+                            let timeoutTime = connectionTime.addingTimeInterval(gatherDataInterval)
+                            if currentTime.compare(timeoutTime) == ComparisonResult.orderedDescending {
+                                print("Current time is later than timeout time. Can collect data again")
+                                // save a reference to the sensor tag
+                                sensorTag = peripheral
+                                sensorTag!.delegate = self
+                                
+                                // Request a connection to the peripheral
+                                centralManager.connect(sensorTag!, options: nil)
+                                
+                                // Update peripheral in to connection history
+                                
+                                let thisPeripheral = roomSensorNode(UUID: peripheral.identifier.uuidString, lastConnectionTime: currentTime)
+                                connectionHistory.append(thisPeripheral)
+                                //self.saveSensor(uuid: peripheral.identifier.uuidString, lastConnectionTime: currentTime)
+                                connectionHistory.remove(at: index)
+                                //connectionHistoryWritable = connectionHistory as NSArray
+                                //connectionHistoryWritable.write(toFile: "storedConnectionHistory.txt", atomically: true)
+                            } else {
+                                print("Have scanned this peripheral recently. Ignore.")
+                                keepScanning = true
+                            }
                         }
                     }
                     
-                }*/
-                
-                // Check if sensorNode has been scanned recently (persistant)
-                if (findSensor(uuid: peripheral.identifier.uuidString)) {
-                    print("Have scanned this peripheral recently. Ignore.")
-                } else {
-                    print("DIDN'T find peripheral in connection history")
-                    saveSensor(uuid: peripheral.identifier.uuidString, lastConnectionTime: currentTime)
+                    if foundInHistory == false {
+                        print("DIDN'T find peripheral in connection history")
+                        // save a reference to the sensor tag
+                        sensorTag = peripheral
+                        sensorTag!.delegate = self
+                        
+                        // Request a connection to the peripheral
+                        centralManager.connect(sensorTag!, options: nil)
+                        
+                        // Put peripheral in to connection history
+                        
+                        let thisPeripheral = roomSensorNode(UUID: peripheral.identifier.uuidString, lastConnectionTime: currentTime)
+                        currentPeripheral = roomSensorNode(UUID: peripheral.identifier.uuidString, lastConnectionTime: currentTime)
+                        connectionHistory.append(thisPeripheral)
+                    }
                 }
                 
-                /*
-                if foundInHistory == false {
-                    print("DIDN'T find peripheral in connection history")
-                    // save a reference to the sensor tag
-                    sensorTag = peripheral
-                    sensorTag!.delegate = self
+                if (usePersistance){
+                    // Check if sensorNode has been scanned recently (persistant)
+                    if (findSensor(uuid: peripheral.identifier.uuidString)) {
+                    //    print("Have scanned this peripheral recently. Ignore.")
+                    } else {
+                        print("DIDN'T find peripheral in connection history")
+                        saveSensor(uuid: peripheral.identifier.uuidString, lastConnectionTime: currentTime)
+                        // save a reference to the sensor tag
+                        sensorTag = peripheral
+                        sensorTag!.delegate = self
                     
-                    // Request a connection to the peripheral
-                    centralManager.connect(sensorTag!, options: nil)
-                    
-                    // Put peripheral in to connection history
-                    
-                    //let thisPeripheral = roomSensorNode(UUID: peripheral.identifier.uuidString, lastConnectionTime: currentTime)
-                    currentPeripheral = roomSensorNode(UUID: peripheral.identifier.uuidString, lastConnectionTime: currentTime)
-                    //connectionHistory.append(thisPeripheral)
-                }*/
+                        // Request a connection to the peripheral
+                        centralManager.connect(sensorTag!, options: nil)
+
+                    }
+                }
             }
         }
     }
@@ -385,6 +398,8 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
                 
                 print("updated historical activity level")
                 
+                activityLevelLabel.text = "\(rawHistoricalActivityLevel)"
+                
                 gotHistoricalActivity = true
 
             } else if characteristic.uuid == CBUUID(string: Device.HistoricalLightLevelUUID) {
@@ -398,6 +413,8 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
                 currentHistoricalData.historicalLightLevel = rawHistoricalLightLevel
                 
                 print("updated historical light level")
+                
+                lightLevelLabel.text = "\(rawHistoricalLightLevel)"
                 
                 gotHistoricalLight = true
                 
@@ -422,7 +439,11 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
             gotHistoricalActivity = false
             gotHistoricalLight = false
             gotHistoricalTime = false
-            //rawHistoricalTime = 0 // enable for test only
+            
+            if (debugHistoricalData){
+                rawHistoricalTime = 0 // enable for test only
+            }
+            
             
             if (rawHistoricalTime == 0){ // if the historical time is 0 all data has been collected
                 print("historical time is 0")
@@ -432,6 +453,7 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
                     gotHistoricalLight = false
                     gotHistoricalActivity = false
                     calculateActualHistoricalTime()
+                    print("done")
             }
         }
     }
@@ -454,7 +476,7 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
                 , historicalDataTable[index].relativeTimeHistoricalMeasurement, ","
                 , historicalDataTable[index].actualTimeHistoricalMeasurement)
         }
-        print("done")
+        
         maximumRelativeTime = 0
         collectingHistoricalData = false
     }
