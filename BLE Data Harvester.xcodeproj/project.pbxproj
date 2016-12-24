@@ -24,6 +24,7 @@
 		67A107FE1E0AA38E00453D0C /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67A107FD1E0AA38E00453D0C /* SettingsViewController.swift */; };
 		9429E5DA2E694619D3A87C88 /* Pods_BLE_Data_HarvesterUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5D38BE2A45A37B0864AF1354 /* Pods_BLE_Data_HarvesterUITests.framework */; };
 		B680C29F02EA7F7AC68156A1 /* Pods_BLE_Data_HarvesterTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F1181EFAFAB06B512533764 /* Pods_BLE_Data_HarvesterTests.framework */; };
+		D83547E01E0ECDA3000AA9B8 /* BLE Data Harvester.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = D83547DE1E0ECDA3000AA9B8 /* BLE Data Harvester.xcdatamodeld */; };
 		F38639A14ECBAAB91FA5B20A /* Pods_BLE_Data_Harvester.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA5BE9288338DC569A94D1A0 /* Pods_BLE_Data_Harvester.framework */; };
 /* End PBXBuildFile section */
 
@@ -73,6 +74,7 @@
 		67A107FD1E0AA38E00453D0C /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		A35B1B2F42526347435986F3 /* Pods-BLE Data HarvesterTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BLE Data HarvesterTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-BLE Data HarvesterTests/Pods-BLE Data HarvesterTests.release.xcconfig"; sourceTree = "<group>"; };
 		B4C09D880669FE02CDD87DFE /* Pods-BLE Data Harvester.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BLE Data Harvester.debug.xcconfig"; path = "Pods/Target Support Files/Pods-BLE Data Harvester/Pods-BLE Data Harvester.debug.xcconfig"; sourceTree = "<group>"; };
+		D83547DF1E0ECDA3000AA9B8 /* BLE Data Harvester.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "BLE Data Harvester.xcdatamodel"; sourceTree = "<group>"; };
 		DD1165D67839D45FA3FB6DF7 /* Pods-BLE Data HarvesterTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BLE Data HarvesterTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-BLE Data HarvesterTests/Pods-BLE Data HarvesterTests.debug.xcconfig"; sourceTree = "<group>"; };
 		FA5BE9288338DC569A94D1A0 /* Pods_BLE_Data_Harvester.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BLE_Data_Harvester.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -131,6 +133,7 @@
 		6703D0751DF214EB005220CC /* BLE Data Harvester */ = {
 			isa = PBXGroup;
 			children = (
+				D83547DE1E0ECDA3000AA9B8 /* BLE Data Harvester.xcdatamodeld */,
 				67A107FD1E0AA38E00453D0C /* SettingsViewController.swift */,
 				6703D0AD1DF22C31005220CC /* device.swift */,
 				6703D0AF1DF2335E005220CC /* MQTT-config.swift */,
@@ -482,6 +485,7 @@
 				6703D0B01DF2335E005220CC /* MQTT-config.swift in Sources */,
 				67515B641E0D33BE0018A8BC /* GraphViewController.swift in Sources */,
 				6703D0771DF214EB005220CC /* AppDelegate.swift in Sources */,
+				D83547E01E0ECDA3000AA9B8 /* BLE Data Harvester.xcdatamodeld in Sources */,
 				6703D0791DF214EB005220CC /* FirstViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -762,6 +766,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		D83547DE1E0ECDA3000AA9B8 /* BLE Data Harvester.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				D83547DF1E0ECDA3000AA9B8 /* BLE Data Harvester.xcdatamodel */,
+			);
+			currentVersion = D83547DF1E0ECDA3000AA9B8 /* BLE Data Harvester.xcdatamodel */;
+			path = "BLE Data Harvester.xcdatamodeld";
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 6703D06B1DF214EB005220CC /* Project object */;
 }
