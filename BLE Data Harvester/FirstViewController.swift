@@ -262,14 +262,17 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
     }
     
     func centralManager(_ central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: Error?) {
-        connectionHistory.append(currentPeripheral!)
+        if (usePersistance == false){
+            connectionHistory.append(currentPeripheral!)
+        }
+        
         print("**** DISCONNECTED FROM SENSOR TAG and stored in to history")
         if error != nil {
             print("****** DISCONNECTION DETAILS: \(error!.localizedDescription)")
         }
         sensorTag = nil
         keepScanning = true
-        
+        historicalDataTable.removeAll()
     }
     
     func peripheral(_ peripheral: CBPeripheral, didDiscoverServices error: Error?) {
@@ -448,14 +451,21 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
             if (rawHistoricalTime == 0){ // if the historical time is 0 all data has been collected
                 print("historical time is 0")
                 
-                    centralManager.cancelPeripheralConnection(sensorTag!)
-                    print("GOT ALL HISTORICAL DATA: DISCONNECTING FROM PERIPHERAL")
+                
+                    keepScanning = true
+                    print("GOT ALL HISTORICAL DATA")
                     gotHistoricalLight = false
                     gotHistoricalActivity = false
                     calculateActualHistoricalTime()
                     print("done")
+                    disconnectSensorNode()
             }
         }
+    }
+    
+    func disconnectSensorNode() {
+        centralManager.cancelPeripheralConnection(sensorTag!)
+        sensorTag = nil
     }
     
     func calculateActualHistoricalTime(){
