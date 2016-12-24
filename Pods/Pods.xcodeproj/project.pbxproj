@@ -81,7 +81,7 @@
 
 /* Begin PBXFileReference section */
 		000BB5A5D0B75310A8112031A8878DC7 /* Pods-BLE Data HarvesterUITests-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-BLE Data HarvesterUITests-frameworks.sh"; sourceTree = "<group>"; };
-		0450293D17AB4E744C8888D990B4AF83 /* Pods_BLE_Data_HarvesterTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Pods_BLE_Data_HarvesterTests.framework; path = "Pods-BLE Data HarvesterTests.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
+		0450293D17AB4E744C8888D990B4AF83 /* Pods_BLE_Data_HarvesterTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BLE_Data_HarvesterTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		0627EBBE52CF7C51B0AAC434709EC5C2 /* Pods-BLE Data Harvester.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-BLE Data Harvester.debug.xcconfig"; sourceTree = "<group>"; };
 		094B1D5DBE46D5DC7165826B5D15CD60 /* MSWeakTimer-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "MSWeakTimer-dummy.m"; sourceTree = "<group>"; };
 		0B2F0026832CE1DFC02974B27050F2A3 /* MSWeakTimer.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = MSWeakTimer.h; sourceTree = "<group>"; };
@@ -89,13 +89,13 @@
 		0F9B2C073F288D4DFC20D2637AE7313C /* MSWeakTimer.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = MSWeakTimer.m; sourceTree = "<group>"; };
 		10FE649B1A94297D6A216040EC9E7B42 /* Pods-BLE Data HarvesterTests-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-BLE Data HarvesterTests-frameworks.sh"; sourceTree = "<group>"; };
 		1C2DAB92A329D562F4868B40ADD08DC0 /* Pods-BLE Data HarvesterUITests-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-BLE Data HarvesterUITests-acknowledgements.plist"; sourceTree = "<group>"; };
-		1D2A703DD26ED97D2B274FDAC09B82D0 /* CocoaAsyncSocket.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; path = CocoaAsyncSocket.modulemap; sourceTree = "<group>"; };
+		1D2A703DD26ED97D2B274FDAC09B82D0 /* CocoaAsyncSocket.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "sourcecode.module-map"; path = CocoaAsyncSocket.modulemap; sourceTree = "<group>"; };
 		1DF1EDC4E8AB48C8AD914D949915E8F9 /* MSWeakTimer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MSWeakTimer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		245A2DEF5F2F85ACFBC9172D760DF43B /* Pods-BLE Data HarvesterUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-BLE Data HarvesterUITests.release.xcconfig"; sourceTree = "<group>"; };
 		262388EBB992BA139B7FA32AF9187A1E /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		2A737A14A7425411670231F471FB5DFD /* CocoaMQTT.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = CocoaMQTT.framework; path = CocoaMQTT.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		2A737A14A7425411670231F471FB5DFD /* CocoaMQTT.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CocoaMQTT.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		2CFE92E5E39378E5D3BD86965D5BA523 /* Pods-BLE Data Harvester.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-BLE Data Harvester.release.xcconfig"; sourceTree = "<group>"; };
-		3C5C8DD1573F590451B8CE5A6B54362B /* MSWeakTimer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = MSWeakTimer.framework; path = MSWeakTimer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		3C5C8DD1573F590451B8CE5A6B54362B /* MSWeakTimer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MSWeakTimer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		41438928267CF3DD8688E66376960096 /* Pods-BLE Data HarvesterUITests-resources.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-BLE Data HarvesterUITests-resources.sh"; sourceTree = "<group>"; };
 		42B081163C9704EA5118B35EDBC0ED23 /* Pods-BLE Data HarvesterTests-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-BLE Data HarvesterTests-dummy.m"; sourceTree = "<group>"; };
 		48D4A3BF4A33D7D4AF2012751A3099CC /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -103,7 +103,7 @@
 		505F73A8ED1163C1E8BABF1F274BF9E2 /* GCDAsyncSocket.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GCDAsyncSocket.h; path = Source/GCD/GCDAsyncSocket.h; sourceTree = "<group>"; };
 		54A268C03C2E5ACAF9D34EDDB975C095 /* Pods-BLE Data Harvester-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-BLE Data Harvester-frameworks.sh"; sourceTree = "<group>"; };
 		54A2B75242446975CC5DFDD9A064FBAE /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS10.0.sdk/System/Library/Frameworks/CFNetwork.framework; sourceTree = DEVELOPER_DIR; };
-		5CC7F85915F1E8F6809382DEB11CFBDA /* Pods-BLE Data Harvester.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; path = "Pods-BLE Data Harvester.modulemap"; sourceTree = "<group>"; };
+		5CC7F85915F1E8F6809382DEB11CFBDA /* Pods-BLE Data Harvester.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "sourcecode.module-map"; path = "Pods-BLE Data Harvester.modulemap"; sourceTree = "<group>"; };
 		6158E7A8C88F256A86C512D496F3FCAF /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS10.0.sdk/System/Library/Frameworks/Security.framework; sourceTree = DEVELOPER_DIR; };
 		62C2601A26F85FC41AC8B15E5E901F43 /* Pods-BLE Data HarvesterUITests-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-BLE Data HarvesterUITests-dummy.m"; sourceTree = "<group>"; };
 		632EC4EEC2C8DEFA61609571A560C4B6 /* Pods-BLE Data HarvesterUITests-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-BLE Data HarvesterUITests-umbrella.h"; sourceTree = "<group>"; };
@@ -112,15 +112,15 @@
 		712E3EDFFB9AC38BEEAB8D836DD654BF /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		77D5E5C5FCF1E9F0C57FB8A1AA3AB21E /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7A3DC53DE3B13A2CF0369F010D470C89 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		7D066C82460B571AF26F57AC93D2A140 /* Pods-BLE Data HarvesterUITests.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; path = "Pods-BLE Data HarvesterUITests.modulemap"; sourceTree = "<group>"; };
+		7D066C82460B571AF26F57AC93D2A140 /* Pods-BLE Data HarvesterUITests.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "sourcecode.module-map"; path = "Pods-BLE Data HarvesterUITests.modulemap"; sourceTree = "<group>"; };
 		809249C6FAF8560870FC593F904DF387 /* Pods-BLE Data HarvesterUITests-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-BLE Data HarvesterUITests-acknowledgements.markdown"; sourceTree = "<group>"; };
 		81BFE627678034FB26AD746ADB86E4C0 /* GCDAsyncUdpSocket.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GCDAsyncUdpSocket.h; path = Source/GCD/GCDAsyncUdpSocket.h; sourceTree = "<group>"; };
 		844B88D34482CE66222F547A5CD18EE0 /* GCDAsyncSocket.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = GCDAsyncSocket.m; path = Source/GCD/GCDAsyncSocket.m; sourceTree = "<group>"; };
 		85CA0C99BD4C8557B9B331D3635EA2A0 /* Pods-BLE Data HarvesterTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-BLE Data HarvesterTests.release.xcconfig"; sourceTree = "<group>"; };
 		8DC0F971AB495A9187B8F15421B52289 /* MSWeakTimer.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = MSWeakTimer.xcconfig; sourceTree = "<group>"; };
-		8E8FAD1D94F0247CD0EBA4F761C3B9B1 /* Pods_BLE_Data_HarvesterUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Pods_BLE_Data_HarvesterUITests.framework; path = "Pods-BLE Data HarvesterUITests.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
+		8E8FAD1D94F0247CD0EBA4F761C3B9B1 /* Pods_BLE_Data_HarvesterUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BLE_Data_HarvesterUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8E933B1A75844B7CF04EA81AD8D4B4F7 /* Pods-BLE Data Harvester-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-BLE Data Harvester-acknowledgements.markdown"; sourceTree = "<group>"; };
-		93A4A3777CF96A4AAC1D13BA6DCCEA73 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; lastKnownFileType = text; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		93A4A3777CF96A4AAC1D13BA6DCCEA73 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		93F1A452245805D5D6DE440D274B8A9F /* CocoaAsyncSocket.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = CocoaAsyncSocket.xcconfig; sourceTree = "<group>"; };
 		9B7A6EAD8DA29B5B8312D9F9E59D7BAA /* Pods-BLE Data Harvester-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-BLE Data Harvester-umbrella.h"; sourceTree = "<group>"; };
 		A0E4E3661CA642445FC31B096FA2F065 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -129,25 +129,25 @@
 		A9547748E256E2F6E4E673863EA8E438 /* CocoaMQTT-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "CocoaMQTT-prefix.pch"; sourceTree = "<group>"; };
 		AA8CBD24951F49F31939CC4626039300 /* CocoaAsyncSocket-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "CocoaAsyncSocket-umbrella.h"; sourceTree = "<group>"; };
 		B54F89A4C70AAB84FFFBFAE4D28666C6 /* Pods-BLE Data Harvester-resources.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-BLE Data Harvester-resources.sh"; sourceTree = "<group>"; };
-		BFA2B3D608E8F7E183F3849BCFC74F5B /* CocoaMQTT.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; path = CocoaMQTT.modulemap; sourceTree = "<group>"; };
+		BFA2B3D608E8F7E183F3849BCFC74F5B /* CocoaMQTT.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "sourcecode.module-map"; path = CocoaMQTT.modulemap; sourceTree = "<group>"; };
 		C474B006E570389270EDC6EE90C7DC04 /* CocoaMQTT-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "CocoaMQTT-dummy.m"; sourceTree = "<group>"; };
 		C556C32A572E23A75C0E42A8BF07FAD9 /* Pods-BLE Data Harvester-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-BLE Data Harvester-dummy.m"; sourceTree = "<group>"; };
 		C5CD57D19A7EC51CE2F0B735EECCFF14 /* CocoaAsyncSocket-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "CocoaAsyncSocket-dummy.m"; sourceTree = "<group>"; };
-		C8F0208F6A239B0E21464E216FA5874A /* Pods-BLE Data HarvesterTests.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; path = "Pods-BLE Data HarvesterTests.modulemap"; sourceTree = "<group>"; };
+		C8F0208F6A239B0E21464E216FA5874A /* Pods-BLE Data HarvesterTests.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "sourcecode.module-map"; path = "Pods-BLE Data HarvesterTests.modulemap"; sourceTree = "<group>"; };
 		C97A7FC61647420163931C7857154AFF /* Pods-BLE Data HarvesterTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-BLE Data HarvesterTests.debug.xcconfig"; sourceTree = "<group>"; };
 		D1441CAB5A6AB2B7E27C3B99DFB8729C /* CocoaMQTT.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = CocoaMQTT.xcconfig; sourceTree = "<group>"; };
 		D1DAB823976C7DF9DC01583A12A85FDA /* Pods-BLE Data HarvesterTests-resources.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-BLE Data HarvesterTests-resources.sh"; sourceTree = "<group>"; };
 		D2DD2D8D7AD54C6D15AD3B82A64D4B15 /* CocoaAsyncSocket-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "CocoaAsyncSocket-prefix.pch"; sourceTree = "<group>"; };
 		D8861751EC48397494FFA6B070715B9E /* CocoaMQTT.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = CocoaMQTT.swift; path = Source/CocoaMQTT.swift; sourceTree = "<group>"; };
 		DF6EF482DADA3772700E3BA662526513 /* CocoaAsyncSocket.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CocoaAsyncSocket.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		E0C2984981EE0AFD069BBA4756BDD1CC /* CocoaAsyncSocket.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = CocoaAsyncSocket.framework; path = CocoaAsyncSocket.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		E3F41EB16B636BDD9D808C5F3CF5F15E /* MSWeakTimer.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; path = MSWeakTimer.modulemap; sourceTree = "<group>"; };
+		E0C2984981EE0AFD069BBA4756BDD1CC /* CocoaAsyncSocket.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CocoaAsyncSocket.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		E3F41EB16B636BDD9D808C5F3CF5F15E /* MSWeakTimer.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "sourcecode.module-map"; path = MSWeakTimer.modulemap; sourceTree = "<group>"; };
 		E468CD3CC6B2C2374A7CCB26349A814A /* MSWeakTimer-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "MSWeakTimer-umbrella.h"; sourceTree = "<group>"; };
 		E4CF240A735355A501A220A230ADE318 /* GCDAsyncUdpSocket.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = GCDAsyncUdpSocket.m; path = Source/GCD/GCDAsyncUdpSocket.m; sourceTree = "<group>"; };
 		EC61E335F594F8DDF36B9BC5DFAA359D /* CocoaMQTTFrame.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = CocoaMQTTFrame.swift; path = Source/CocoaMQTTFrame.swift; sourceTree = "<group>"; };
 		EDF2E15BB5D273DBEEC01575FF26D3AE /* MSWeakTimer-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "MSWeakTimer-prefix.pch"; sourceTree = "<group>"; };
 		F00845E4F65600F89AEA4908E6F8CCCB /* Pods-BLE Data HarvesterTests-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-BLE Data HarvesterTests-acknowledgements.plist"; sourceTree = "<group>"; };
-		F2D6C490BF261888B7195B84AC864947 /* Pods_BLE_Data_Harvester.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Pods_BLE_Data_Harvester.framework; path = "Pods-BLE Data Harvester.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
+		F2D6C490BF261888B7195B84AC864947 /* Pods_BLE_Data_Harvester.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BLE_Data_Harvester.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FAB30131226967841B22701559B82DE3 /* CocoaMQTTMessage.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = CocoaMQTTMessage.swift; path = Source/CocoaMQTTMessage.swift; sourceTree = "<group>"; };
 		FE39C18950BDA0C587C2143DB4858ADE /* Pods-BLE Data HarvesterTests-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-BLE Data HarvesterTests-umbrella.h"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -227,7 +227,6 @@
 				FAB30131226967841B22701559B82DE3 /* CocoaMQTTMessage.swift */,
 				8FAFA215EE6B6128D2C0052EA8B25DCD /* Support Files */,
 			);
-			name = CocoaMQTT;
 			path = CocoaMQTT;
 			sourceTree = "<group>";
 		};
@@ -363,7 +362,6 @@
 				C8A0B7BC7507936DEA30BDB14C852482 /* GCD */,
 				58A1021E62AE6632FB2DF32958659625 /* Support Files */,
 			);
-			name = CocoaAsyncSocket;
 			path = CocoaAsyncSocket;
 			sourceTree = "<group>";
 		};
@@ -374,7 +372,6 @@
 				0F9B2C073F288D4DFC20D2637AE7313C /* MSWeakTimer.m */,
 				DBAE1477AA6F9ED56172A1B064659DAE /* Support Files */,
 			);
-			name = MSWeakTimer;
 			path = MSWeakTimer;
 			sourceTree = "<group>";
 		};
@@ -586,6 +583,11 @@
 			attributes = {
 				LastSwiftUpdateCheck = 0730;
 				LastUpgradeCheck = 0700;
+				TargetAttributes = {
+					AC0D2D2B4EE7C873431AB3502859CA60 = {
+						LastSwiftMigration = 0820;
+					};
+				};
 			};
 			buildConfigurationList = 2D8E8EC45A3A1A1D94AE762CB5028504 /* Build configuration list for PBXProject "Pods" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -879,6 +881,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 93F1A452245805D5D6DE440D274B8A9F /* CocoaAsyncSocket.xcconfig */;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
@@ -900,6 +903,7 @@
 				PRODUCT_NAME = CocoaAsyncSocket;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
@@ -911,6 +915,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 93F1A452245805D5D6DE440D274B8A9F /* CocoaAsyncSocket.xcconfig */;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";

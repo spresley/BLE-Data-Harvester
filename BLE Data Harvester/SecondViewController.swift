@@ -12,9 +12,8 @@ import WebKit
 
 
 class SecondViewController: UIViewController, WKUIDelegate {
-    
-    var webView: WKWebView!
-    
+        
+    @IBOutlet var webView: WKWebView!
     override func loadView() {
         let webConfiguration = WKWebViewConfiguration()
         webView = WKWebView(frame: .zero, configuration: webConfiguration)

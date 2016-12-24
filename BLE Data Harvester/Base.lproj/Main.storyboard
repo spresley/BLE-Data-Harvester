@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="16C60b" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="49e-Tb-3d3">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="16C67" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="49e-Tb-3d3">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -110,32 +110,58 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <webView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mZv-sv-A4p" customClass="WKWebView">
-                                <rect key="frame" x="16" y="57" width="343" height="561"/>
-                                <color key="backgroundColor" red="0.36078431370000003" green="0.38823529410000002" blue="0.4039215686" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                            </webView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Historical Data Graphing" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="a6i-Ic-bJv">
-                                <rect key="frame" x="94" y="28" width="187" height="21"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Webview Test" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="a6i-Ic-bJv">
+                                <rect key="frame" x="135" y="28" width="106" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <webView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mZv-sv-A4p" customClass="WKWebView">
+                                <rect key="frame" x="16" y="99" width="343" height="519"/>
+                                <color key="backgroundColor" red="0.36078431370000003" green="0.38823529410000002" blue="0.4039215686" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            </webView>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="mZv-sv-A4p" firstAttribute="top" secondItem="L7p-HK-0SC" secondAttribute="bottom" constant="37" id="HPJ-tQ-g0W"/>
+                            <constraint firstItem="Djb-ko-YwX" firstAttribute="top" secondItem="mZv-sv-A4p" secondAttribute="bottom" id="2ML-dg-dNF"/>
+                            <constraint firstItem="mZv-sv-A4p" firstAttribute="trailing" secondItem="QS5-Rx-YEW" secondAttribute="trailingMargin" id="G12-tV-uQw"/>
                             <constraint firstItem="a6i-Ic-bJv" firstAttribute="centerX" secondItem="QS5-Rx-YEW" secondAttribute="centerX" id="N5a-ri-Id6"/>
-                            <constraint firstAttribute="leadingMargin" secondItem="mZv-sv-A4p" secondAttribute="leading" id="TXq-cF-2kj"/>
-                            <constraint firstItem="Djb-ko-YwX" firstAttribute="top" secondItem="mZv-sv-A4p" secondAttribute="bottom" id="ajD-QD-ug0"/>
+                            <constraint firstItem="mZv-sv-A4p" firstAttribute="leading" secondItem="QS5-Rx-YEW" secondAttribute="leadingMargin" id="PaZ-B3-JLP"/>
                             <constraint firstItem="a6i-Ic-bJv" firstAttribute="top" secondItem="L7p-HK-0SC" secondAttribute="bottom" constant="8" id="fhX-3q-sUK"/>
                             <constraint firstItem="mZv-sv-A4p" firstAttribute="centerX" secondItem="QS5-Rx-YEW" secondAttribute="centerX" id="gF7-ug-uKn"/>
+                            <constraint firstItem="mZv-sv-A4p" firstAttribute="top" secondItem="a6i-Ic-bJv" secondAttribute="bottom" constant="50" id="oiU-4B-rhg"/>
+                            <constraint firstItem="mZv-sv-A4p" firstAttribute="top" secondItem="L7p-HK-0SC" secondAttribute="bottom" constant="79" id="w8c-gG-hKU"/>
                         </constraints>
                     </view>
+                    <extendedEdge key="edgesForExtendedLayout" bottom="YES"/>
                     <tabBarItem key="tabBarItem" title="Second" image="second" id="cPa-gy-q4n"/>
+                    <connections>
+                        <outlet property="webView" destination="mZv-sv-A4p" id="W3N-aT-2Nb"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4Nw-L8-lE0" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="956" y="393.55322338830587"/>
+            <point key="canvasLocation" x="900" y="452"/>
+        </scene>
+        <!--Graph-->
+        <scene sceneID="Wu6-Ti-v90">
+            <objects>
+                <viewController id="YfS-Wk-PLh" customClass="GraphViewController" customModule="BLE_Data_Harvester" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="jY3-aN-urS"/>
+                        <viewControllerLayoutGuide type="bottom" id="zve-1v-IYE"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="lMA-ym-Pao">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <tabBarItem key="tabBarItem" title="Graph" id="rux-lV-3Mo"/>
+                    <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="gcx-Zo-JSD" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1612" y="394"/>
         </scene>
         <!--Settings View Controller-->
         <scene sceneID="vq8-bX-H3i">
@@ -173,7 +199,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HVm-Zv-Mac">
-                                <rect key="frame" x="17" y="544" width="340" height="60"/>
+                                <rect key="frame" x="18" y="544" width="340" height="60"/>
                                 <color key="backgroundColor" red="0.0" green="0.0" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="340" id="Rax-d7-T2y"/>
@@ -188,7 +214,7 @@
                                 </connections>
                             </button>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" text="Cloud Connector" textAlignment="center" lineBreakMode="tailTruncation" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="6cU-QC-n9h">
-                                <rect key="frame" x="46" y="28" width="284.5" height="50"/>
+                                <rect key="frame" x="45" y="28" width="285" height="50"/>
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="50" id="PhP-Oo-u9w"/>
@@ -227,7 +253,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4rm-qS-ID5" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1661.5999999999999" y="110.19490254872565"/>
+            <point key="canvasLocation" x="1612" y="-272"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="yl2-sM-qoP">
@@ -242,7 +268,8 @@
                     <connections>
                         <segue destination="9pv-A4-QxB" kind="relationship" relationship="viewControllers" id="u7Y-xg-7CH"/>
                         <segue destination="8rJ-Kc-sve" kind="relationship" relationship="viewControllers" id="lzU-1b-eKA"/>
-                        <segue destination="soF-Fb-v9x" kind="relationship" relationship="viewControllers" id="4Lv-8N-7mX"/>
+                        <segue destination="YfS-Wk-PLh" kind="relationship" relationship="viewControllers" id="BG1-oD-sHS"/>
+                        <segue destination="soF-Fb-v9x" kind="relationship" relationship="viewControllers" id="i6u-Yr-XZB"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="HuB-VB-40B" sceneMemberID="firstResponder"/>
