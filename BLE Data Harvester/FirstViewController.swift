@@ -213,11 +213,12 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
                 
                 if (usePersistance){
                     // Check if sensorNode has been scanned recently (persistant)
-                    if (findSensor(uuid: peripheral.identifier.uuidString)) {
+                    if (findSensor(testuuid: peripheral.identifier.uuidString)) {
                     //    print("Have scanned this peripheral recently. Ignore.")
                     } else {
                         print("DIDN'T find peripheral in connection history")
                         saveSensor(uuid: peripheral.identifier.uuidString, lastConnectionTime: currentTime)
+                        self.sensorTable.reloadData()
                         // save a reference to the sensor tag
                         sensorTag = peripheral
                         sensorTag!.delegate = self
@@ -493,9 +494,9 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
     
     // MARK: Persistance Methods and table
     
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    func sensorTable(_ sensorTable: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell")
+        let cell = sensorTable.dequeueReusableCell(withIdentifier: "Cell")
         
         let sensornode = persistantConnectionHistory[indexPath.row]
         
@@ -504,7 +505,7 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
         return cell!
     }
     
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func sensorTable(_ sensorTable: UITableView, numberOfRowsInSection section: Int) -> Int {
         return persistantConnectionHistory.count
     }
     
@@ -531,9 +532,15 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
         } catch let error as NSError  {
             print("Could not save \(error), \(error.userInfo)")
         }
+        self.sensorTable.reloadData()
     }
     
-    func findSensor(uuid: String)  -> Bool {
+    func findSensor(testuuid: String)  -> Bool {
+        print("Searching for:",testuuid)
+        let uuidPredicate = NSPredicate(format: "uuid = 'testuuid'")
+        
+        let matches = (persistantConnectionHistory as NSArray).filtered(using: uuidPredicate)
+        
         //let currenTime = Date()
         
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
@@ -544,14 +551,24 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
         let entity =  NSEntityDescription.entity(forEntityName: "RoomSensor", in:managedContext)
         
         let findSensorNode = NSManagedObject(entity: entity!, insertInto: managedContext)
-        findSensorNode.setValue(uuid, forKey: "uuid")
+        findSensorNode.setValue(testuuid, forKey: "uuid")
         //findSensorNode.setValue(currenTime, forKey: "lastConnectionTime")
         
-        if (persistantConnectionHistory.contains(findSensorNode)){
+        for index in 0..<matches.count {
+            print(matches[index])
+        }
+        
+        if (matches.count > 0 ){
             return true
         } else {
             return false
         }
+    
+        /*if (persistantConnectionHistory.contains(findSensorNode)){
+            return true
+        } else {
+            return false
+        }*/
         
     }
 }
