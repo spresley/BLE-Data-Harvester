@@ -7,6 +7,7 @@ target 'BLE Data Harvester' do
 
   # Pods for BLE Data Harvester
   pod 'CocoaMQTT'
+  pod ‘Charts’
 
   target 'BLE Data HarvesterTests' do
     inherit! :search_paths

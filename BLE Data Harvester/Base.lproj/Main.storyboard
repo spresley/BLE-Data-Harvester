@@ -174,14 +174,29 @@
                     <view key="view" contentMode="scaleToFill" id="lMA-ym-Pao">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="XNC-Jj-F1O" customClass="LineChartView" customModule="Charts">
+                                <rect key="frame" x="16" y="28" width="343" height="590"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </view>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="zve-1v-IYE" firstAttribute="top" secondItem="XNC-Jj-F1O" secondAttribute="bottom" id="PyK-TI-jOj"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="XNC-Jj-F1O" secondAttribute="trailing" id="XcU-HP-YaM"/>
+                            <constraint firstItem="XNC-Jj-F1O" firstAttribute="top" secondItem="jY3-aN-urS" secondAttribute="bottom" constant="8" id="ebZ-GB-kN5"/>
+                            <constraint firstAttribute="leadingMargin" secondItem="XNC-Jj-F1O" secondAttribute="leading" id="mgF-W5-PNS"/>
+                        </constraints>
                     </view>
                     <tabBarItem key="tabBarItem" title="Graph" id="rux-lV-3Mo"/>
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
+                    <connections>
+                        <outlet property="lineView" destination="XNC-Jj-F1O" id="wpE-HJ-NL3"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="gcx-Zo-JSD" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1612" y="394"/>
+            <point key="canvasLocation" x="1612" y="393.55322338830587"/>
         </scene>
         <!--Settings View Controller-->
         <scene sceneID="vq8-bX-H3i">

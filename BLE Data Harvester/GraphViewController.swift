@@ -7,69 +7,69 @@
 //
 
 import UIKit
+import Charts
 
 class GraphViewController: UIViewController {
     
-    
+    @IBOutlet var lineView: LineChartView!
+    weak var axisFormatDelegate: IAxisValueFormatter?
 
+    func dataDidParse(historicDataObj : HistoricData){
+        print("Data parsed")
+        let numDataPoints: Int = historicDataObj.sensorData.count
+        print("numDataPoints:\(numDataPoints)")
+        print("\(historicDataObj.sensorData[0].time_stamp.dateFromISO8601)")
+        let sensorData = historicDataObj.sensorData
+        
+        struct dataStruct{
+            var time_stamp: Double
+            var activity_level: Double
+            var light_level: Double
+        
+        }
+        var i : Int = 1
+        var dataEntries: [ChartDataEntry] = []
+
+        
+        for entry in sensorData{
+            let timestamp : Date = entry.time_stamp.dateFromISO8601!
+            let dataEntry = ChartDataEntry(x: Double(timestamp.timeIntervalSince1970), y: Double(entry.light_level))
+            dataEntries.append(dataEntry)
+            i += 1
+        }
+
+        //print("TimestampAsDouble: \(timestampAsDouble)")
+        
+
+        let chartDataSet = LineChartDataSet(values: dataEntries, label: "Activity level")
+        let chartData = LineChartData(dataSet: chartDataSet)
+        lineView.data = chartData
+        
+        let xaxis = lineView.xAxis
+        xaxis.valueFormatter = axisFormatDelegate
+    
+        lineView.leftAxis.axisMinimum = 0
+    
+    }
+    
+  
     override func viewDidLoad() {
         super.viewDidLoad()
         print("Graph view loaded")
+        axisFormatDelegate = self
+
     
         // Do any additional setup after loading the view.
-        
-        var keys: NSDictionary?
-        if let path = Bundle.main.path(forResource: "APIkeys", ofType: "plist") {
-            keys = NSDictionary(contentsOfFile: path)
-        }
-        
-        let keysdict = keys
-        
-        let cloudantUsername = keysdict?["cloudant-username"] as! String
-        let cloudantPassword = keysdict?["cloudant-password"] as! String
-        
-       let url = URL(string: ("https://" + cloudantUsername + ":" + cloudantPassword + "@f810fc6b-39be-4c4c-9716-47f93c071d09-bluemix.cloudant.com/test-data/_design/design_doc/_view/by-date-minimised"))!
-        let task = URLSession.shared.dataTask(with: url){(data, response, error) in
-            if error != nil{
-                print("error")
-            } else{
-                if let urlContent = data{
-                    do{
-                        let jsonResult = try JSONSerialization.jsonObject(with: urlContent, options:[])
-                        print(jsonResult)
-                        
-                        if let dictionary = jsonResult as? [String: AnyObject] {
-                            if let total_rows = dictionary["total_rows"] as? Int {
-                                // access individual value in dictionary
-                                print(total_rows)
-                            }
-                            if let rows = dictionary["rows"]{
-                                for (row) in rows as! [AnyObject] {
-                                    if let value = row["value"] as? [String: AnyObject]{
-                                        print(value)
-                                        if let time_stamp = value["time_stamp"] as? String {
-                                            print(time_stamp)
-                                            if let activity_level = value["activity_level"] as? Int {
-                                                print(activity_level)
-                                                if let light_level = value["light_level"] as? Int {
-                                                    print(light_level)
-                                                    //Add data to array here
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    catch{
-                        print("Json processing failed")
-                    }
-                }
-        
+        let historicDataObj = HistoricData()
+        historicDataObj.requestDataFromDB(completion: {
+            print("finished loading from DB")
+            
+            for datapoint in historicDataObj.sensorData{
+                print("time_stamp: \(datapoint.time_stamp), activity_level: \(datapoint.activity_level), light_level: \(datapoint.light_level)")
             }
-        }
-        task.resume()
+            self.dataDidParse(historicDataObj: historicDataObj)
+        })
+
     
     }
 
@@ -89,4 +89,120 @@ class GraphViewController: UIViewController {
     }
     */
 
+}
+
+
+struct sensorDataPoint{
+    let time_stamp: String
+    let activity_level: Int
+    let light_level: Int
+    
+    init(time_stamp: String, activity_level: Int, light_level: Int){
+        self.time_stamp = time_stamp
+        self.activity_level = activity_level
+        self.light_level = light_level
+    }
+}
+
+class HistoricData{
+    
+    var sensorData: [sensorDataPoint] = []
+    
+    init(){
+    }
+    
+    func addDataPoint(sensorData: [sensorDataPoint]){
+        for datapoint in sensorData {
+            self.sensorData.append(datapoint)
+            print("added")
+        }
+    }
+    
+    func requestDataFromDB(completion: @escaping () -> Void ){
+        
+        // Do any additional setup after loading the view.
+        
+        var keys: NSDictionary?
+        if let path = Bundle.main.path(forResource: "APIkeys", ofType: "plist") {
+            keys = NSDictionary(contentsOfFile: path)
+        }
+        
+        let keysdict = keys
+        
+        let cloudantUsername = keysdict?["cloudant-username"] as! String
+        let cloudantPassword = keysdict?["cloudant-password"] as! String
+        
+        let url = URL(string: ("https://" + cloudantUsername + ":" + cloudantPassword + "@f810fc6b-39be-4c4c-9716-47f93c071d09-bluemix.cloudant.com/test-data/_design/design_doc/_view/by-date-minimised"))!
+        
+        
+        let task = URLSession.shared.dataTask(with: url){(data, response, error) in
+            if error != nil{
+                print("error")
+            } else{
+                if let urlContent = data{
+                    do{
+                        let jsonResult = try JSONSerialization.jsonObject(with: urlContent, options:[])
+                        //print(jsonResult)
+                        
+                        if let dictionary = jsonResult as? [String: AnyObject] {
+                            if let total_rows = dictionary["total_rows"] as? Int {
+                                // access individual value in dictionary
+                                print(total_rows)
+                            }
+                            if let rows = dictionary["rows"]{
+                                for (row) in rows as! [AnyObject] {
+                                    if let value = row["value"] as? [String: AnyObject]{
+                                        //print(value)
+                                        guard let time_stamp = value["time_stamp"] as? String else {
+                                            return
+                                        }
+                                        //print(time_stamp)
+                                        
+                                        guard let activity_level = value["activity_level"] as? Int else {
+                                            return
+                                        }
+                                        //print(activity_level)
+                                        
+                                        guard let light_level = value["light_level"] as? Int else {
+                                            return
+                                        }
+                                        //print(light_level)
+                                        
+                                        //Add data to array here
+                                        var datapoint: sensorDataPoint = sensorDataPoint(time_stamp: time_stamp, activity_level: activity_level, light_level: light_level)
+                                        self.addDataPoint(sensorData: [datapoint]);
+                                    }
+                                }
+                            }
+                        }
+                    
+                    }
+                    catch{
+                        print("Json processing failed")
+                    }
+                }
+                print("finished parsing data into objects")
+                completion()
+            
+            }
+        }
+        task.resume()
+        
+    
+    }
+        //json query
+        //pass json to parser
+}
+
+
+
+
+// MARK: axisFormatDelegate
+extension GraphViewController: IAxisValueFormatter {
+    
+    func stringForValue(_ value: Double, axis: AxisBase?) -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "HH:mm.ss"
+        return dateFormatter.string(from: Date(timeIntervalSince1970: value))
+    }
 }
