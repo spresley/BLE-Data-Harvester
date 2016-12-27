@@ -77,9 +77,15 @@ class SettingsViewController: UIViewController {
 
     }
 
-
     @IBAction func sendButtonWasPressed(_ sender: Any) {
-        sendRoomMonitorMessage()
+        print("Send button was pressed")
+
+        if isConnected == 1{
+            sendRoomMonitorMessage()
+        }
+        else{
+            print("Not logged in")
+        }
     }
 
     func setupConnection(clientID: String, authToken: String){

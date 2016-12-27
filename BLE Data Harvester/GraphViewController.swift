@@ -36,10 +36,7 @@ class GraphViewController: UIViewController {
             let dataEntry = ChartDataEntry(x: Double(timestamp.timeIntervalSince1970), y: Double(entry.light_level))
             dataEntries.append(dataEntry)
             i += 1
-        }
-
-        //print("TimestampAsDouble: \(timestampAsDouble)")
-        
+        }        
 
         let chartDataSet = LineChartDataSet(values: dataEntries, label: "Activity level")
         let chartData = LineChartData(dataSet: chartDataSet)
@@ -49,9 +46,9 @@ class GraphViewController: UIViewController {
         xaxis.valueFormatter = axisFormatDelegate
     
         lineView.leftAxis.axisMinimum = 0
+        lineView.rightAxis.axisMinimum = 0
     
     }
-    
   
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -69,8 +66,6 @@ class GraphViewController: UIViewController {
             }
             self.dataDidParse(historicDataObj: historicDataObj)
         })
-
-    
     }
 
     override func didReceiveMemoryWarning() {
@@ -169,7 +164,7 @@ class HistoricData{
                                         //print(light_level)
                                         
                                         //Add data to array here
-                                        var datapoint: sensorDataPoint = sensorDataPoint(time_stamp: time_stamp, activity_level: activity_level, light_level: light_level)
+                                        let datapoint: sensorDataPoint = sensorDataPoint(time_stamp: time_stamp, activity_level: activity_level, light_level: light_level)
                                         self.addDataPoint(sensorData: [datapoint]);
                                     }
                                 }
