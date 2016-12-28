@@ -79,28 +79,21 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
         // Do any additional setup after loading the view, typically from a nib.
         centralManager = CBCentralManager(delegate: self, queue: nil)
         sensorTable.register(UITableViewCell.self, forCellReuseIdentifier: "Cell")
-        
-        //var appDel: AppDelegate = UIApplication.shared.delegate as! AppDelegate
-        //var context: NSManagedObjectContext = appDel.managedObjectContext!
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
-        //1
+
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         
         let managedContext = appDelegate.persistentContainer.viewContext
-        
-        //2
+
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "RoomSensor")
-        
-        //3
+
         do {
             let results = try managedContext.fetch(fetchRequest)
             persistantConnectionHistory = results as! [NSManagedObject]
@@ -131,9 +124,7 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
             print(message)
             keepScanning = true
             timer = Timer.scheduledTimer(timeInterval: timerScanInterval, target:self, selector: #selector(FirstViewController.pauseScan), userInfo: nil, repeats: false)
-            
-            //(withTimeInterval: timerScanInterval, target: self, selector: #selector(FirstViewController.pauseScan), userInfo: nil, repeats: false)
-            
+
             // Initiate Scan for Peripherals
             let roomMonitorServiceUUID = CBUUID(string: Device.RoomMonitorServiceUUID)
             print("Scanning for SensorTag adverstising room monitor service \(roomMonitorServiceUUID)")
@@ -238,14 +229,14 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
     
     func pauseScan() {
         // Scanning uses up battery on phone, so pause the scan process for the designated interval.
-        print("*** PAUSING SCAN...")
+        print("*** PAUSING SCAN")
         timer = Timer.scheduledTimer(timeInterval: timerPauseInterval, target:self, selector: #selector(FirstViewController.resumeScan), userInfo: nil, repeats: false)
         centralManager.stopScan()
     }
     
     func resumeScan() {
         if keepScanning {
-            // Start scanning again...
+            // Start scanning again
             print("*** RESUMING SCAN!")
             timer = Timer.scheduledTimer(timeInterval: timerScanInterval, target:self, selector: #selector(FirstViewController.pauseScan), userInfo: nil, repeats: false)
             centralManager.scanForPeripherals(withServices: nil, options: nil)
@@ -254,12 +245,7 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
     
     func centralManager(_ central: CBCentralManager, didConnect peripheral: CBPeripheral) {
         print("**** SUCCESSFULLY CONNECTED TO SENSOR TAG!!!")
-        
-        // Now that we've successfully connected to the SensorTag, let's discover the services.
-        // - NOTE:  we pass nil here to request ALL services be discovered.
-        //          If there was a subset of services we were interested in, we could pass the UUIDs here.
-        //          Doing so saves battery life and saves time.
-        peripheral.discoverServices(nil)
+        peripheral.discoverServices(nil) // nil = discover all services
     }
    
     func centralManager(_ central: CBCentralManager, didFailToConnect peripheral: CBPeripheral, error: Error?) {
@@ -305,30 +291,25 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
         }
         
         if let characteristics = service.characteristics {
-            
             for characteristic in characteristics {
-
                 if characteristic.uuid == CBUUID(string: Device.MostRecentLightLevelUUID) {
                     lightLevelCharacteristic = characteristic
                     sensorTag?.setNotifyValue(false, for: characteristic)
                     sensorTag?.readValue(for: characteristic)
                     print("Discovered most recent light level")
                 }
-                
                 if characteristic.uuid == CBUUID(string: Device.MostRecentActivityStateUUID) {
                     activityStateCharacteristic = characteristic
                     sensorTag?.setNotifyValue(false, for: characteristic)
                     sensorTag?.readValue(for: characteristic)
                     print("Discovered most recent activity level")
                 }
-                
                 if characteristic.uuid == CBUUID(string: Device.HistoricalLightLevelUUID) {
                     activityStateCharacteristic = characteristic
                     sensorTag?.setNotifyValue(false, for: characteristic)
                     sensorTag?.readValue(for: characteristic)
                     print("Discovered most historical light level")
                 }
-                
                 if characteristic.uuid == CBUUID(string: Device.HistoricalActivityStateUUID) {
                     activityStateCharacteristic = characteristic
                     sensorTag?.setNotifyValue(false, for: characteristic)
@@ -336,7 +317,6 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
                     print("Discovered most historical activity level")
                     collectingHistoricalData = true
                 }
-                
                 if characteristic.uuid == CBUUID(string: Device.TimeOfHistoricalMeasurementUUID) {
                     activityStateCharacteristic = characteristic
                     sensorTag?.setNotifyValue(false, for: characteristic)
@@ -440,7 +420,8 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
                 gotHistoricalTime = true
             }
         }
-        //Historical data checking
+        
+        // MARK: Historical data checking
         if (gotHistoricalActivity && gotHistoricalLight && gotHistoricalTime){
             print("save historical data")
             historicalDataTable.append(currentHistoricalData) // add the most recently collected data to the table
@@ -452,18 +433,15 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
                 rawHistoricalTime = 0 // enable for test only
             }
             
-            
             if (rawHistoricalTime == 0){ // if the historical time is 0 all data has been collected
                 print("historical time is 0")
-                
-                
-                    keepScanning = true
-                    print("GOT ALL HISTORICAL DATA")
-                    gotHistoricalLight = false
-                    gotHistoricalActivity = false
-                    calculateActualHistoricalTime()
-                    print("done")
-                    disconnectSensorNode()
+                keepScanning = true
+                print("GOT ALL HISTORICAL DATA")
+                gotHistoricalLight = false
+                gotHistoricalActivity = false
+                calculateActualHistoricalTime()
+                print("done")
+                disconnectSensorNode()
             }
         }
     }
@@ -501,7 +479,6 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
     func sensorTable(_ sensorTable: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = sensorTable.dequeueReusableCell(withIdentifier: "Cell")
-        
         let sensornode = persistantConnectionHistory[indexPath.row]
         
         cell!.textLabel!.text = sensornode.value(forKey: "uuid") as? String
@@ -514,21 +491,17 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
     }
     
     func saveSensor(uuid: String, lastConnectionTime: Date) {
-        //1
+
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
-        
         let managedContext = appDelegate.persistentContainer.viewContext
-        
-        //2
+
         let entity =  NSEntityDescription.entity(forEntityName: "RoomSensor", in:managedContext)
         
         let sensorNode = NSManagedObject(entity: entity!, insertInto: managedContext)
         
-        //3
         sensorNode.setValue(uuid, forKey: "uuid")
         sensorNode.setValue(lastConnectionTime, forKey: "lastConnectionTime")
         
-        //4
         do {
             try managedContext.save()
             //5
@@ -543,13 +516,8 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
         var returnVal = false
         var foundUUID = false
         var foundIndex:Int = 0
-        var updateIndex = true
-        var duplicateCounter = 0
-        var haveRemovedDuplicates = false
         
         print("Searching for:",testuuid)
-        //let uuidPredicate = NSPredicate(format: "uuid = 'testuuid'")
-        
         print("Number of nodes in connection history: ", persistantConnectionHistory.count)
         
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "RoomSensor")
@@ -574,12 +542,11 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
             if (resultTest as! String == testuuid){
                 print("MATCH")
                 foundUUID = true
-                //if (updateIndex){ //if the foundIndex hasn't been updated do this
+                
                 if(index>foundIndex){
                     foundIndex = index
                     print("found later entry")
                 }
-                    updateIndex = false
             } else {
                 print("NO MATCH")
             }
@@ -595,7 +562,7 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
             let timeoutTime = connectionTime.addingTimeInterval(gatherDataInterval)
             if currentTime.compare(timeoutTime) == ComparisonResult.orderedDescending {
                 print("Current time is later than timeout time. Can collect data again")
-                //persistantConnectionHistory.remove(at: foundIndex)
+                //persistantConnectionHistory.remove(at: foundIndex) // TODO: fix this to reduce storage usage
                 result.remove(at: foundIndex)
                 print("Have removed record from history")
             } else {
