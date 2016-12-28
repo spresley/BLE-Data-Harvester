@@ -517,12 +517,14 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
         var foundUUID = false
         var foundIndex:Int = 0
         
+        /* Print out some debugging info */
         print("Searching for:",testuuid)
         print("Number of nodes in connection history: ", persistantConnectionHistory.count)
         
-        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "RoomSensor")
-        var result = [NSManagedObject]()
-        result.removeAll()
+        
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "RoomSensor") //fetch entities with the correct name
+        var result = [NSManagedObject]() //an array to put the results in
+        result.removeAll() //make sure this array is empty
         
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         let managedContext = appDelegate.persistentContainer.viewContext
@@ -551,9 +553,7 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
                 print("NO MATCH")
             }
         }
-        
         removedDuplicates = true
-        
         
         if (foundUUID){
             print("Node was found in history at index: ", foundIndex, ", checking last connection time")
@@ -570,7 +570,6 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
                 returnVal = true
             }
         }
-        
         return returnVal
     }
 }
