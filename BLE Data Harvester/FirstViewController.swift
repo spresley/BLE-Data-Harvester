@@ -61,12 +61,13 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
     var currentHistoricalData = historicalData(historicalActivityLevel: 0, historicalLightLevel: 0, relativeTimeHistoricalMeasurement: 0, actualTimeHistoricalMeasurement: Date())
     
     // MARK: connection history parameters
-    let gatherDataInterval:TimeInterval = 60.0
+    let gatherDataInterval:TimeInterval = 30.0
     struct roomSensorNode {
         var UUID:String
         var lastConnectionTime:Date
     }
     var currentPeripheral:roomSensorNode?
+    var removedDuplicates = false
     
     // TODO: Make this persistant
     var connectionHistory = [roomSensorNode]()
@@ -78,6 +79,9 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
         // Do any additional setup after loading the view, typically from a nib.
         centralManager = CBCentralManager(delegate: self, queue: nil)
         sensorTable.register(UITableViewCell.self, forCellReuseIdentifier: "Cell")
+        
+        //var appDel: AppDelegate = UIApplication.shared.delegate as! AppDelegate
+        //var context: NSManagedObjectContext = appDel.managedObjectContext!
     }
 
     override func didReceiveMemoryWarning() {
@@ -214,7 +218,8 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
                 if (usePersistance){
                     // Check if sensorNode has been scanned recently (persistant)
                     if (findSensor(testuuid: peripheral.identifier.uuidString)) {
-                    //    print("Have scanned this peripheral recently. Ignore.")
+                        print("Have scanned this peripheral recently. Ignore.")
+                        keepScanning = true
                     } else {
                         print("DIDN'T find peripheral in connection history")
                         saveSensor(uuid: peripheral.identifier.uuidString, lastConnectionTime: currentTime)
@@ -225,7 +230,6 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
                     
                         // Request a connection to the peripheral
                         centralManager.connect(sensorTag!, options: nil)
-
                     }
                 }
             }
@@ -267,7 +271,7 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
             connectionHistory.append(currentPeripheral!)
         }
         
-        print("**** DISCONNECTED FROM SENSOR TAG and stored in to history")
+        print("**** DISCONNECTED FROM SENSOR TAG")
         if error != nil {
             print("****** DISCONNECTION DETAILS: \(error!.localizedDescription)")
         }
@@ -536,39 +540,70 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
     }
     
     func findSensor(testuuid: String)  -> Bool {
+        var returnVal = false
+        var foundUUID = false
+        var foundIndex:Int = 0
+        var updateIndex = true
+        var duplicateCounter = 0
+        var haveRemovedDuplicates = false
+        
         print("Searching for:",testuuid)
-        let uuidPredicate = NSPredicate(format: "uuid = 'testuuid'")
+        //let uuidPredicate = NSPredicate(format: "uuid = 'testuuid'")
         
-        let matches = (persistantConnectionHistory as NSArray).filtered(using: uuidPredicate)
+        print("Number of nodes in connection history: ", persistantConnectionHistory.count)
         
-        //let currenTime = Date()
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "RoomSensor")
+        var result = [NSManagedObject]()
+        result.removeAll()
         
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
-        
         let managedContext = appDelegate.persistentContainer.viewContext
         
-        //2
-        let entity =  NSEntityDescription.entity(forEntityName: "RoomSensor", in:managedContext)
-        
-        let findSensorNode = NSManagedObject(entity: entity!, insertInto: managedContext)
-        findSensorNode.setValue(testuuid, forKey: "uuid")
-        //findSensorNode.setValue(currenTime, forKey: "lastConnectionTime")
-        
-        for index in 0..<matches.count {
-            print(matches[index])
+        do {
+            let matches = try managedContext.fetch(fetchRequest)
+            
+            if let matches = matches as? [NSManagedObject] {
+                result = matches
+            }
+        } catch {
+            print("Unable to fetch managed objects for entity RoomSensor.")
+        }
+        print("Number of nodes in result history: ", result.count)
+        for index in 0..<result.count {
+            let resultTest = result[index].value(forKey: "uuid")
+            if (resultTest as! String == testuuid){
+                print("MATCH")
+                foundUUID = true
+                //if (updateIndex){ //if the foundIndex hasn't been updated do this
+                if(index>foundIndex){
+                    foundIndex = index
+                    print("found later entry")
+                }
+                    updateIndex = false
+            } else {
+                print("NO MATCH")
+            }
         }
         
-        if (matches.count > 0 ){
-            return true
-        } else {
-            return false
-        }
-    
-        /*if (persistantConnectionHistory.contains(findSensorNode)){
-            return true
-        } else {
-            return false
-        }*/
+        removedDuplicates = true
         
+        
+        if (foundUUID){
+            print("Node was found in history at index: ", foundIndex, ", checking last connection time")
+            let currentTime = Date()
+            let connectionTime = result[foundIndex].value(forKey: "lastConnectionTime") as! Date
+            let timeoutTime = connectionTime.addingTimeInterval(gatherDataInterval)
+            if currentTime.compare(timeoutTime) == ComparisonResult.orderedDescending {
+                print("Current time is later than timeout time. Can collect data again")
+                //persistantConnectionHistory.remove(at: foundIndex)
+                result.remove(at: foundIndex)
+                print("Have removed record from history")
+            } else {
+                print("Current time is sooner than timeout time. Can't collect data again")
+                returnVal = true
+            }
+        }
+        
+        return returnVal
     }
 }
