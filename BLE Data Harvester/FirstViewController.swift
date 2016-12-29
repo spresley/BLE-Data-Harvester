@@ -361,7 +361,18 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
                 if (gotActivity && gotLight) {
                     centralManager.cancelPeripheralConnection(sensorTag!)
                     print("DISCONNECTED FROM PERIPHERAL")
-                    gotLight = true
+                    gotLight = false
+                    
+                    if isConnected == 1{
+                        sharedInstance.sendRoomMonitorMessage(activity_level: Double(rawActivityLevel), light_level: Double(rawLightLevel), time_stamp: Date()) // Call this function for each message needing to be sent
+                    }else {
+                        print("Not connected to IBM BlueMix")
+                        
+                        /*let alertController = UIAlertController(title: "Connection Error", message: "Not connected to IBM BlueMix", preferredStyle: UIAlertControllerStyle.alert)
+                        let okAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.cancel, handler: nil)
+                        alertController.addAction(okAction)
+                        self.show(alertController, sender: self)*/
+                    }
                 }
             } else if characteristic.uuid == CBUUID(string: Device.MostRecentActivityStateUUID) {
                 //update activity level
@@ -380,6 +391,17 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
                     centralManager.cancelPeripheralConnection(sensorTag!)
                     print("GOT DATA: DISCONNECTING FROM PERIPHERAL")
                     gotActivity = false
+                    
+                    if isConnected == 1{
+                        sharedInstance.sendRoomMonitorMessage(activity_level: Double(rawActivityLevel), light_level: Double(rawLightLevel), time_stamp: Date()) // Call this function for each message needing to be sent
+                    }else {
+                        print("Not connected to IBM BlueMix")
+                        
+                        /*let alertController = UIAlertController(title: "Connection Error", message: "Not connected to IBM BlueMix", preferredStyle: UIAlertControllerStyle.alert)
+                        let okAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.cancel, handler: nil)
+                        alertController.addAction(okAction)
+                        self.show(alertController, sender: self)*/
+                    }
                 }
                 
             // HISTORICAL DATA HANDLING
@@ -478,10 +500,26 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
                 , historicalDataTable[index].historicalLightLevel, ","
                 , historicalDataTable[index].relativeTimeHistoricalMeasurement, ","
                 , historicalDataTable[index].actualTimeHistoricalMeasurement)
+            
+            //Send each data line to BlueMix
+            if isConnected == 1{
+                sharedInstance.sendRoomMonitorMessage(activity_level: Double(historicalDataTable[index].historicalActivityLevel),
+                                                      light_level: Double(historicalDataTable[index].historicalLightLevel),
+                                                      time_stamp: historicalDataTable[index].actualTimeHistoricalMeasurement)
+            }else {
+                print("Not connected to IBM BlueMix")
+                
+                /*let alertController = UIAlertController(title: "Connection Error", message: "Not connected to IBM BlueMix", preferredStyle: UIAlertControllerStyle.alert)
+                 let okAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.cancel, handler: nil)
+                 alertController.addAction(okAction)
+                 self.show(alertController, sender: self)*/
+            }
         }
         
         maximumRelativeTime = 0
         collectingHistoricalData = false
+        
+        
     }
     
     // MARK: Persistance Methods and table
