@@ -25,7 +25,17 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
     // MARK: Properties
     @IBOutlet weak var activityLevelLabel: UILabel!
     @IBOutlet weak var lightLevelLabel: UILabel!
-    @IBOutlet weak var sensorTable: UITableView!
+    //@IBOutlet weak var sensorTable: UITableView!
+    
+    
+    // MARK: Status Indicators
+
+    @IBOutlet weak var FoundSensorStatus: UILabel!
+    @IBOutlet weak var DiscoveredServicesStatus: UILabel!
+    @IBOutlet weak var HistoricalDataStatus: UILabel!
+    @IBOutlet weak var LiveDataStatus: UILabel!
+    @IBOutlet weak var SentToBlueMixStatus: UILabel!
+    @IBOutlet weak var DisconnectedStatus: UILabel!
     
     // MARK: Debugging Flags
     let debugHistoricalData = true
@@ -88,7 +98,7 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
         title = "\"Sensor Nodes\""
         // Do any additional setup after loading the view, typically from a nib.
         centralManager = CBCentralManager(delegate: self, queue: nil)
-        sensorTable.register(UITableViewCell.self, forCellReuseIdentifier: "Cell")
+        //sensorTable.register(UITableViewCell.self, forCellReuseIdentifier: "Cell")
     }
 
     override func didReceiveMemoryWarning() {
@@ -224,13 +234,14 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
                     } else {
                         print("DIDN'T find peripheral in connection history")
                         saveSensor(uuid: peripheral.identifier.uuidString, lastConnectionTime: currentTime)
-                        self.sensorTable.reloadData()
+                        //self.sensorTable.reloadData()
                         // save a reference to the sensor tag
                         sensorTag = peripheral
                         sensorTag!.delegate = self
                     
                         // Request a connection to the peripheral
                         centralManager.connect(sensorTag!, options: nil)
+                        
                     }
                 }
             }
@@ -255,6 +266,10 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
     
     func centralManager(_ central: CBCentralManager, didConnect peripheral: CBPeripheral) {
         print("**** SUCCESSFULLY CONNECTED TO SENSOR TAG!!!")
+        FoundSensorStatus.text = "✔"
+        FoundSensorStatus.textColor = UIColor.green
+        DisconnectedStatus.text = "✘"
+        DisconnectedStatus.textColor = UIColor.red
         peripheral.discoverServices(nil) // nil = discover all services
     }
    
@@ -268,6 +283,18 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
         }
         
         print("**** DISCONNECTED FROM SENSOR TAG")
+        FoundSensorStatus.text = "✘"
+        FoundSensorStatus.textColor = UIColor.red
+        DiscoveredServicesStatus.text = "✘"
+        DiscoveredServicesStatus.textColor = UIColor.red
+        HistoricalDataStatus.text = "✘"
+        HistoricalDataStatus.textColor = UIColor.red
+        LiveDataStatus.text = "✘"
+        LiveDataStatus.textColor = UIColor.red
+        SentToBlueMixStatus.text = "✘"
+        SentToBlueMixStatus.textColor = UIColor.red
+        DisconnectedStatus.text = "✔"
+        DisconnectedStatus.textColor = UIColor.green
         if error != nil {
             print("****** DISCONNECTION DETAILS: \(error!.localizedDescription)")
         }
@@ -289,6 +316,8 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
                 // If we found either the temperature or the humidity service, discover the characteristics for those services.
                 if (service.uuid == CBUUID(string: Device.RoomMonitorServiceUUID)) {
                     peripheral.discoverCharacteristics(nil, for: service)
+                    DiscoveredServicesStatus.text = "✔"
+                    DiscoveredServicesStatus.textColor = UIColor.green
                 }
             }
         }
@@ -362,9 +391,13 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
                     centralManager.cancelPeripheralConnection(sensorTag!)
                     print("DISCONNECTED FROM PERIPHERAL")
                     gotLight = false
-                    
+                    gotActivity = false
+                    LiveDataStatus.text = "✔"
+                    LiveDataStatus.textColor = UIColor.green
                     if isConnected == 1{
                         sharedInstance.sendRoomMonitorMessage(activity_level: Double(rawActivityLevel), light_level: Double(rawLightLevel), time_stamp: Date()) // Call this function for each message needing to be sent
+                        SentToBlueMixStatus.text = "✔"
+                        SentToBlueMixStatus.textColor = UIColor.green
                     }else {
                         print("Not connected to IBM BlueMix")
                         
@@ -391,9 +424,13 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
                     centralManager.cancelPeripheralConnection(sensorTag!)
                     print("GOT DATA: DISCONNECTING FROM PERIPHERAL")
                     gotActivity = false
-                    
+                    gotLight = false
+                    LiveDataStatus.text = "✔"
+                    LiveDataStatus.textColor = UIColor.green
                     if isConnected == 1{
                         sharedInstance.sendRoomMonitorMessage(activity_level: Double(rawActivityLevel), light_level: Double(rawLightLevel), time_stamp: Date()) // Call this function for each message needing to be sent
+                        SentToBlueMixStatus.text = "✔"
+                        SentToBlueMixStatus.textColor = UIColor.green
                     }else {
                         print("Not connected to IBM BlueMix")
                         
@@ -473,7 +510,10 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
                 gotHistoricalActivity = false
                 calculateActualHistoricalTime()
                 print("done")
+                HistoricalDataStatus.text = "✔"
+                HistoricalDataStatus.textColor = UIColor.green
                 disconnectSensorNode()
+                
             }
         }
     }
@@ -506,6 +546,8 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
                 sharedInstance.sendRoomMonitorMessage(activity_level: Double(historicalDataTable[index].historicalActivityLevel),
                                                       light_level: Double(historicalDataTable[index].historicalLightLevel),
                                                       time_stamp: historicalDataTable[index].actualTimeHistoricalMeasurement)
+                SentToBlueMixStatus.text = "✔"
+                SentToBlueMixStatus.textColor = UIColor.green
             }else {
                 print("Not connected to IBM BlueMix")
                 
@@ -522,21 +564,7 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
         
     }
     
-    // MARK: Persistance Methods and table
-    
-    func sensorTable(_ sensorTable: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
-        let cell = sensorTable.dequeueReusableCell(withIdentifier: "Cell")
-        let sensornode = persistantConnectionHistory[indexPath.row]
-        
-        cell!.textLabel!.text = sensornode.value(forKey: "uuid") as? String
-        
-        return cell!
-    }
-    
-    func sensorTable(_ sensorTable: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return persistantConnectionHistory.count
-    }
+    // MARK: Persistance Methods
     
     func saveSensor(uuid: String, lastConnectionTime: Date) {
 
@@ -557,7 +585,7 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
         } catch let error as NSError  {
             print("Could not save \(error), \(error.userInfo)")
         }
-        self.sensorTable.reloadData()
+        //self.sensorTable.reloadData()
     }
     
     func findSensor(testuuid: String)  -> Bool {
