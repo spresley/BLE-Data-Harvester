@@ -11,6 +11,16 @@ import CoreBluetooth
 import CoreData
 
 class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDelegate {
+    
+    var sharedInstance = MQTTmanager.sharedInstance
+    
+    @IBAction func testButton(_ sender: Any) {
+        if isConnected == 1{
+            sharedInstance.sendRoomMonitorMessage(activity_level: 0, light_level: 0, time_stamp: Date()) // Call this function for each message needing to be sent
+        }else {
+            print("not connected")
+        }
+    }
 
     // MARK: Properties
     @IBOutlet weak var activityLevelLabel: UILabel!
