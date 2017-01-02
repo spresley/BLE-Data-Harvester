@@ -53,7 +53,7 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
     var sensorTag:CBPeripheral?
     var lightLevelCharacteristic:CBCharacteristic?
     var activityStateCharacteristic:CBCharacteristic?
-    let sensorTagName = "GH-SensorNode"
+    let sensorTagName = "ROOM"
     
     var gotLight:Bool = false
     var gotActivity:Bool = false
@@ -167,7 +167,8 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
             print("NEXT PERIPHERAL NAME: \(peripheralName)")
             print("NEXT PERIPHERAL UUID: \(peripheral.identifier.uuidString)")
             
-            if peripheralName == sensorTagName {
+            if peripheralName.contains(sensorTagName) {
+            //if peripheralName == sensorTagName {
                 print("SENSOR TAG FOUND! ADDING NOW!!!")
                 
                 let currentTime = Date()
