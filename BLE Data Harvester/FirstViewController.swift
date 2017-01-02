@@ -38,7 +38,7 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
     @IBOutlet weak var DisconnectedStatus: UILabel!
     
     // MARK: Debugging Flags
-    let debugHistoricalData = true
+    let debugHistoricalData = false
     let usePersistance = true
     
     // MARK: scanning parameters
@@ -376,7 +376,7 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
         
         // extract the data from the characteristic's value property and display the value based on the characteristic type
         if let dataBytes = characteristic.value {
-            if characteristic.uuid == CBUUID(string: Device.MostRecentLightLevelUUID) {
+            if (characteristic.uuid == CBUUID(string: Device.MostRecentLightLevelUUID) && (collectingHistoricalData == false)) {
                 //update light level
                 let dataLength = dataBytes.count / MemoryLayout<UInt16>.size
                 var value = [UInt16](repeating:0, count: dataLength)
@@ -408,7 +408,7 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
                         self.show(alertController, sender: self)*/
                     }
                 }
-            } else if characteristic.uuid == CBUUID(string: Device.MostRecentActivityStateUUID) {
+            } else if (characteristic.uuid == CBUUID(string: Device.MostRecentActivityStateUUID) && (collectingHistoricalData == false)) {
                 //update activity level
                 
                 let dataLength = dataBytes.count / MemoryLayout<UInt16>.size
@@ -444,7 +444,7 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
                 
             // HISTORICAL DATA HANDLING
                 
-            } else if characteristic.uuid == CBUUID(string: Device.HistoricalActivityStateUUID) {
+            } else if (characteristic.uuid == CBUUID(string: Device.HistoricalActivityStateUUID) && (collectingHistoricalData == true)) {
                 //update historical activity level
                 
                 let dataLength = dataBytes.count / MemoryLayout<UInt16>.size
@@ -460,7 +460,7 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
                 
                 gotHistoricalActivity = true
 
-            } else if characteristic.uuid == CBUUID(string: Device.HistoricalLightLevelUUID) {
+            } else if (characteristic.uuid == CBUUID(string: Device.HistoricalLightLevelUUID) && (collectingHistoricalData == true)) {
                 //update historical light level
                 
                 let dataLength = dataBytes.count / MemoryLayout<UInt16>.size
@@ -476,7 +476,7 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
                 
                 gotHistoricalLight = true
                 
-            } else if characteristic.uuid == CBUUID(string: Device.TimeOfHistoricalMeasurementUUID) {
+            } else if (characteristic.uuid == CBUUID(string: Device.TimeOfHistoricalMeasurementUUID) && (collectingHistoricalData == true)) {
                 let dataLength = dataBytes.count / MemoryLayout<UInt16>.size
                 var value = [UInt16](repeating:0, count: dataLength)
                 (dataBytes as NSData).getBytes(&value, length: dataLength * MemoryLayout<Int16>.size)
