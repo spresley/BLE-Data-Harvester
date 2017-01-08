@@ -80,6 +80,10 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
     var collectingHistoricalData:Bool = false
     var currentHistoricalData = historicalData(historicalActivityLevel: 0, historicalLightLevel: 0, relativeTimeHistoricalMeasurement: 0, actualTimeHistoricalMeasurement: Date())
     
+    var histTimeCharRef:CBCharacteristic?
+    var histActivityCharRef:CBCharacteristic?
+    var histLightCharRef:CBCharacteristic?
+    
     // MARK: connection history parameters
     let gatherDataInterval:TimeInterval = 30.0
     struct roomSensorNode {
@@ -345,12 +349,15 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
                     print("Discovered most recent activity level")
                 }
                 if characteristic.uuid == CBUUID(string: Device.HistoricalLightLevelUUID) {
+                    histLightCharRef = characteristic
                     activityStateCharacteristic = characteristic
                     sensorTag?.setNotifyValue(false, for: characteristic)
                     sensorTag?.readValue(for: characteristic)
                     print("Discovered most historical light level")
+                    collectingHistoricalData = true
                 }
                 if characteristic.uuid == CBUUID(string: Device.HistoricalActivityStateUUID) {
+                    histActivityCharRef = characteristic
                     activityStateCharacteristic = characteristic
                     sensorTag?.setNotifyValue(false, for: characteristic)
                     sensorTag?.readValue(for: characteristic)
@@ -358,6 +365,7 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
                     collectingHistoricalData = true
                 }
                 if characteristic.uuid == CBUUID(string: Device.TimeOfHistoricalMeasurementUUID) {
+                    histTimeCharRef = characteristic
                     activityStateCharacteristic = characteristic
                     sensorTag?.setNotifyValue(false, for: characteristic)
                     sensorTag?.readValue(for: characteristic)
@@ -447,6 +455,7 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
             } else if (characteristic.uuid == CBUUID(string: Device.HistoricalActivityStateUUID) && (collectingHistoricalData == true)) {
                 //update historical activity level
                 
+                histActivityCharRef = characteristic
                 let dataLength = dataBytes.count / MemoryLayout<UInt16>.size
                 var value = [UInt16](repeating:0, count: dataLength)
                 (dataBytes as NSData).getBytes(&value, length: dataLength * MemoryLayout<Int16>.size)
@@ -463,6 +472,7 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
             } else if (characteristic.uuid == CBUUID(string: Device.HistoricalLightLevelUUID) && (collectingHistoricalData == true)) {
                 //update historical light level
                 
+                histLightCharRef = characteristic
                 let dataLength = dataBytes.count / MemoryLayout<UInt16>.size
                 var value = [UInt16](repeating:0, count: dataLength)
                 (dataBytes as NSData).getBytes(&value, length: dataLength * MemoryLayout<Int16>.size)
@@ -477,6 +487,8 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
                 gotHistoricalLight = true
                 
             } else if (characteristic.uuid == CBUUID(string: Device.TimeOfHistoricalMeasurementUUID) && (collectingHistoricalData == true)) {
+                
+                histTimeCharRef = characteristic
                 let dataLength = dataBytes.count / MemoryLayout<UInt16>.size
                 var value = [UInt16](repeating:0, count: dataLength)
                 (dataBytes as NSData).getBytes(&value, length: dataLength * MemoryLayout<Int16>.size)
@@ -514,7 +526,16 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
                 HistoricalDataStatus.text = "✔"
                 HistoricalDataStatus.textColor = UIColor.green
                 disconnectSensorNode()
-                
+            }
+        } else if ((gotHistoricalActivity || gotHistoricalLight || gotHistoricalTime) && collectingHistoricalData){ //if only got one or two of these
+            if (!gotHistoricalTime) {
+                peripheral.readValue(for: histTimeCharRef!)
+            }
+            if (!gotHistoricalActivity) {
+                peripheral.readValue(for: histActivityCharRef!)
+            }
+            if (!gotHistoricalLight) {
+                peripheral.readValue(for: histLightCharRef!)
             }
         }
     }
