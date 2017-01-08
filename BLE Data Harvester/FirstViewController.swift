@@ -83,6 +83,7 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
     var histTimeCharRef:CBCharacteristic?
     var histActivityCharRef:CBCharacteristic?
     var histLightCharRef:CBCharacteristic?
+    var historicalFirstPass:Bool = false
     
     // MARK: connection history parameters
     let gatherDataInterval:TimeInterval = 30.0
@@ -452,7 +453,7 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
                 
             // HISTORICAL DATA HANDLING
                 
-            } else if (characteristic.uuid == CBUUID(string: Device.HistoricalActivityStateUUID) && (collectingHistoricalData == true)) {
+            } else if (characteristic.uuid == CBUUID(string: Device.HistoricalActivityStateUUID) && (collectingHistoricalData == true) && (gotHistoricalActivity == false)) {
                 //update historical activity level
                 
                 histActivityCharRef = characteristic
@@ -466,10 +467,11 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
                 print("updated historical activity level")
                 
                 activityLevelLabel.text = "\(rawHistoricalActivityLevel)"
-                
+                HistoricalDataStatus.textColor = UIColor.green
+                HistoricalDataStatus.text = "✔"
                 gotHistoricalActivity = true
 
-            } else if (characteristic.uuid == CBUUID(string: Device.HistoricalLightLevelUUID) && (collectingHistoricalData == true)) {
+            } else if (characteristic.uuid == CBUUID(string: Device.HistoricalLightLevelUUID) && (collectingHistoricalData == true) && (gotHistoricalLight == false)) {
                 //update historical light level
                 
                 histLightCharRef = characteristic
@@ -483,10 +485,11 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
                 print("updated historical light level")
                 
                 lightLevelLabel.text = "\(rawHistoricalLightLevel)"
-                
+                HistoricalDataStatus.textColor = UIColor.green
+                HistoricalDataStatus.text = "✔"
                 gotHistoricalLight = true
                 
-            } else if (characteristic.uuid == CBUUID(string: Device.TimeOfHistoricalMeasurementUUID) && (collectingHistoricalData == true)) {
+            } else if (characteristic.uuid == CBUUID(string: Device.TimeOfHistoricalMeasurementUUID) && (collectingHistoricalData == true) && (gotHistoricalTime == false)) {
                 
                 histTimeCharRef = characteristic
                 let dataLength = dataBytes.count / MemoryLayout<UInt16>.size
@@ -499,6 +502,8 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
                 if (rawHistoricalTime>maximumRelativeTime){
                     maximumRelativeTime = rawHistoricalTime
                 }
+                HistoricalDataStatus.textColor = UIColor.green
+                HistoricalDataStatus.text = "✔"
                 gotHistoricalTime = true
             }
         }
@@ -510,6 +515,7 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
             gotHistoricalActivity = false
             gotHistoricalLight = false
             gotHistoricalTime = false
+            historicalFirstPass = true
             
             if (debugHistoricalData){
                 rawHistoricalTime = 0 // enable for test only
@@ -521,13 +527,16 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
                 print("GOT ALL HISTORICAL DATA")
                 gotHistoricalLight = false
                 gotHistoricalActivity = false
+                gotHistoricalTime = false
+                historicalFirstPass = false
                 calculateActualHistoricalTime()
                 print("done")
                 HistoricalDataStatus.text = "✔"
                 HistoricalDataStatus.textColor = UIColor.green
                 disconnectSensorNode()
             }
-        } else if ((gotHistoricalActivity || gotHistoricalLight || gotHistoricalTime) && collectingHistoricalData){ //if only got one or two of these
+        }
+        if (collectingHistoricalData && historicalFirstPass){ //if the first pass is done and collecting historical data then:
             if (!gotHistoricalTime) {
                 peripheral.readValue(for: histTimeCharRef!)
             }
