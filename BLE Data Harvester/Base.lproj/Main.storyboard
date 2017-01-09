@@ -298,6 +298,7 @@
                                 <segments>
                                     <segment title="Day"/>
                                     <segment title="Week"/>
+                                    <segment title="Month"/>
                                 </segments>
                                 <connections>
                                     <action selector="segmentControlAction:" destination="YfS-Wk-PLh" eventType="valueChanged" id="4aJ-tM-foa"/>

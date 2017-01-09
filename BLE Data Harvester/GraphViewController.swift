@@ -17,12 +17,42 @@ class GraphViewController: UIViewController {
     @IBOutlet var segmentControl: UISegmentedControl!
     
     @IBAction func segmentControlAction(_ sender: Any) {
-        if segmentControl.selectedSegmentIndex == 0{
-            
+        if segmentControl.selectedSegmentIndex == 0{ //day
+            if segmentControl.selectedSegmentIndex == 1{
+                let historicDataObj = HistoricData()
+                historicDataObj.requestDataFromDB_byDate(startDate: "2017-01-09", endDate: "2017-01-10", completion: {
+                    print("finished loading from DB")
+                    
+                    for datapoint in historicDataObj.sensorData{
+                        print("time_stamp: \(datapoint.time_stamp), activity_level: \(datapoint.activity_level), light_level: \(datapoint.light_level)")
+                    }
+                    self.dataDidParse(historicDataObj: historicDataObj)
+                })
+            }
+        }
+        if segmentControl.selectedSegmentIndex == 1{ //week
+            let historicDataObj = HistoricData()
+            historicDataObj.requestDataFromDB_byDate(startDate: "2017-01-03", endDate: "2017-01-10", completion: {
+                print("finished loading from DB")
+                
+                for datapoint in historicDataObj.sensorData{
+                    print("time_stamp: \(datapoint.time_stamp), activity_level: \(datapoint.activity_level), light_level: \(datapoint.light_level)")
+                }
+                self.dataDidParse(historicDataObj: historicDataObj)
+            })
         
         }
-        if segmentControl.selectedSegmentIndex == 1{
-        
+        if segmentControl.selectedSegmentIndex == 2{ //month
+            let historicDataObj = HistoricData()
+            historicDataObj.requestDataFromDB_byDate(startDate: "2016-12-10", endDate: "2017-01-10", completion: {
+                print("finished loading from DB")
+                
+                for datapoint in historicDataObj.sensorData{
+                    print("time_stamp: \(datapoint.time_stamp), activity_level: \(datapoint.activity_level), light_level: \(datapoint.light_level)")
+                }
+                self.dataDidParse(historicDataObj: historicDataObj)
+            })
+            
         }
     }
     
@@ -72,7 +102,6 @@ class GraphViewController: UIViewController {
     
         //lineView.setVisibleXRangeMaximum(10)
         
-    
         lineView.leftAxis.axisMinimum = 0
         lineView.rightAxis.axisMinimum = 0
         lineView.rightAxis.enabled = false
@@ -215,6 +244,79 @@ class HistoricData{
         
     
     }
+    func requestDataFromDB_byDate(startDate: String, endDate: String, completion: @escaping () -> Void ){
+        
+        // Do any additional setup after loading the view.
+        
+        var keys: NSDictionary?
+        if let path = Bundle.main.path(forResource: "APIkeys", ofType: "plist") {
+            keys = NSDictionary(contentsOfFile: path)
+        }
+        
+        let keysdict = keys
+        
+        let cloudantUsername = keysdict?["cloudant-username"] as! String
+        let cloudantPassword = keysdict?["cloudant-password"] as! String
+        
+        let url = URL(string: ("https://" + cloudantUsername + ":" + cloudantPassword + "@f810fc6b-39be-4c4c-9716-47f93c071d09-bluemix.cloudant.com/test-data/_design/design_doc/_view/by-date-minimised?reduce=false&inclusive_end=true&start_key=%22" + startDate + "%22&end_key=%22" + endDate + "%22"))!
+        
+        
+        let task = URLSession.shared.dataTask(with: url){(data, response, error) in
+            if error != nil{
+                print("error")
+            } else{
+                if let urlContent = data{
+                    do{
+                        let jsonResult = try JSONSerialization.jsonObject(with: urlContent, options:[])
+                        //print(jsonResult)
+                        
+                        if let dictionary = jsonResult as? [String: AnyObject] {
+                            if let total_rows = dictionary["total_rows"] as? Int {
+                                // access individual value in dictionary
+                                print(total_rows)
+                            }
+                            if let rows = dictionary["rows"]{
+                                for (row) in rows as! [AnyObject] {
+                                    if let value = row["value"] as? [String: AnyObject]{
+                                        //print(value)
+                                        guard let time_stamp = value["time_stamp"] as? String else {
+                                            return
+                                        }
+                                        //print(time_stamp)
+                                        
+                                        guard let activity_level = value["activity_level"] as? Int else {
+                                            return
+                                        }
+                                        //print(activity_level)
+                                        
+                                        guard let light_level = value["light_level"] as? Int else {
+                                            return
+                                        }
+                                        //print(light_level)
+                                        
+                                        //Add data to array here
+                                        let datapoint: sensorDataPoint = sensorDataPoint(time_stamp: time_stamp, activity_level: activity_level, light_level: light_level)
+                                        self.addDataPoint(sensorData: [datapoint]);
+                                    }
+                                }
+                            }
+                        }
+                        
+                    }
+                    catch{
+                        print("Json processing failed")
+                    }
+                }
+                print("finished parsing data into objects")
+                completion()
+                
+            }
+        }
+        task.resume()
+        
+        
+    }
+
         //json query
         //pass json to parser
 }
