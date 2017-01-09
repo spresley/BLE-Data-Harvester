@@ -292,13 +292,13 @@
                                 <rect key="frame" x="16" y="72" width="343" height="546"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </view>
-                            <segmentedControl opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" translatesAutoresizingMaskIntoConstraints="NO" id="Ycc-GW-Wxr">
-                                <rect key="frame" x="34" y="20" width="306" height="29"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" translatesAutoresizingMaskIntoConstraints="NO" id="Ycc-GW-Wxr">
+                                <rect key="frame" x="34" y="28" width="306" height="29"/>
                                 <segments>
-                                    <segment title="Day"/>
-                                    <segment title="Week"/>
                                     <segment title="Month"/>
+                                    <segment title="Week"/>
+                                    <segment title="Day"/>
+                                    <segment title="Hour"/>
                                 </segments>
                                 <connections>
                                     <action selector="segmentControlAction:" destination="YfS-Wk-PLh" eventType="valueChanged" id="4aJ-tM-foa"/>
@@ -307,10 +307,13 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstItem="Ycc-GW-Wxr" firstAttribute="top" secondItem="jY3-aN-urS" secondAttribute="bottom" constant="8" id="Knc-aV-k58"/>
                             <constraint firstItem="zve-1v-IYE" firstAttribute="top" secondItem="XNC-Jj-F1O" secondAttribute="bottom" id="PyK-TI-jOj"/>
                             <constraint firstAttribute="trailingMargin" secondItem="XNC-Jj-F1O" secondAttribute="trailing" id="XcU-HP-YaM"/>
+                            <constraint firstItem="Ycc-GW-Wxr" firstAttribute="leading" secondItem="lMA-ym-Pao" secondAttribute="leadingMargin" constant="18" id="Yn6-Sr-LFC"/>
                             <constraint firstItem="XNC-Jj-F1O" firstAttribute="top" secondItem="jY3-aN-urS" secondAttribute="bottom" constant="52" id="ebZ-GB-kN5"/>
                             <constraint firstAttribute="leadingMargin" secondItem="XNC-Jj-F1O" secondAttribute="leading" id="mgF-W5-PNS"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="Ycc-GW-Wxr" secondAttribute="trailing" constant="19" id="oe0-FE-vgH"/>
                         </constraints>
                     </view>
                     <tabBarItem key="tabBarItem" title="Graph" id="rux-lV-3Mo"/>

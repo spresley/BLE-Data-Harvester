@@ -17,31 +17,37 @@ class GraphViewController: UIViewController {
     @IBOutlet var segmentControl: UISegmentedControl!
     
     
-
+    //Requests data from the DB for the chosen data range and plots on graph
     
     @IBAction func segmentControlAction(_ sender: Any) {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "YYYY-MM-DD"
         let today = Date()
-        let tomorrow = Calendar.current.date(byAdding: .day, value: 1, to: today)
+        
+        let calendar = NSCalendar(calendarIdentifier: NSCalendar.Identifier.gregorian)!
+        var components = calendar.components([.year, .month, .day, .hour, .minute, .second], from: today)
+        components.hour = 0
+        components.minute = 0
+        components.second = 0
+        //let today_start = calendar.date(from: components)
+        //let tomorrow = Calendar.current.date(byAdding: .day, value: 1, to: today)
+        let yesterday = Calendar.current.date(byAdding: .day, value: -1, to: today)
         let lastweek = Calendar.current.date(byAdding: .day, value: -7, to: today)
         let lastmonth = Calendar.current.date(byAdding: .month, value: -1, to: today)
+        let lasthour = Calendar.current.date(byAdding: .hour, value: -1, to: today)
         
-        if segmentControl.selectedSegmentIndex == 0{ //day
-            
-                let historicDataObj = HistoricData()
-                historicDataObj.requestDataFromDB_byDate(startDate: dateFormatter.string(from: today as Date), endDate: dateFormatter.string(from: tomorrow! as Date), completion: {
-                    print("finished loading from DB")
-                    
-                    for datapoint in historicDataObj.sensorData{
-                        print("time_stamp: \(datapoint.time_stamp), activity_level: \(datapoint.activity_level), light_level: \(datapoint.light_level)")
-                    }
-                    self.dataDidParse(historicDataObj: historicDataObj)
-                })
-        }
-        if segmentControl.selectedSegmentIndex == 1{ //week
+        if segmentControl.selectedSegmentIndex == 0{ //Month
             let historicDataObj = HistoricData()
-            historicDataObj.requestDataFromDB_byDate(startDate: dateFormatter.string(from: lastweek! as Date), endDate: dateFormatter.string(from: tomorrow! as Date), completion: {
+            historicDataObj.requestDataFromDB_byDate(startDate: (lastmonth?.iso8601)!, endDate: today.iso8601, completion: {
+                print("finished loading from DB")
+                
+                for datapoint in historicDataObj.sensorData{
+                    print("time_stamp: \(datapoint.time_stamp), activity_level: \(datapoint.activity_level), light_level: \(datapoint.light_level)")
+                }
+                self.dataDidParse(historicDataObj: historicDataObj)
+            })
+        }
+        if segmentControl.selectedSegmentIndex == 1{ //Week
+            let historicDataObj = HistoricData()
+            historicDataObj.requestDataFromDB_byDate(startDate: (lastweek?.iso8601)!, endDate: today.iso8601, completion: {
                 print("finished loading from DB")
                 
                 for datapoint in historicDataObj.sensorData{
@@ -51,9 +57,9 @@ class GraphViewController: UIViewController {
             })
         
         }
-        if segmentControl.selectedSegmentIndex == 2{ //month
+        if segmentControl.selectedSegmentIndex == 2{ //Day
             let historicDataObj = HistoricData()
-            historicDataObj.requestDataFromDB_byDate(startDate: dateFormatter.string(from: lastmonth! as Date), endDate: dateFormatter.string(from: tomorrow! as Date), completion: {
+            historicDataObj.requestDataFromDB_byDate(startDate: (yesterday?.iso8601)!, endDate: today.iso8601, completion: {
                 print("finished loading from DB")
                 
                 for datapoint in historicDataObj.sensorData{
@@ -61,7 +67,17 @@ class GraphViewController: UIViewController {
                 }
                 self.dataDidParse(historicDataObj: historicDataObj)
             })
-            
+        }
+        if segmentControl.selectedSegmentIndex == 3{ //Hour
+            let historicDataObj = HistoricData()
+            historicDataObj.requestDataFromDB_byDate(startDate: (lasthour?.iso8601)!, endDate: today.iso8601, completion: {
+                print("finished loading from DB")
+                
+                for datapoint in historicDataObj.sensorData{
+                    print("time_stamp: \(datapoint.time_stamp), activity_level: \(datapoint.activity_level), light_level: \(datapoint.light_level)")
+                }
+                self.dataDidParse(historicDataObj: historicDataObj)
+            })
         }
     }
     
@@ -94,12 +110,14 @@ class GraphViewController: UIViewController {
         let lightDataSet = LineChartDataSet(values: lightDataEntries, label: "Light level")
         lightDataSet.drawCirclesEnabled = false
         lightDataSet.mode = LineChartDataSet.Mode.horizontalBezier
+        lightDataSet.lineWidth = 2
         
         let activityDataSet = LineChartDataSet(values: activityDataEntries, label: "Activity level")
         activityDataSet.drawCirclesEnabled = false
         activityDataSet.mode = LineChartDataSet.Mode.horizontalBezier
         activityDataSet.setColor(UIColor.red)
         activityDataSet.axisDependency = .right
+        activityDataSet.lineWidth = 2
         
         let chartData = LineChartData(dataSets: [activityDataSet, lightDataSet])
         lineView.data = chartData
@@ -117,6 +135,7 @@ class GraphViewController: UIViewController {
         //lineView.rightAxis.enabled = false
         
         lineView.chartDescription?.enabled=false
+        lineView.animate(xAxisDuration: 2.0, yAxisDuration: 2.0)
     }
   
     override func viewDidLoad() {
@@ -269,7 +288,7 @@ class HistoricData{
         let cloudantPassword = keysdict?["cloudant-password"] as! String
         
         let url = URL(string: ("https://" + cloudantUsername + ":" + cloudantPassword + "@f810fc6b-39be-4c4c-9716-47f93c071d09-bluemix.cloudant.com/test-data/_design/design_doc/_view/by-date-minimised?reduce=false&inclusive_end=true&start_key=%22" + startDate + "%22&end_key=%22" + endDate + "%22"))!
-        
+        print(url)
         
         let task = URLSession.shared.dataTask(with: url){(data, response, error) in
             if error != nil{
@@ -343,3 +362,4 @@ extension GraphViewController: IAxisValueFormatter {
         return dateFormatter.string(from: Date(timeIntervalSince1970: value))
     }
 }
+
