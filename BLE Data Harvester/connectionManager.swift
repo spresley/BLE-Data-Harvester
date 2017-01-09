@@ -116,11 +116,11 @@ class MQTTmanager: CocoaMQTTDelegate{
         mqtt!.connect()
     }
     
-    func sendRoomMonitorMessage(activity_level: Double, light_level: Double, time_stamp: Date){
+    func sendRoomMonitorMessage(activity_level: Double, light_level: Double, time_stamp: Date, node_id: String){
         if isConnected == 1 {
             let dateAsString: String = time_stamp.iso8601
             
-            var message = createRoomMonitorMessage(activity_level: activity_level, light_level: light_level, time_stamp: dateAsString)
+            var message = createRoomMonitorMessage(activity_level: activity_level, light_level: light_level, time_stamp: dateAsString, node_id: node_id)
             message = "{\"d\":\(message)}"
             let topic = "iot-2/evt/room-data/fmt/json"
             let mqttmessage = CocoaMQTTMessage.init(topic: topic, string: message)
@@ -137,7 +137,7 @@ class MQTTmanager: CocoaMQTTDelegate{
         let rand = Double(arc4random_uniform(10))
         let rand2 = Double(arc4random_uniform(2))
         
-        var message = createRoomMonitorMessage(activity_level: rand, light_level: rand2, time_stamp: stringFromDate)
+        var message = createRoomMonitorMessage(activity_level: rand, light_level: rand2, time_stamp: stringFromDate, node_id: "test")
         message = "{\"d\":\(message)}"
         let topic = "iot-2/evt/room-data/fmt/json"
         let mqttmessage = CocoaMQTTMessage.init(topic: topic, string: message)

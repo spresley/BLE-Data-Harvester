@@ -16,7 +16,7 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
     
     @IBAction func testButton(_ sender: Any) {
         if isConnected == 1{
-            sharedInstance.sendRoomMonitorMessage(activity_level: 0, light_level: 0, time_stamp: Date()) // Call this function for each message needing to be sent
+            sharedInstance.sendRoomMonitorMessage(activity_level: 0, light_level: 0, time_stamp: Date(), node_id: "undef") // Call this function for each message needing to be sent
         }else {
             print("not connected")
         }
@@ -407,7 +407,7 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
                     LiveDataStatus.text = "✔"
                     LiveDataStatus.textColor = UIColor.green
                     if isConnected == 1{
-                        sharedInstance.sendRoomMonitorMessage(activity_level: Double(rawActivityLevel), light_level: Double(rawLightLevel), time_stamp: Date()) // Call this function for each message needing to be sent
+                        sharedInstance.sendRoomMonitorMessage(activity_level: Double(rawActivityLevel), light_level: Double(rawLightLevel), time_stamp: Date(), node_id: "undef") // Call this function for each message needing to be sent
                         SentToBlueMixStatus.text = "✔"
                         SentToBlueMixStatus.textColor = UIColor.green
                     }else {
@@ -440,7 +440,7 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
                     LiveDataStatus.text = "✔"
                     LiveDataStatus.textColor = UIColor.green
                     if isConnected == 1{
-                        sharedInstance.sendRoomMonitorMessage(activity_level: Double(rawActivityLevel), light_level: Double(rawLightLevel), time_stamp: Date()) // Call this function for each message needing to be sent
+                        sharedInstance.sendRoomMonitorMessage(activity_level: Double(rawActivityLevel), light_level: Double(rawLightLevel), time_stamp: Date(), node_id: "undef") // Call this function for each message needing to be sent
                         SentToBlueMixStatus.text = "✔"
                         SentToBlueMixStatus.textColor = UIColor.green
                     }else {
@@ -578,7 +578,8 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
             if isConnected == 1{
                 sharedInstance.sendRoomMonitorMessage(activity_level: Double(historicalDataTable[index].historicalActivityLevel),
                                                       light_level: Double(historicalDataTable[index].historicalLightLevel),
-                                                      time_stamp: historicalDataTable[index].actualTimeHistoricalMeasurement)
+                                                      time_stamp: historicalDataTable[index].actualTimeHistoricalMeasurement,
+                                                      node_id: "undef")
                 SentToBlueMixStatus.text = "✔"
                 SentToBlueMixStatus.textColor = UIColor.green
             }else {

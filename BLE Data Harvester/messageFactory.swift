@@ -12,13 +12,15 @@ import Foundation
 // creates a room monitor message
 func createRoomMonitorMessage(activity_level: Double,
                               light_level: Double,
-                              time_stamp: String) ->String
+                              time_stamp: String,
+                              node_id: String) ->String
 {
     let jsonObject: NSMutableDictionary = NSMutableDictionary()
     
     jsonObject.setValue(activity_level, forKey: "activity_level")
     jsonObject.setValue(light_level, forKey: "light_level")
     jsonObject.setValue(time_stamp, forKey: "time_stamp")
+    jsonObject.setValue(node_id, forKey: "node_id")
     
     let jsonData: NSData
     
