@@ -16,11 +16,21 @@ class GraphViewController: UIViewController {
 
     @IBOutlet var segmentControl: UISegmentedControl!
     
+    
+
+    
     @IBAction func segmentControlAction(_ sender: Any) {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "YYYY-MM-DD"
+        let today = Date()
+        let tomorrow = Calendar.current.date(byAdding: .day, value: 1, to: today)
+        let lastweek = Calendar.current.date(byAdding: .day, value: -7, to: today)
+        let lastmonth = Calendar.current.date(byAdding: .month, value: -1, to: today)
+        
         if segmentControl.selectedSegmentIndex == 0{ //day
-            if segmentControl.selectedSegmentIndex == 1{
+            
                 let historicDataObj = HistoricData()
-                historicDataObj.requestDataFromDB_byDate(startDate: "2017-01-09", endDate: "2017-01-10", completion: {
+                historicDataObj.requestDataFromDB_byDate(startDate: dateFormatter.string(from: today as Date), endDate: dateFormatter.string(from: tomorrow! as Date), completion: {
                     print("finished loading from DB")
                     
                     for datapoint in historicDataObj.sensorData{
@@ -28,11 +38,10 @@ class GraphViewController: UIViewController {
                     }
                     self.dataDidParse(historicDataObj: historicDataObj)
                 })
-            }
         }
         if segmentControl.selectedSegmentIndex == 1{ //week
             let historicDataObj = HistoricData()
-            historicDataObj.requestDataFromDB_byDate(startDate: "2017-01-03", endDate: "2017-01-10", completion: {
+            historicDataObj.requestDataFromDB_byDate(startDate: dateFormatter.string(from: lastweek! as Date), endDate: dateFormatter.string(from: tomorrow! as Date), completion: {
                 print("finished loading from DB")
                 
                 for datapoint in historicDataObj.sensorData{
@@ -44,7 +53,7 @@ class GraphViewController: UIViewController {
         }
         if segmentControl.selectedSegmentIndex == 2{ //month
             let historicDataObj = HistoricData()
-            historicDataObj.requestDataFromDB_byDate(startDate: "2016-12-10", endDate: "2017-01-10", completion: {
+            historicDataObj.requestDataFromDB_byDate(startDate: dateFormatter.string(from: lastmonth! as Date), endDate: dateFormatter.string(from: tomorrow! as Date), completion: {
                 print("finished loading from DB")
                 
                 for datapoint in historicDataObj.sensorData{
@@ -90,6 +99,7 @@ class GraphViewController: UIViewController {
         activityDataSet.drawCirclesEnabled = false
         activityDataSet.mode = LineChartDataSet.Mode.horizontalBezier
         activityDataSet.setColor(UIColor.red)
+        activityDataSet.axisDependency = .right
         
         let chartData = LineChartData(dataSets: [activityDataSet, lightDataSet])
         lineView.data = chartData
@@ -104,7 +114,7 @@ class GraphViewController: UIViewController {
         
         lineView.leftAxis.axisMinimum = 0
         lineView.rightAxis.axisMinimum = 0
-        lineView.rightAxis.enabled = false
+        //lineView.rightAxis.enabled = false
         
         lineView.chartDescription?.enabled=false
     }
