@@ -16,7 +16,7 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
     
     @IBAction func testButton(_ sender: Any) {
         if isConnected == 1{
-            sharedInstance.sendRoomMonitorMessage(activity_level: 0, light_level: 0, time_stamp: Date(), node_id: "undef") // Call this function for each message needing to be sent
+            sharedInstance.sendRoomMonitorMessage(activity_level: 0, light_level: 0, time_stamp: Date(), node_id: "test node") // Call this function for each message needing to be sent
         }else {
             print("not connected")
         }
@@ -67,6 +67,7 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
     var rawHistoricalActivityLevel:UInt16 = 0
     var rawHistoricalLightLevel:UInt16 = 0
     var rawHistoricalTime:UInt16 = 0
+    var currentSensorName:String = "something has gone wrong"
     
     // MARK: Historical data collection
     struct historicalData {
@@ -225,6 +226,7 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
                         
                         // Request a connection to the peripheral
                         centralManager.connect(sensorTag!, options: nil)
+                        currentSensorName = peripheral.identifier.uuidString
                         
                         // Put peripheral in to connection history
                         
@@ -249,6 +251,7 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
                     
                         // Request a connection to the peripheral
                         centralManager.connect(sensorTag!, options: nil)
+                        currentSensorName = peripheral.identifier.uuidString
                         
                     }
                 }
@@ -268,8 +271,8 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
             // Start scanning again
             print("*** RESUMING SCAN!")
             timer = Timer.scheduledTimer(timeInterval: timerScanInterval, target:self, selector: #selector(FirstViewController.pauseScan), userInfo: nil, repeats: false)
-            //centralManager.scanForPeripherals(withServices: nil, options: nil)
-            centralManager.scanForPeripherals(withServices: [CBUUID(string: "2A19")], options: nil)
+            centralManager.scanForPeripherals(withServices: nil, options: nil)
+            //centralManager.scanForPeripherals(withServices: [CBUUID(string: "2A19")], options: nil)
         }
     }
     
@@ -407,7 +410,7 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
                     LiveDataStatus.text = "✔"
                     LiveDataStatus.textColor = UIColor.green
                     if isConnected == 1{
-                        sharedInstance.sendRoomMonitorMessage(activity_level: Double(rawActivityLevel), light_level: Double(rawLightLevel), time_stamp: Date(), node_id: "undef") // Call this function for each message needing to be sent
+                        sharedInstance.sendRoomMonitorMessage(activity_level: Double(rawActivityLevel), light_level: Double(rawLightLevel), time_stamp: Date(), node_id: currentSensorName) // Call this function for each message needing to be sent
                         SentToBlueMixStatus.text = "✔"
                         SentToBlueMixStatus.textColor = UIColor.green
                     }else {
@@ -440,7 +443,7 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
                     LiveDataStatus.text = "✔"
                     LiveDataStatus.textColor = UIColor.green
                     if isConnected == 1{
-                        sharedInstance.sendRoomMonitorMessage(activity_level: Double(rawActivityLevel), light_level: Double(rawLightLevel), time_stamp: Date(), node_id: "undef") // Call this function for each message needing to be sent
+                        sharedInstance.sendRoomMonitorMessage(activity_level: Double(rawActivityLevel), light_level: Double(rawLightLevel), time_stamp: Date(), node_id: currentSensorName) // Call this function for each message needing to be sent
                         SentToBlueMixStatus.text = "✔"
                         SentToBlueMixStatus.textColor = UIColor.green
                     }else {
@@ -556,7 +559,7 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
         sensorTag = nil
     }
     
-    func calculateActualHistoricalTime(){
+    func calculateActualHistoricalTime(){ // calculate historical time and send data to BlueMix
         print("calculating actual times")
         print("max relative time:",maximumRelativeTime)
         //let maximumRelativeTime:TimeInterval = 10 // for test only
@@ -575,21 +578,26 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
                 , historicalDataTable[index].actualTimeHistoricalMeasurement)
             
             //Send each data line to BlueMix
-            if isConnected == 1{
-                sharedInstance.sendRoomMonitorMessage(activity_level: Double(historicalDataTable[index].historicalActivityLevel),
-                                                      light_level: Double(historicalDataTable[index].historicalLightLevel),
-                                                      time_stamp: historicalDataTable[index].actualTimeHistoricalMeasurement,
-                                                      node_id: "undef")
-                SentToBlueMixStatus.text = "✔"
-                SentToBlueMixStatus.textColor = UIColor.green
-            }else {
-                print("Not connected to IBM BlueMix")
-                
-                /*let alertController = UIAlertController(title: "Connection Error", message: "Not connected to IBM BlueMix", preferredStyle: UIAlertControllerStyle.alert)
-                 let okAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.cancel, handler: nil)
-                 alertController.addAction(okAction)
-                 self.show(alertController, sender: self)*/
+            if(relativeTime > 0){
+                if (isConnected == 1){
+                    sharedInstance.sendRoomMonitorMessage(activity_level: Double(historicalDataTable[index].historicalActivityLevel),
+                                                          light_level: Double(historicalDataTable[index].historicalLightLevel),
+                                                          time_stamp: historicalDataTable[index].actualTimeHistoricalMeasurement,
+                                                          node_id: currentSensorName)
+                    SentToBlueMixStatus.text = "✔"
+                    SentToBlueMixStatus.textColor = UIColor.green
+                }else {
+                    print("Not connected to IBM BlueMix")
+                    
+                    /*let alertController = UIAlertController(title: "Connection Error", message: "Not connected to IBM BlueMix", preferredStyle: UIAlertControllerStyle.alert)
+                     let okAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.cancel, handler: nil)
+                     alertController.addAction(okAction)
+                     self.show(alertController, sender: self)*/
+                }
+            } else {
+                print("Reached last line")
             }
+            
         }
         
         maximumRelativeTime = 0
