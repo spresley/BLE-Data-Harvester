@@ -33,6 +33,7 @@ class GraphViewController: UIViewController {
         let lastweek = Calendar.current.date(byAdding: .day, value: -7, to: today)
         let lastmonth = Calendar.current.date(byAdding: .month, value: -1, to: today)
         let lasthour = Calendar.current.date(byAdding: .hour, value: -1, to: today)
+        let lastminute = Calendar.current.date(byAdding: .minute, value: -1, to: today)
         
         if segmentControl.selectedSegmentIndex == 0{ //Month
             let historicDataObj = HistoricData()
@@ -85,57 +86,66 @@ class GraphViewController: UIViewController {
         print("Data parsed")
         let numDataPoints: Int = historicDataObj.sensorData.count
         print("numDataPoints:\(numDataPoints)")
-        print("\(historicDataObj.sensorData[0].time_stamp.dateFromISO8601)")
-        let sensorData = historicDataObj.sensorData
         
-        struct dataStruct{
-            var time_stamp: Double
-            var activity_level: Double
-            var light_level: Double
-        
-        }
-        var i : Int = 1
-        var lightDataEntries: [ChartDataEntry] = []
-        var activityDataEntries: [ChartDataEntry] = []
-        
-        for entry in sensorData{
-            let timestamp : Date = entry.time_stamp.dateFromISO8601!
-            let lightDataEntry = ChartDataEntry(x: Double(timestamp.timeIntervalSince1970), y: Double(entry.light_level))
-            lightDataEntries.append(lightDataEntry)
-            let activityDataEntry = ChartDataEntry(x: Double(timestamp.timeIntervalSince1970), y: Double(entry.activity_level))
-            activityDataEntries.append(activityDataEntry)
-            i += 1
-        }        
+        if(numDataPoints > 0){
+            let sensorData = historicDataObj.sensorData
+            
+            struct dataStruct{
+                var time_stamp: Double
+                var activity_level: Double
+                var light_level: Double
+                
+            }
+            var i : Int = 1
+            var lightDataEntries: [ChartDataEntry] = []
+            var activityDataEntries: [ChartDataEntry] = []
+            
+            for entry in sensorData{
+                let timestamp : Date = entry.time_stamp.dateFromISO8601!
+                let lightDataEntry = ChartDataEntry(x: Double(timestamp.timeIntervalSince1970), y: Double(entry.light_level))
+                lightDataEntries.append(lightDataEntry)
+                let activityDataEntry = ChartDataEntry(x: Double(timestamp.timeIntervalSince1970), y: Double(entry.activity_level))
+                activityDataEntries.append(activityDataEntry)
+                i += 1
+            }
+            
+            let lightDataSet = LineChartDataSet(values: lightDataEntries, label: "Light level")
+            lightDataSet.drawCirclesEnabled = false
+            lightDataSet.mode = LineChartDataSet.Mode.horizontalBezier
+            lightDataSet.lineWidth = 2
+            
+            let activityDataSet = LineChartDataSet(values: activityDataEntries, label: "Activity level")
+            activityDataSet.drawCirclesEnabled = false
+            activityDataSet.mode = LineChartDataSet.Mode.horizontalBezier
+            activityDataSet.setColor(UIColor.red)
+            activityDataSet.axisDependency = .right
+            activityDataSet.lineWidth = 2
+            
+            let chartData = LineChartData(dataSets: [activityDataSet, lightDataSet])
+            lineView.data = chartData
+            
+            let xaxis = lineView.xAxis
+            xaxis.valueFormatter = axisFormatDelegate
+            xaxis.setLabelCount(5, force: false)
+            xaxis.granularity = 59
+            xaxis.labelPosition = XAxis.LabelPosition.bottom
+            
+            //lineView.setVisibleXRangeMaximum(10)
+            
+            lineView.leftAxis.axisMinimum = 0
+            lineView.rightAxis.axisMinimum = 0
+            //lineView.rightAxis.enabled = false
+            
+            lineView.chartDescription?.enabled=false
+            lineView.animate(xAxisDuration: 2.0, yAxisDuration: 2.0)
 
-        let lightDataSet = LineChartDataSet(values: lightDataEntries, label: "Light level")
-        lightDataSet.drawCirclesEnabled = false
-        lightDataSet.mode = LineChartDataSet.Mode.horizontalBezier
-        lightDataSet.lineWidth = 2
-        
-        let activityDataSet = LineChartDataSet(values: activityDataEntries, label: "Activity level")
-        activityDataSet.drawCirclesEnabled = false
-        activityDataSet.mode = LineChartDataSet.Mode.horizontalBezier
-        activityDataSet.setColor(UIColor.red)
-        activityDataSet.axisDependency = .right
-        activityDataSet.lineWidth = 2
-        
-        let chartData = LineChartData(dataSets: [activityDataSet, lightDataSet])
-        lineView.data = chartData
-        
-        let xaxis = lineView.xAxis
-        xaxis.valueFormatter = axisFormatDelegate
-        xaxis.setLabelCount(5, force: false)
-        xaxis.granularity = 59
-        xaxis.labelPosition = XAxis.LabelPosition.bottom
-    
-        //lineView.setVisibleXRangeMaximum(10)
-        
-        lineView.leftAxis.axisMinimum = 0
-        lineView.rightAxis.axisMinimum = 0
-        //lineView.rightAxis.enabled = false
-        
-        lineView.chartDescription?.enabled=false
-        lineView.animate(xAxisDuration: 2.0, yAxisDuration: 2.0)
+            
+        }else{
+            lineView.clear()
+            lineView.animate(xAxisDuration: 2.0, yAxisDuration: 2.0)
+            print("No data returned")
+        }
+
     }
   
     override func viewDidLoad() {
