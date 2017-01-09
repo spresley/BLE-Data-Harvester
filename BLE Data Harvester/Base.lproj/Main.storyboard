@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="16C60b" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="49e-Tb-3d3">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="16C67" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="49e-Tb-3d3">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -289,15 +289,26 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="XNC-Jj-F1O" customClass="LineChartView" customModule="Charts">
-                                <rect key="frame" x="16" y="28" width="343" height="590"/>
+                                <rect key="frame" x="16" y="72" width="343" height="546"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </view>
+                            <segmentedControl opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="Ycc-GW-Wxr">
+                                <rect key="frame" x="34" y="20" width="306" height="29"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <segments>
+                                    <segment title="Day"/>
+                                    <segment title="Week"/>
+                                </segments>
+                                <connections>
+                                    <action selector="segmentControlAction:" destination="YfS-Wk-PLh" eventType="valueChanged" id="4aJ-tM-foa"/>
+                                </connections>
+                            </segmentedControl>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="zve-1v-IYE" firstAttribute="top" secondItem="XNC-Jj-F1O" secondAttribute="bottom" id="PyK-TI-jOj"/>
                             <constraint firstAttribute="trailingMargin" secondItem="XNC-Jj-F1O" secondAttribute="trailing" id="XcU-HP-YaM"/>
-                            <constraint firstItem="XNC-Jj-F1O" firstAttribute="top" secondItem="jY3-aN-urS" secondAttribute="bottom" constant="8" id="ebZ-GB-kN5"/>
+                            <constraint firstItem="XNC-Jj-F1O" firstAttribute="top" secondItem="jY3-aN-urS" secondAttribute="bottom" constant="52" id="ebZ-GB-kN5"/>
                             <constraint firstAttribute="leadingMargin" secondItem="XNC-Jj-F1O" secondAttribute="leading" id="mgF-W5-PNS"/>
                         </constraints>
                     </view>
@@ -305,6 +316,7 @@
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="lineView" destination="XNC-Jj-F1O" id="wpE-HJ-NL3"/>
+                        <outlet property="segmentControl" destination="Ycc-GW-Wxr" id="4os-nh-vnZ"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="gcx-Zo-JSD" userLabel="First Responder" sceneMemberID="firstResponder"/>

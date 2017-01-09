@@ -14,6 +14,18 @@ class GraphViewController: UIViewController {
     @IBOutlet var lineView: LineChartView!
     weak var axisFormatDelegate: IAxisValueFormatter?
 
+    @IBOutlet var segmentControl: UISegmentedControl!
+    
+    @IBAction func segmentControlAction(_ sender: Any) {
+        if segmentControl.selectedSegmentIndex == 0{
+            
+        
+        }
+        if segmentControl.selectedSegmentIndex == 1{
+        
+        }
+    }
+    
     func dataDidParse(historicDataObj : HistoricData){
         print("Data parsed")
         let numDataPoints: Int = historicDataObj.sensorData.count
@@ -54,10 +66,18 @@ class GraphViewController: UIViewController {
         
         let xaxis = lineView.xAxis
         xaxis.valueFormatter = axisFormatDelegate
+        xaxis.setLabelCount(5, force: false)
+        xaxis.granularity = 59
+        xaxis.labelPosition = XAxis.LabelPosition.bottom
+    
+        //lineView.setVisibleXRangeMaximum(10)
+        
     
         lineView.leftAxis.axisMinimum = 0
         lineView.rightAxis.axisMinimum = 0
-    
+        lineView.rightAxis.enabled = false
+        
+        lineView.chartDescription?.enabled=false
     }
   
     override func viewDidLoad() {
@@ -207,7 +227,7 @@ extension GraphViewController: IAxisValueFormatter {
     
     func stringForValue(_ value: Double, axis: AxisBase?) -> String {
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "HH:mm"
+        dateFormatter.dateFormat = "EEE HH:mm"
         return dateFormatter.string(from: Date(timeIntervalSince1970: value))
     }
 }
