@@ -28,18 +28,28 @@ class GraphViewController: UIViewController {
         
         }
         var i : Int = 1
-        var dataEntries: [ChartDataEntry] = []
-
+        var lightDataEntries: [ChartDataEntry] = []
+        var activityDataEntries: [ChartDataEntry] = []
         
         for entry in sensorData{
             let timestamp : Date = entry.time_stamp.dateFromISO8601!
-            let dataEntry = ChartDataEntry(x: Double(timestamp.timeIntervalSince1970), y: Double(entry.light_level))
-            dataEntries.append(dataEntry)
+            let lightDataEntry = ChartDataEntry(x: Double(timestamp.timeIntervalSince1970), y: Double(entry.light_level))
+            lightDataEntries.append(lightDataEntry)
+            let activityDataEntry = ChartDataEntry(x: Double(timestamp.timeIntervalSince1970), y: Double(entry.activity_level))
+            activityDataEntries.append(activityDataEntry)
             i += 1
         }        
 
-        let chartDataSet = LineChartDataSet(values: dataEntries, label: "Activity level")
-        let chartData = LineChartData(dataSet: chartDataSet)
+        let lightDataSet = LineChartDataSet(values: lightDataEntries, label: "Light level")
+        lightDataSet.drawCirclesEnabled = false
+        lightDataSet.mode = LineChartDataSet.Mode.horizontalBezier
+        
+        let activityDataSet = LineChartDataSet(values: activityDataEntries, label: "Activity level")
+        activityDataSet.drawCirclesEnabled = false
+        activityDataSet.mode = LineChartDataSet.Mode.horizontalBezier
+        activityDataSet.setColor(UIColor.red)
+        
+        let chartData = LineChartData(dataSets: [activityDataSet, lightDataSet])
         lineView.data = chartData
         
         let xaxis = lineView.xAxis
@@ -197,7 +207,7 @@ extension GraphViewController: IAxisValueFormatter {
     
     func stringForValue(_ value: Double, axis: AxisBase?) -> String {
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "HH:mm.ss"
+        dateFormatter.dateFormat = "HH:mm"
         return dateFormatter.string(from: Date(timeIntervalSince1970: value))
     }
 }
