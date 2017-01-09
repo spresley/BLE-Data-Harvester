@@ -48,6 +48,7 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
     var pauseScanFlag = false
     var resumeScanFlag = false
     var timer = Timer()
+    let servicesArray:[CBUUID] = [CBUUID(string: Device.RoomMonitorServiceUUID)]
     
     var centralManager:CBCentralManager!
     var sensorTag:CBPeripheral?
@@ -148,12 +149,13 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
             
             print(message)
             keepScanning = true
-            timer = Timer.scheduledTimer(timeInterval: timerScanInterval, target:self, selector: #selector(FirstViewController.pauseScan), userInfo: nil, repeats: false)
+            resumeScan()
+            /*timer = Timer.scheduledTimer(timeInterval: timerScanInterval, target:self, selector: #selector(FirstViewController.pauseScan), userInfo: nil, repeats: false)
 
             // Initiate Scan for Peripherals
             let roomMonitorServiceUUID = CBUUID(string: Device.RoomMonitorServiceUUID)
             print("Scanning for SensorTag adverstising room monitor service \(roomMonitorServiceUUID)")
-            centralManager.scanForPeripherals(withServices: nil, options: nil)
+            centralManager.scanForPeripherals(withServices: [CBUUID(string: "2A2B")], options: nil)*/
         }
         
         if showAlert {
@@ -266,7 +268,8 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
             // Start scanning again
             print("*** RESUMING SCAN!")
             timer = Timer.scheduledTimer(timeInterval: timerScanInterval, target:self, selector: #selector(FirstViewController.pauseScan), userInfo: nil, repeats: false)
-            centralManager.scanForPeripherals(withServices: nil, options: nil)
+            //centralManager.scanForPeripherals(withServices: nil, options: nil)
+            centralManager.scanForPeripherals(withServices: [CBUUID(string: "2A19")], options: nil)
         }
     }
     
@@ -319,7 +322,6 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
         if let services = peripheral.services {
             for service in services {
                 print("Discovered service \(service)")
-                // If we found either the temperature or the humidity service, discover the characteristics for those services.
                 if (service.uuid == CBUUID(string: Device.RoomMonitorServiceUUID)) {
                     peripheral.discoverCharacteristics(nil, for: service)
                     DiscoveredServicesStatus.text = "✔"
