@@ -25,16 +25,22 @@ class GraphViewController: UIViewController, UIPickerViewDelegate, UIPickerViewD
         devicePicker.reloadAllComponents()
         if(devicePicker.isHidden==false){
             devicePicker.isHidden = true
+            
+            updateGraph(timeWindow: segmentControl.selectedSegmentIndex , selected_node: selectedNode.text!)
         } else {
             devicePicker.isHidden = false
         }
     }
+    @IBOutlet var selectedNode: UILabel!
     
     //Requests data from the DB for the chosen data range and plots on graph
     
     @IBAction func segmentControlAction(_ sender: Any) {
+        updateGraph(timeWindow: segmentControl.selectedSegmentIndex , selected_node: selectedNode.text!)
+    
+    }
+    func updateGraph(timeWindow: Int, selected_node: String){
         let today = Date()
-        
         let calendar = NSCalendar(calendarIdentifier: NSCalendar.Identifier.gregorian)!
         var components = calendar.components([.year, .month, .day, .hour, .minute, .second], from: today)
         components.hour = 0
@@ -46,52 +52,37 @@ class GraphViewController: UIViewController, UIPickerViewDelegate, UIPickerViewD
         let lastweek = Calendar.current.date(byAdding: .day, value: -7, to: today)
         let lastmonth = Calendar.current.date(byAdding: .month, value: -1, to: today)
         let lasthour = Calendar.current.date(byAdding: .hour, value: -1, to: today)
-        let lastminute = Calendar.current.date(byAdding: .minute, value: -1, to: today)
         
-        if segmentControl.selectedSegmentIndex == 0{ //Month
-            let historicDataObj = HistoricData()
-            historicDataObj.requestDataFromDB_byDate(startDate: (lastmonth?.iso8601)!, endDate: today.iso8601, completion: {
-                print("finished loading from DB")
-                
-                for datapoint in historicDataObj.sensorData{
-                    print("node_id: \(datapoint.node_id), time_stamp: \(datapoint.time_stamp), activity_level: \(datapoint.activity_level), light_level: \(datapoint.light_level)")
-                }
+        let historicDataObj = HistoricData()
+        if timeWindow==0{
+            historicDataObj.requestDataFromDB_byDate(startDate: (lastmonth?.iso8601)!, endDate: today.iso8601, selected_node: selected_node, completion: {
+                self.printHistDataObj(historicDataObj: historicDataObj)
                 self.dataDidParse(historicDataObj: historicDataObj)
             })
         }
-        if segmentControl.selectedSegmentIndex == 1{ //Week
-            let historicDataObj = HistoricData()
-            historicDataObj.requestDataFromDB_byDate(startDate: (lastweek?.iso8601)!, endDate: today.iso8601, completion: {
-                print("finished loading from DB")
-                
-                for datapoint in historicDataObj.sensorData{
-                    print("node_id: \(datapoint.node_id), time_stamp: \(datapoint.time_stamp), activity_level: \(datapoint.activity_level), light_level: \(datapoint.light_level)")
-                }
-                self.dataDidParse(historicDataObj: historicDataObj)
-            })
-        
-        }
-        if segmentControl.selectedSegmentIndex == 2{ //Day
-            let historicDataObj = HistoricData()
-            historicDataObj.requestDataFromDB_byDate(startDate: (yesterday?.iso8601)!, endDate: today.iso8601, completion: {
-                print("finished loading from DB")
-                
-                for datapoint in historicDataObj.sensorData{
-                    print("node_id: \(datapoint.node_id), time_stamp: \(datapoint.time_stamp), activity_level: \(datapoint.activity_level), light_level: \(datapoint.light_level)")
-                }
+        if timeWindow==1{
+            historicDataObj.requestDataFromDB_byDate(startDate: (lastweek?.iso8601)!, endDate: today.iso8601, selected_node: selected_node, completion: {
+                self.printHistDataObj(historicDataObj: historicDataObj)
                 self.dataDidParse(historicDataObj: historicDataObj)
             })
         }
-        if segmentControl.selectedSegmentIndex == 3{ //Hour
-            let historicDataObj = HistoricData()
-            historicDataObj.requestDataFromDB_byDate(startDate: (lasthour?.iso8601)!, endDate: today.iso8601, completion: {
-                print("finished loading from DB")
-                
-                for datapoint in historicDataObj.sensorData{
-                    print("node_id: \(datapoint.node_id), time_stamp: \(datapoint.time_stamp), activity_level: \(datapoint.activity_level), light_level: \(datapoint.light_level)")
-                }
+        if timeWindow==2{
+            historicDataObj.requestDataFromDB_byDate(startDate: (yesterday?.iso8601)!, endDate: today.iso8601, selected_node: selected_node, completion: {
+                self.printHistDataObj(historicDataObj: historicDataObj)
                 self.dataDidParse(historicDataObj: historicDataObj)
             })
+        }
+        if timeWindow==3{
+            historicDataObj.requestDataFromDB_byDate(startDate: (lasthour?.iso8601)!, endDate: today.iso8601, selected_node: selected_node, completion: {
+                self.printHistDataObj(historicDataObj: historicDataObj)
+                self.dataDidParse(historicDataObj: historicDataObj)
+            })
+        }
+    }
+    
+    func printHistDataObj(historicDataObj: HistoricData){
+        for datapoint in historicDataObj.sensorData{
+            print("node_id: \(datapoint.node_id), time_stamp: \(datapoint.time_stamp), activity_level: \(datapoint.activity_level), light_level: \(datapoint.light_level)")
         }
     }
     
@@ -169,14 +160,8 @@ class GraphViewController: UIViewController, UIPickerViewDelegate, UIPickerViewD
         self.devicePicker.delegate = self
         self.devicePicker.dataSource = self
         
-        pickerEntry = ["Node 1", "Node 2", "Node 3", "Node  4", "Node 5", "Node 6"]
-        
-        if(!pickerEntry.contains("Node 7")){
-            pickerEntry.append("Node 7")
-        }
-        if(!pickerEntry.contains("Node 1")){
-            pickerEntry.append("Node 1")
-        }
+        pickerEntry = ["All"]
+    
         
 //        devicePicker.setValue(UIColor.white, forKey: "textColor")
 //        devicePicker.setValue(UIColor.black, forKey: "backgroundColor")
@@ -184,7 +169,7 @@ class GraphViewController: UIViewController, UIPickerViewDelegate, UIPickerViewD
     
         // Do any additional setup after loading the view.
         let historicDataObj = HistoricData()
-        historicDataObj.requestDataFromDB(completion: {
+        historicDataObj.requestDataFromDB_byDate(startDate: "2000", endDate: "2019",  selected_node: "All", completion: {
             print("finished loading from DB")
             
             for datapoint in historicDataObj.sensorData{
@@ -218,9 +203,11 @@ class GraphViewController: UIViewController, UIPickerViewDelegate, UIPickerViewD
         // This method is triggered whenever the user makes a change to the picker selection.
         // The parameter named row and component represents what was selected.
         print("picker changed")
+        selectedNode.text = pickerEntry[row]
         //pickerView.isHidden = true
     }
 
+    
     
     //Picker view tut: http://codewithchris.com/uipickerview-example/
     
@@ -235,7 +222,6 @@ class GraphViewController: UIViewController, UIPickerViewDelegate, UIPickerViewD
     */
 
 }
-
 
 struct sensorDataPoint{
     let time_stamp: String
@@ -265,94 +251,7 @@ class HistoricData{
         }
     }
     
-    func requestDataFromDB(completion: @escaping () -> Void ){
-        
-        // Do any additional setup after loading the view.
-        
-        var keys: NSDictionary?
-        if let path = Bundle.main.path(forResource: "APIkeys", ofType: "plist") {
-            keys = NSDictionary(contentsOfFile: path)
-        }
-        
-        let keysdict = keys
-        
-        let cloudantUsername = keysdict?["cloudant-username"] as! String
-        let cloudantPassword = keysdict?["cloudant-password"] as! String
-        
-        let url = URL(string: ("https://" + cloudantUsername + ":" + cloudantPassword + "@f810fc6b-39be-4c4c-9716-47f93c071d09-bluemix.cloudant.com/test-data/_design/design_doc/_view/by-date-minimised"))!
-        
-        
-        let task = URLSession.shared.dataTask(with: url){(data, response, error) in
-            if error != nil{
-                print("error")
-            } else{
-                if let urlContent = data{
-                    do{
-                        let jsonResult = try JSONSerialization.jsonObject(with: urlContent, options:[])
-                        //print(jsonResult)
-                        
-                        if let dictionary = jsonResult as? [String: AnyObject] {
-                            if let total_rows = dictionary["total_rows"] as? Int {
-                                // access individual value in dictionary
-                                print(total_rows)
-                            }
-                            if let rows = dictionary["rows"]{
-                                for (row) in rows as! [AnyObject] {
-                                    if let value = row["value"] as? [String: AnyObject]{
-                                        //print(value)
-                                        guard let time_stamp = value["time_stamp"] as? String else {
-                                            return
-                                        }
-                                        //print(time_stamp)
-                                        
-                                        guard let activity_level = value["activity_level"] as? Int else {
-                                            return
-                                        }
-                                        //print(activity_level)
-                                        
-                                        guard let light_level = value["light_level"] as? Int else {
-                                            return
-                                        }
-                                        //print(light_level)
-//                                        guard let node_id = value["node_id"] as? String else {
-//                                            return
-//                                        }
-
-                                        var node_id = ""
-                                    
-                                        if (value["node_id"] != nil){
-                                            node_id = value["node_id"] as! String
-                                        } else{
-                                            node_id = "empty"
-                                        }
-                                        if(!pickerEntry.contains(node_id)){
-                                            pickerEntry.append(node_id)
-                                        }
-
-                                        //Add data to array here
-                                        let datapoint: sensorDataPoint = sensorDataPoint(time_stamp: time_stamp, activity_level: activity_level, light_level: light_level, node_id: node_id)
-
-                                        self.addDataPoint(sensorData: [datapoint]);
-                                    }
-                                }
-                            }
-                        }
-                    
-                    }
-                    catch{
-                        print("Json processing failed")
-                    }
-                }
-                print("finished parsing data into objects")
-                completion()
-            
-            }
-        }
-        task.resume()
-        
-    
-    }
-    func requestDataFromDB_byDate(startDate: String, endDate: String, completion: @escaping () -> Void ){
+    func requestDataFromDB_byDate(startDate: String, endDate: String, selected_node: String, completion: @escaping () -> Void ){
         
         // Do any additional setup after loading the view.
         
@@ -400,11 +299,25 @@ class HistoricData{
                                         guard let light_level = value["light_level"] as? Int else {
                                             return
                                         }
-
+                                        
                                         var node_id = ""
                                         
                                         if (value["node_id"] != nil){
                                             node_id = value["node_id"] as! String
+                                            
+                                            if (node_id == selected_node){
+                                                //Add data to array here
+                                                let datapoint: sensorDataPoint = sensorDataPoint(time_stamp: time_stamp, activity_level: activity_level, light_level: light_level, node_id: node_id)
+                                                
+                                                self.addDataPoint(sensorData: [datapoint]);
+                                            }
+                                            if (selected_node == "All"){
+                                                //Add data to array here
+                                                let datapoint: sensorDataPoint = sensorDataPoint(time_stamp: time_stamp, activity_level: activity_level, light_level: light_level, node_id: node_id)
+                                                
+                                                self.addDataPoint(sensorData: [datapoint]);
+                                                
+                                            }
                                         } else{
                                             node_id = "empty"
                                         }
@@ -413,10 +326,6 @@ class HistoricData{
                                             pickerEntry.append(node_id)
                                         }
                                         
-                                        //Add data to array here
-                                        let datapoint: sensorDataPoint = sensorDataPoint(time_stamp: time_stamp, activity_level: activity_level, light_level: light_level, node_id: node_id)
-                                        
-                                        self.addDataPoint(sensorData: [datapoint]);
                                     }
                                 }
                             }
@@ -429,20 +338,11 @@ class HistoricData{
                 }
                 print("finished parsing data into objects")
                 completion()
-                
             }
         }
         task.resume()
-        
-        
     }
-
-        //json query
-        //pass json to parser
 }
-
-
-
 
 // MARK: axisFormatDelegate
 extension GraphViewController: IAxisValueFormatter {
