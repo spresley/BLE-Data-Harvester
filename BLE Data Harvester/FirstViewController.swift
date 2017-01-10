@@ -36,6 +36,8 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
     @IBOutlet weak var LiveDataStatus: UILabel!
     @IBOutlet weak var SentToBlueMixStatus: UILabel!
     @IBOutlet weak var DisconnectedStatus: UILabel!
+    @IBOutlet weak var ScanningStatus: UILabel!
+    @IBOutlet weak var ScanningIndicator: UIActivityIndicatorView!
     
     // MARK: Debugging Flags
     let debugHistoricalData = false
@@ -120,7 +122,8 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
         let managedContext = appDelegate.persistentContainer.viewContext
 
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "RoomSensor")
-
+        ScanningIndicator.hidesWhenStopped = true
+        ScanningStatus.text = ""
         do {
             let results = try managedContext.fetch(fetchRequest)
             persistantConnectionHistory = results as! [NSManagedObject]
@@ -263,6 +266,7 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
         // Scanning uses up battery on phone, so pause the scan process for the designated interval.
         print("*** PAUSING SCAN")
         timer = Timer.scheduledTimer(timeInterval: timerPauseInterval, target:self, selector: #selector(FirstViewController.resumeScan), userInfo: nil, repeats: false)
+        ScanningIndicator.stopAnimating()
         centralManager.stopScan()
     }
     
@@ -272,6 +276,7 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
             print("*** RESUMING SCAN!")
             timer = Timer.scheduledTimer(timeInterval: timerScanInterval, target:self, selector: #selector(FirstViewController.pauseScan), userInfo: nil, repeats: false)
             centralManager.scanForPeripherals(withServices: nil, options: nil)
+            ScanningIndicator.startAnimating()
             //centralManager.scanForPeripherals(withServices: [CBUUID(string: "2A19")], options: nil)
         }
     }
@@ -599,7 +604,6 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
             }
             
         }
-        
         maximumRelativeTime = 0
         collectingHistoricalData = false
         
