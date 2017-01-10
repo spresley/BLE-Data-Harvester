@@ -52,7 +52,7 @@ class GraphViewController: UIViewController, UIPickerViewDelegate, UIPickerViewD
                 print("finished loading from DB")
                 
                 for datapoint in historicDataObj.sensorData{
-                    print("time_stamp: \(datapoint.time_stamp), activity_level: \(datapoint.activity_level), light_level: \(datapoint.light_level)")
+                    print("node_id: \(datapoint.node_id), time_stamp: \(datapoint.time_stamp), activity_level: \(datapoint.activity_level), light_level: \(datapoint.light_level)")
                 }
                 self.dataDidParse(historicDataObj: historicDataObj)
             })
@@ -63,7 +63,7 @@ class GraphViewController: UIViewController, UIPickerViewDelegate, UIPickerViewD
                 print("finished loading from DB")
                 
                 for datapoint in historicDataObj.sensorData{
-                    print("time_stamp: \(datapoint.time_stamp), activity_level: \(datapoint.activity_level), light_level: \(datapoint.light_level)")
+                    print("node_id: \(datapoint.node_id), time_stamp: \(datapoint.time_stamp), activity_level: \(datapoint.activity_level), light_level: \(datapoint.light_level)")
                 }
                 self.dataDidParse(historicDataObj: historicDataObj)
             })
@@ -75,7 +75,7 @@ class GraphViewController: UIViewController, UIPickerViewDelegate, UIPickerViewD
                 print("finished loading from DB")
                 
                 for datapoint in historicDataObj.sensorData{
-                    print("time_stamp: \(datapoint.time_stamp), activity_level: \(datapoint.activity_level), light_level: \(datapoint.light_level)")
+                    print("node_id: \(datapoint.node_id), time_stamp: \(datapoint.time_stamp), activity_level: \(datapoint.activity_level), light_level: \(datapoint.light_level)")
                 }
                 self.dataDidParse(historicDataObj: historicDataObj)
             })
@@ -86,7 +86,7 @@ class GraphViewController: UIViewController, UIPickerViewDelegate, UIPickerViewD
                 print("finished loading from DB")
                 
                 for datapoint in historicDataObj.sensorData{
-                    print("time_stamp: \(datapoint.time_stamp), activity_level: \(datapoint.activity_level), light_level: \(datapoint.light_level)")
+                    print("node_id: \(datapoint.node_id), time_stamp: \(datapoint.time_stamp), activity_level: \(datapoint.activity_level), light_level: \(datapoint.light_level)")
                 }
                 self.dataDidParse(historicDataObj: historicDataObj)
             })
@@ -178,7 +178,7 @@ class GraphViewController: UIViewController, UIPickerViewDelegate, UIPickerViewD
             print("finished loading from DB")
             
             for datapoint in historicDataObj.sensorData{
-                print("time_stamp: \(datapoint.time_stamp), activity_level: \(datapoint.activity_level), light_level: \(datapoint.light_level)")
+                print("node_id: \(datapoint.node_id), time_stamp: \(datapoint.time_stamp), activity_level: \(datapoint.activity_level), light_level: \(datapoint.light_level)")
             }
             self.dataDidParse(historicDataObj: historicDataObj)
         })
@@ -231,11 +231,13 @@ struct sensorDataPoint{
     let time_stamp: String
     let activity_level: Int
     let light_level: Int
+    let node_id: String
     
-    init(time_stamp: String, activity_level: Int, light_level: Int){
+    init(time_stamp: String, activity_level: Int, light_level: Int, node_id: String){
         self.time_stamp = time_stamp
         self.activity_level = activity_level
         self.light_level = light_level
+        self.node_id = node_id
     }
 }
 
@@ -302,9 +304,21 @@ class HistoricData{
                                             return
                                         }
                                         //print(light_level)
-                                        
+//                                        guard let node_id = value["node_id"] as? String else {
+//                                            return
+//                                        }
+
+                                        var node_id = ""
+                                    
+                                        if (value["node_id"] != nil){
+                                            node_id = value["node_id"] as! String
+                                        } else{
+                                            node_id = "empty"
+                                        }
+
                                         //Add data to array here
-                                        let datapoint: sensorDataPoint = sensorDataPoint(time_stamp: time_stamp, activity_level: activity_level, light_level: light_level)
+                                        let datapoint: sensorDataPoint = sensorDataPoint(time_stamp: time_stamp, activity_level: activity_level, light_level: light_level, node_id: node_id)
+
                                         self.addDataPoint(sensorData: [datapoint]);
                                     }
                                 }
@@ -373,10 +387,18 @@ class HistoricData{
                                         guard let light_level = value["light_level"] as? Int else {
                                             return
                                         }
-                                        //print(light_level)
+
+                                        var node_id = ""
                                         
+                                        if (value["node_id"] != nil){
+                                            node_id = value["node_id"] as! String
+                                        } else{
+                                            node_id = "empty"
+                                        }
+
                                         //Add data to array here
-                                        let datapoint: sensorDataPoint = sensorDataPoint(time_stamp: time_stamp, activity_level: activity_level, light_level: light_level)
+                                        let datapoint: sensorDataPoint = sensorDataPoint(time_stamp: time_stamp, activity_level: activity_level, light_level: light_level, node_id: node_id)
+                                        
                                         self.addDataPoint(sensorData: [datapoint]);
                                     }
                                 }
