@@ -9,13 +9,24 @@
 import UIKit
 import Charts
 
-class GraphViewController: UIViewController {
+class GraphViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource {
+
     
     @IBOutlet var lineView: LineChartView!
     weak var axisFormatDelegate: IAxisValueFormatter?
 
     @IBOutlet var segmentControl: UISegmentedControl!
     
+    @IBOutlet var devicePicker: UIPickerView!
+    var pickerEntry: [String] = [String]()
+    
+    @IBAction func pickNode(_ sender: Any) {
+        if(devicePicker.isHidden==false){
+            devicePicker.isHidden = true
+        } else {
+            devicePicker.isHidden = false
+        }
+    }
     
     //Requests data from the DB for the chosen data range and plots on graph
     
@@ -152,7 +163,14 @@ class GraphViewController: UIViewController {
         super.viewDidLoad()
         print("Graph view loaded")
         axisFormatDelegate = self
-
+        
+        self.devicePicker.delegate = self
+        self.devicePicker.dataSource = self
+        
+        pickerEntry = ["Node 1", "Node 2", "Node 3", "Node  4", "Node 5", "Node 6"]
+//        devicePicker.setValue(UIColor.white, forKey: "textColor")
+//        devicePicker.setValue(UIColor.black, forKey: "backgroundColor")
+        devicePicker.isHidden = true
     
         // Do any additional setup after loading the view.
         let historicDataObj = HistoricData()
@@ -171,7 +189,31 @@ class GraphViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
+    // The number of columns of data
+    func numberOfComponents (in pickerView: UIPickerView) -> Int {
+        return 1
+    }
+    
+    // The number of rows of data
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        return pickerEntry.count
+    }
+    
+    // The data to return for the row and component (column) that's being passed in
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        return pickerEntry[row]
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        // This method is triggered whenever the user makes a change to the picker selection.
+        // The parameter named row and component represents what was selected.
+        print("picker changed")
+        //pickerView.isHidden = true
+    }
 
+    
+    //Picker view tut: http://codewithchris.com/uipickerview-example/
+    
     /*
     // MARK: - Navigation
 
