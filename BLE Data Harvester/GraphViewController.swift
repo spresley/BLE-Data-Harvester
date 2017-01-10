@@ -9,6 +9,8 @@
 import UIKit
 import Charts
 
+var pickerEntry: [String] = [String]()
+
 class GraphViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource {
 
     
@@ -18,9 +20,9 @@ class GraphViewController: UIViewController, UIPickerViewDelegate, UIPickerViewD
     @IBOutlet var segmentControl: UISegmentedControl!
     
     @IBOutlet var devicePicker: UIPickerView!
-    var pickerEntry: [String] = [String]()
     
     @IBAction func pickNode(_ sender: Any) {
+        devicePicker.reloadAllComponents()
         if(devicePicker.isHidden==false){
             devicePicker.isHidden = true
         } else {
@@ -168,6 +170,14 @@ class GraphViewController: UIViewController, UIPickerViewDelegate, UIPickerViewD
         self.devicePicker.dataSource = self
         
         pickerEntry = ["Node 1", "Node 2", "Node 3", "Node  4", "Node 5", "Node 6"]
+        
+        if(!pickerEntry.contains("Node 7")){
+            pickerEntry.append("Node 7")
+        }
+        if(!pickerEntry.contains("Node 1")){
+            pickerEntry.append("Node 1")
+        }
+        
 //        devicePicker.setValue(UIColor.white, forKey: "textColor")
 //        devicePicker.setValue(UIColor.black, forKey: "backgroundColor")
         devicePicker.isHidden = true
@@ -315,6 +325,9 @@ class HistoricData{
                                         } else{
                                             node_id = "empty"
                                         }
+                                        if(!pickerEntry.contains(node_id)){
+                                            pickerEntry.append(node_id)
+                                        }
 
                                         //Add data to array here
                                         let datapoint: sensorDataPoint = sensorDataPoint(time_stamp: time_stamp, activity_level: activity_level, light_level: light_level, node_id: node_id)
@@ -396,6 +409,10 @@ class HistoricData{
                                             node_id = "empty"
                                         }
 
+                                        if(!pickerEntry.contains(node_id)){
+                                            pickerEntry.append(node_id)
+                                        }
+                                        
                                         //Add data to array here
                                         let datapoint: sensorDataPoint = sensorDataPoint(time_stamp: time_stamp, activity_level: activity_level, light_level: light_level, node_id: node_id)
                                         
