@@ -97,8 +97,6 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
     }
     var currentPeripheral:roomSensorNode?
     var removedDuplicates = false
-    
-    // TODO: Make this persistant
     var connectionHistory = [roomSensorNode]()
     var persistantConnectionHistory = [NSManagedObject]()
     
@@ -154,12 +152,6 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
             print(message)
             keepScanning = true
             resumeScan()
-            /*timer = Timer.scheduledTimer(timeInterval: timerScanInterval, target:self, selector: #selector(FirstViewController.pauseScan), userInfo: nil, repeats: false)
-
-            // Initiate Scan for Peripherals
-            let roomMonitorServiceUUID = CBUUID(string: Device.RoomMonitorServiceUUID)
-            print("Scanning for SensorTag adverstising room monitor service \(roomMonitorServiceUUID)")
-            centralManager.scanForPeripherals(withServices: [CBUUID(string: "2A2B")], options: nil)*/
         }
         
         if showAlert {
@@ -267,6 +259,7 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
         print("*** PAUSING SCAN")
         timer = Timer.scheduledTimer(timeInterval: timerPauseInterval, target:self, selector: #selector(FirstViewController.resumeScan), userInfo: nil, repeats: false)
         ScanningIndicator.stopAnimating()
+        ScanningStatus.text = "Scanning"
         centralManager.stopScan()
     }
     
@@ -277,6 +270,7 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
             timer = Timer.scheduledTimer(timeInterval: timerScanInterval, target:self, selector: #selector(FirstViewController.pauseScan), userInfo: nil, repeats: false)
             centralManager.scanForPeripherals(withServices: nil, options: nil)
             ScanningIndicator.startAnimating()
+            ScanningStatus.text = " "
             //centralManager.scanForPeripherals(withServices: [CBUUID(string: "2A19")], options: nil)
         }
     }
