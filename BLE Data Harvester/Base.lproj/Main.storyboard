@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="16C67" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="49e-Tb-3d3">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="16C60b" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="49e-Tb-3d3">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -10,7 +10,7 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--First-->
+        <!--Node Finder-->
         <scene sceneID="hNz-n2-bh7">
             <objects>
                 <viewController storyboardIdentifier="FirstViewController" id="9pv-A4-QxB" customClass="FirstViewController" customModule="BLE_Data_Harvester" customModuleProvider="target" sceneMemberID="viewController">
@@ -168,11 +168,11 @@
                                     <action selector="testButton:" destination="9pv-A4-QxB" eventType="touchUpInside" id="7Z6-vH-vzi"/>
                                 </connections>
                             </button>
-                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="zwm-Db-IbX">
-                                <rect key="frame" x="16" y="111" width="20" height="20"/>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" misplaced="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="zwm-Db-IbX">
+                                <rect key="frame" x="91" y="110" width="20" height="20"/>
                             </activityIndicatorView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2UP-JG-dYd">
-                                <rect key="frame" x="44" y="110" width="42" height="21"/>
+                                <rect key="frame" x="16" y="110" width="67" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
@@ -196,7 +196,6 @@
                             <constraint firstItem="dZs-um-gv3" firstAttribute="top" secondItem="Ia1-K6-d13" secondAttribute="bottom" constant="353" id="DBh-MG-tyg"/>
                             <constraint firstItem="qEA-G5-WpD" firstAttribute="top" secondItem="Ia1-K6-d13" secondAttribute="bottom" constant="324" id="FgF-wP-4re"/>
                             <constraint firstItem="DL1-XS-N6n" firstAttribute="top" secondItem="Ia1-K6-d13" secondAttribute="bottom" constant="266" id="Fpn-SS-hYX"/>
-                            <constraint firstAttribute="leadingMargin" secondItem="zwm-Db-IbX" secondAttribute="leading" id="GAG-12-h8w"/>
                             <constraint firstAttribute="leadingMargin" secondItem="EAt-Bg-Kdn" secondAttribute="leading" id="Gr5-kA-ZmU"/>
                             <constraint firstAttribute="leadingMargin" secondItem="DL1-XS-N6n" secondAttribute="leading" id="HwL-qB-HU5"/>
                             <constraint firstAttribute="leadingMargin" secondItem="cYs-4u-5gV" secondAttribute="leading" id="JXM-Hq-YNf"/>
@@ -209,8 +208,8 @@
                             <constraint firstAttribute="trailingMargin" secondItem="nAK-mV-UFX" secondAttribute="trailing" id="SMV-Xj-ZnF"/>
                             <constraint firstAttribute="leadingMargin" secondItem="D99-UW-WdQ" secondAttribute="leading" id="UUg-8H-RSb"/>
                             <constraint firstItem="G0w-Zh-X9x" firstAttribute="top" secondItem="Ia1-K6-d13" secondAttribute="bottom" constant="353" id="VBd-ZH-GyZ"/>
-                            <constraint firstItem="2UP-JG-dYd" firstAttribute="leading" secondItem="tsR-hK-woN" secondAttribute="leadingMargin" constant="28" id="Vac-3x-Ooe"/>
                             <constraint firstItem="Ufj-Td-fea" firstAttribute="top" secondItem="Ia1-K6-d13" secondAttribute="bottom" constant="237" id="Won-es-Ebu"/>
+                            <constraint firstAttribute="leadingMargin" secondItem="2UP-JG-dYd" secondAttribute="leading" id="adw-LH-knd"/>
                             <constraint firstItem="Aeq-2r-x1L" firstAttribute="top" secondItem="Ia1-K6-d13" secondAttribute="bottom" constant="237" id="blQ-P5-srg"/>
                             <constraint firstItem="kiZ-f6-qbz" firstAttribute="top" secondItem="Ia1-K6-d13" secondAttribute="bottom" constant="179" id="bvy-mY-4ud"/>
                             <constraint firstAttribute="trailingMargin" secondItem="Aeq-2r-x1L" secondAttribute="trailing" id="c8B-6b-T2m"/>
@@ -222,13 +221,14 @@
                             <constraint firstItem="bL2-KS-96a" firstAttribute="top" secondItem="Ia1-K6-d13" secondAttribute="bottom" constant="265" id="kf4-ES-FFQ"/>
                             <constraint firstAttribute="leadingMargin" secondItem="ZH4-jm-cPK" secondAttribute="leading" id="nHM-UX-T3l"/>
                             <constraint firstItem="mqW-eP-Za1" firstAttribute="top" secondItem="Ia1-K6-d13" secondAttribute="bottom" constant="179" id="pDf-2n-IYs"/>
+                            <constraint firstItem="zwm-Db-IbX" firstAttribute="leading" secondItem="tsR-hK-woN" secondAttribute="leadingMargin" constant="75" id="rGE-lr-4hf"/>
                             <constraint firstItem="Jqy-Aq-Vfh" firstAttribute="top" secondItem="Ia1-K6-d13" secondAttribute="bottom" constant="148" id="roL-39-m2t"/>
                             <constraint firstItem="D99-UW-WdQ" firstAttribute="top" secondItem="Ia1-K6-d13" secondAttribute="bottom" constant="208" id="szv-X6-Lft"/>
                             <constraint firstAttribute="trailingMargin" secondItem="G0w-Zh-X9x" secondAttribute="trailing" id="wPt-Mm-whj"/>
                             <constraint firstItem="zwm-Db-IbX" firstAttribute="top" secondItem="Ia1-K6-d13" secondAttribute="bottom" constant="91" id="yzZ-aF-bJf"/>
                         </constraints>
                     </view>
-                    <tabBarItem key="tabBarItem" title="First" image="first" id="acW-dT-cKf"/>
+                    <tabBarItem key="tabBarItem" title="Node Finder" image="first" selectedImage="first" id="acW-dT-cKf"/>
                     <connections>
                         <outlet property="DisconnectedStatus" destination="0m7-0B-bCA" id="ZN8-VY-O17"/>
                         <outlet property="DiscoveredServicesStatus" destination="bL2-KS-96a" id="sdT-Lh-TM2"/>
@@ -245,51 +245,6 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="W5J-7L-Pyd" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="956" y="-272.11394302848578"/>
-        </scene>
-        <!--Second-->
-        <scene sceneID="wg7-f3-ORb">
-            <objects>
-                <viewController id="8rJ-Kc-sve" customClass="SecondViewController" customModule="BLE_Data_Harvester" customModuleProvider="target" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="L7p-HK-0SC"/>
-                        <viewControllerLayoutGuide type="bottom" id="Djb-ko-YwX"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="QS5-Rx-YEW">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES" flexibleMaxY="YES"/>
-                        <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Webview Test" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="a6i-Ic-bJv">
-                                <rect key="frame" x="134.5" y="28" width="106" height="21"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <webView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mZv-sv-A4p" customClass="WKWebView">
-                                <rect key="frame" x="16" y="99" width="343" height="519"/>
-                                <color key="backgroundColor" red="0.36078431370000003" green="0.38823529410000002" blue="0.4039215686" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                            </webView>
-                        </subviews>
-                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        <constraints>
-                            <constraint firstItem="Djb-ko-YwX" firstAttribute="top" secondItem="mZv-sv-A4p" secondAttribute="bottom" id="2ML-dg-dNF"/>
-                            <constraint firstItem="mZv-sv-A4p" firstAttribute="trailing" secondItem="QS5-Rx-YEW" secondAttribute="trailingMargin" id="G12-tV-uQw"/>
-                            <constraint firstItem="a6i-Ic-bJv" firstAttribute="centerX" secondItem="QS5-Rx-YEW" secondAttribute="centerX" id="N5a-ri-Id6"/>
-                            <constraint firstItem="mZv-sv-A4p" firstAttribute="leading" secondItem="QS5-Rx-YEW" secondAttribute="leadingMargin" id="PaZ-B3-JLP"/>
-                            <constraint firstItem="a6i-Ic-bJv" firstAttribute="top" secondItem="L7p-HK-0SC" secondAttribute="bottom" constant="8" id="fhX-3q-sUK"/>
-                            <constraint firstItem="mZv-sv-A4p" firstAttribute="centerX" secondItem="QS5-Rx-YEW" secondAttribute="centerX" id="gF7-ug-uKn"/>
-                            <constraint firstItem="mZv-sv-A4p" firstAttribute="top" secondItem="a6i-Ic-bJv" secondAttribute="bottom" constant="50" id="oiU-4B-rhg"/>
-                            <constraint firstItem="mZv-sv-A4p" firstAttribute="top" secondItem="L7p-HK-0SC" secondAttribute="bottom" constant="79" id="w8c-gG-hKU"/>
-                        </constraints>
-                    </view>
-                    <extendedEdge key="edgesForExtendedLayout" bottom="YES"/>
-                    <tabBarItem key="tabBarItem" title="Second" image="second" id="cPa-gy-q4n"/>
-                    <connections>
-                        <outlet property="webView" destination="mZv-sv-A4p" id="W3N-aT-2Nb"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="4Nw-L8-lE0" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="900" y="452"/>
         </scene>
         <!--Graph-->
         <scene sceneID="Wu6-Ti-v90">
@@ -365,7 +320,7 @@
                             <constraint firstAttribute="trailingMargin" secondItem="a9p-Mn-pSO" secondAttribute="trailing" id="uCq-6x-mwP"/>
                         </constraints>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Graph" id="rux-lV-3Mo"/>
+                    <tabBarItem key="tabBarItem" title="Graph" image="second" id="rux-lV-3Mo"/>
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="devicePicker" destination="cvw-4z-I6X" id="Np7-FZ-LEI"/>
@@ -482,7 +437,6 @@
                     </tabBar>
                     <connections>
                         <segue destination="9pv-A4-QxB" kind="relationship" relationship="viewControllers" id="u7Y-xg-7CH"/>
-                        <segue destination="8rJ-Kc-sve" kind="relationship" relationship="viewControllers" id="lzU-1b-eKA"/>
                         <segue destination="YfS-Wk-PLh" kind="relationship" relationship="viewControllers" id="BG1-oD-sHS"/>
                         <segue destination="soF-Fb-v9x" kind="relationship" relationship="viewControllers" id="i6u-Yr-XZB"/>
                     </connections>
@@ -493,7 +447,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="first" width="30" height="30"/>
-        <image name="second" width="30" height="30"/>
+        <image name="first" width="21" height="21"/>
+        <image name="second" width="19" height="19"/>
     </resources>
 </document>

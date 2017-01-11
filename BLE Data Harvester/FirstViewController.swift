@@ -102,7 +102,7 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = "\"Sensor Nodes\""
+        title = "Node Finder"
         // Do any additional setup after loading the view, typically from a nib.
         centralManager = CBCentralManager(delegate: self, queue: nil)
         //sensorTable.register(UITableViewCell.self, forCellReuseIdentifier: "Cell")
@@ -259,7 +259,7 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
         print("*** PAUSING SCAN")
         timer = Timer.scheduledTimer(timeInterval: timerPauseInterval, target:self, selector: #selector(FirstViewController.resumeScan), userInfo: nil, repeats: false)
         ScanningIndicator.stopAnimating()
-        ScanningStatus.text = "Scanning"
+        ScanningStatus.text = " "
         centralManager.stopScan()
     }
     
@@ -270,7 +270,7 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
             timer = Timer.scheduledTimer(timeInterval: timerScanInterval, target:self, selector: #selector(FirstViewController.pauseScan), userInfo: nil, repeats: false)
             centralManager.scanForPeripherals(withServices: nil, options: nil)
             ScanningIndicator.startAnimating()
-            ScanningStatus.text = " "
+            ScanningStatus.text = "Scanning"
             //centralManager.scanForPeripherals(withServices: [CBUUID(string: "2A19")], options: nil)
         }
     }
