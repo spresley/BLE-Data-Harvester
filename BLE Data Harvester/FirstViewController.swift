@@ -38,6 +38,7 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
     @IBOutlet weak var DisconnectedStatus: UILabel!
     @IBOutlet weak var ScanningStatus: UILabel!
     @IBOutlet weak var ScanningIndicator: UIActivityIndicatorView!
+    @IBOutlet weak var FoundSensorLabel: UILabel!
     
     // MARK: Debugging Flags
     let debugHistoricalData = false
@@ -105,7 +106,7 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
         title = "Node Finder"
         // Do any additional setup after loading the view, typically from a nib.
         centralManager = CBCentralManager(delegate: self, queue: nil)
-        //sensorTable.register(UITableViewCell.self, forCellReuseIdentifier: "Cell")
+        FoundSensorLabel.backgroundColor = UIColor.gray
     }
 
     override func didReceiveMemoryWarning() {
@@ -267,6 +268,7 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
         if keepScanning {
             // Start scanning again
             print("*** RESUMING SCAN!")
+            
             timer = Timer.scheduledTimer(timeInterval: timerScanInterval, target:self, selector: #selector(FirstViewController.pauseScan), userInfo: nil, repeats: false)
             centralManager.scanForPeripherals(withServices: nil, options: nil)
             ScanningIndicator.startAnimating()
@@ -279,6 +281,7 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
         print("**** SUCCESSFULLY CONNECTED TO SENSOR TAG!!!")
         FoundSensorStatus.text = "✔"
         FoundSensorStatus.textColor = UIColor.green
+        FoundSensorLabel.backgroundColor = UIColor.green
         DisconnectedStatus.text = "✘"
         DisconnectedStatus.textColor = UIColor.red
         peripheral.discoverServices(nil) // nil = discover all services
@@ -294,6 +297,7 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
         }
         
         print("**** DISCONNECTED FROM SENSOR TAG")
+        FoundSensorLabel.backgroundColor = UIColor.red
         FoundSensorStatus.text = "✘"
         FoundSensorStatus.textColor = UIColor.red
         DiscoveredServicesStatus.text = "✘"
