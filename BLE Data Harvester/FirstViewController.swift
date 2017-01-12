@@ -573,7 +573,7 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
         for index in 0..<historicalDataTable.count { // loop through the historical data table and calculate actual time
             let relativeTime:UInt16 = historicalDataTable[index].relativeTimeHistoricalMeasurement
             let timeDifference = maximumRelativeTime - relativeTime
-            subtractTime = TimeInterval((60*timeDifference))
+            subtractTime = TimeInterval(timeDifference)
             historicalDataTable[index].actualTimeHistoricalMeasurement = (currentTime - subtractTime)
             print(historicalDataTable[index].historicalActivityLevel, ","
                 , historicalDataTable[index].historicalLightLevel, ","
