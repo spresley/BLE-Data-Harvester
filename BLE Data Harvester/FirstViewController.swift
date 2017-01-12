@@ -40,6 +40,14 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
     @IBOutlet weak var ScanningIndicator: UIActivityIndicatorView!
     @IBOutlet weak var FoundSensorLabel: UILabel!
     
+    @IBOutlet weak var FoundSensorColour: UIView!
+    @IBOutlet weak var DiscoveredServicesColour: UIView!
+    @IBOutlet weak var GatheringHistDataColour: UIView!
+    @IBOutlet weak var GatheringLiveDataColour: UIView!
+    @IBOutlet weak var BluemixColour: UIView!
+    @IBOutlet weak var DisconnectedColour: UIView!
+
+    
     // MARK: Debugging Flags
     let debugHistoricalData = false
     let usePersistance = true
@@ -106,7 +114,24 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
         title = "Node Finder"
         // Do any additional setup after loading the view, typically from a nib.
         centralManager = CBCentralManager(delegate: self, queue: nil)
-        FoundSensorLabel.backgroundColor = UIColor.gray
+        
+        FoundSensorColour.backgroundColor = UIColor.white
+        DiscoveredServicesColour.backgroundColor = UIColor.white
+        GatheringHistDataColour.backgroundColor = UIColor.white
+        GatheringLiveDataColour.backgroundColor = UIColor.white
+        BluemixColour.backgroundColor = UIColor.white
+        DisconnectedColour.backgroundColor = UIColor.white
+        FoundSensorColour.backgroundColor = UIColor.white
+        
+        UIView.animate(withDuration: 0.5, animations: {
+            self.FoundSensorColour.backgroundColor = UIColor.gray
+            self.DiscoveredServicesColour.backgroundColor = UIColor.gray
+            self.GatheringHistDataColour.backgroundColor = UIColor.gray
+            self.GatheringLiveDataColour.backgroundColor = UIColor.gray
+            self.BluemixColour.backgroundColor = UIColor.gray
+            self.DisconnectedColour.backgroundColor = UIColor.gray
+            self.FoundSensorColour.backgroundColor = UIColor.gray
+        })
     }
 
     override func didReceiveMemoryWarning() {
@@ -268,7 +293,15 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
         if keepScanning {
             // Start scanning again
             print("*** RESUMING SCAN!")
-            
+            UIView.animate(withDuration: 0.5, animations: {
+                self.FoundSensorColour.backgroundColor = UIColor.gray
+                self.DiscoveredServicesColour.backgroundColor = UIColor.gray
+                self.GatheringHistDataColour.backgroundColor = UIColor.gray
+                self.GatheringLiveDataColour.backgroundColor = UIColor.gray
+                self.BluemixColour.backgroundColor = UIColor.gray
+                self.DisconnectedColour.backgroundColor = UIColor.gray
+                self.FoundSensorColour.backgroundColor = UIColor.gray
+            })
             timer = Timer.scheduledTimer(timeInterval: timerScanInterval, target:self, selector: #selector(FirstViewController.pauseScan), userInfo: nil, repeats: false)
             centralManager.scanForPeripherals(withServices: nil, options: nil)
             ScanningIndicator.startAnimating()
@@ -279,11 +312,13 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
     
     func centralManager(_ central: CBCentralManager, didConnect peripheral: CBPeripheral) {
         print("**** SUCCESSFULLY CONNECTED TO SENSOR TAG!!!")
-        FoundSensorStatus.text = "✔"
-        FoundSensorStatus.textColor = UIColor.green
-        FoundSensorLabel.backgroundColor = UIColor.green
-        DisconnectedStatus.text = "✘"
-        DisconnectedStatus.textColor = UIColor.red
+        UIView.animate(withDuration: 0.5, animations: {
+            self.FoundSensorColour.backgroundColor = UIColor.green
+        })
+        
+        UIView.animate(withDuration: 0.5, animations: {
+            self.DisconnectedColour.backgroundColor = UIColor.red
+        })
         peripheral.discoverServices(nil) // nil = discover all services
     }
    
@@ -297,19 +332,14 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
         }
         
         print("**** DISCONNECTED FROM SENSOR TAG")
-        FoundSensorLabel.backgroundColor = UIColor.red
-        FoundSensorStatus.text = "✘"
-        FoundSensorStatus.textColor = UIColor.red
-        DiscoveredServicesStatus.text = "✘"
-        DiscoveredServicesStatus.textColor = UIColor.red
-        HistoricalDataStatus.text = "✘"
-        HistoricalDataStatus.textColor = UIColor.red
-        LiveDataStatus.text = "✘"
-        LiveDataStatus.textColor = UIColor.red
-        SentToBlueMixStatus.text = "✘"
-        SentToBlueMixStatus.textColor = UIColor.red
-        DisconnectedStatus.text = "✔"
-        DisconnectedStatus.textColor = UIColor.green
+        UIView.animate(withDuration: 0.5, animations: {
+            //self.FoundSensorColour.backgroundColor = UIColor.red
+            //self.DiscoveredServicesColour.backgroundColor = UIColor.red
+            //self.GatheringHistDataColour.backgroundColor = UIColor.red
+            //self.GatheringLiveDataColour.backgroundColor = UIColor.red
+            //self.BluemixColour.backgroundColor = UIColor.red
+            self.DisconnectedColour.backgroundColor = UIColor.green
+        })
         if error != nil {
             print("****** DISCONNECTION DETAILS: \(error!.localizedDescription)")
         }
@@ -330,8 +360,9 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
                 print("Discovered service \(service)")
                 if (service.uuid == CBUUID(string: Device.RoomMonitorServiceUUID)) {
                     peripheral.discoverCharacteristics(nil, for: service)
-                    DiscoveredServicesStatus.text = "✔"
-                    DiscoveredServicesStatus.textColor = UIColor.green
+                    UIView.animate(withDuration: 0.5, animations: {
+                        self.DiscoveredServicesColour.backgroundColor = UIColor.green
+                    })
                 }
             }
         }
@@ -410,12 +441,14 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
                     print("DISCONNECTED FROM PERIPHERAL")
                     gotLight = false
                     gotActivity = false
-                    LiveDataStatus.text = "✔"
-                    LiveDataStatus.textColor = UIColor.green
+                    UIView.animate(withDuration: 0.5, animations: {
+                        self.GatheringLiveDataColour.backgroundColor = UIColor.green
+                    })
                     if isConnected == 1{
                         sharedInstance.sendRoomMonitorMessage(activity_level: Double(rawActivityLevel), light_level: Double(rawLightLevel), time_stamp: Date(), node_id: currentSensorName) // Call this function for each message needing to be sent
-                        SentToBlueMixStatus.text = "✔"
-                        SentToBlueMixStatus.textColor = UIColor.green
+                        UIView.animate(withDuration: 0.5, animations: {
+                            self.BluemixColour.backgroundColor = UIColor.green
+                        })
                     }else {
                         print("Not connected to IBM BlueMix")
                         
@@ -443,12 +476,14 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
                     print("GOT DATA: DISCONNECTING FROM PERIPHERAL")
                     gotActivity = false
                     gotLight = false
-                    LiveDataStatus.text = "✔"
-                    LiveDataStatus.textColor = UIColor.green
+                    UIView.animate(withDuration: 0.5, animations: {
+                        self.GatheringLiveDataColour.backgroundColor = UIColor.green
+                    })
                     if isConnected == 1{
                         sharedInstance.sendRoomMonitorMessage(activity_level: Double(rawActivityLevel), light_level: Double(rawLightLevel), time_stamp: Date(), node_id: currentSensorName) // Call this function for each message needing to be sent
-                        SentToBlueMixStatus.text = "✔"
-                        SentToBlueMixStatus.textColor = UIColor.green
+                        UIView.animate(withDuration: 0.5, animations: {
+                            self.BluemixColour.backgroundColor = UIColor.green
+                        })
                     }else {
                         print("Not connected to IBM BlueMix")
                         
@@ -475,8 +510,9 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
                 print("updated historical activity level")
                 
                 activityLevelLabel.text = "\(rawHistoricalActivityLevel)"
-                HistoricalDataStatus.textColor = UIColor.green
-                HistoricalDataStatus.text = "✔"
+                UIView.animate(withDuration: 0.5, animations: {
+                    self.GatheringHistDataColour.backgroundColor = UIColor.green
+                })
                 gotHistoricalActivity = true
 
             } else if (characteristic.uuid == CBUUID(string: Device.HistoricalLightLevelUUID) && (collectingHistoricalData == true) && (gotHistoricalLight == false)) {
@@ -493,8 +529,11 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
                 print("updated historical light level")
                 
                 lightLevelLabel.text = "\(rawHistoricalLightLevel)"
-                HistoricalDataStatus.textColor = UIColor.green
-                HistoricalDataStatus.text = "✔"
+                UIView.animate(withDuration: 0.5, animations: {
+                    self.GatheringHistDataColour.backgroundColor = UIColor.green
+                })
+
+             
                 gotHistoricalLight = true
                 
             } else if (characteristic.uuid == CBUUID(string: Device.TimeOfHistoricalMeasurementUUID) && (collectingHistoricalData == true) && (gotHistoricalTime == false)) {
@@ -510,8 +549,10 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
                 if (rawHistoricalTime>maximumRelativeTime){
                     maximumRelativeTime = rawHistoricalTime
                 }
-                HistoricalDataStatus.textColor = UIColor.green
-                HistoricalDataStatus.text = "✔"
+                UIView.animate(withDuration: 0.5, animations: {
+                    self.GatheringHistDataColour.backgroundColor = UIColor.green
+                })
+
                 gotHistoricalTime = true
             }
         }
@@ -539,8 +580,9 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
                 historicalFirstPass = false
                 calculateActualHistoricalTime()
                 print("done")
-                HistoricalDataStatus.text = "✔"
-                HistoricalDataStatus.textColor = UIColor.green
+                UIView.animate(withDuration: 0.5, animations: {
+                    self.GatheringHistDataColour.backgroundColor = UIColor.green
+                })
                 disconnectSensorNode()
             }
         }
@@ -587,8 +629,10 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
                                                           light_level: Double(historicalDataTable[index].historicalLightLevel),
                                                           time_stamp: historicalDataTable[index].actualTimeHistoricalMeasurement,
                                                           node_id: currentSensorName)
-                    SentToBlueMixStatus.text = "✔"
-                    SentToBlueMixStatus.textColor = UIColor.green
+                    
+                    UIView.animate(withDuration: 0.5, animations: {
+                        self.BluemixColour.backgroundColor = UIColor.green
+                    })
                 }else {
                     print("Not connected to IBM BlueMix")
                     
