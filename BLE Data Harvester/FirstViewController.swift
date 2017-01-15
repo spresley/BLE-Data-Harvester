@@ -46,7 +46,7 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
     @IBOutlet weak var GatheringLiveDataColour: UIView!
     @IBOutlet weak var BluemixColour: UIView!
     @IBOutlet weak var DisconnectedColour: UIView!
-
+    @IBOutlet var MainView: UIView!
     
     // MARK: Debugging Flags
     let debugHistoricalData = false
@@ -115,13 +115,7 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
         // Do any additional setup after loading the view, typically from a nib.
         centralManager = CBCentralManager(delegate: self, queue: nil)
         
-        FoundSensorColour.backgroundColor = UIColor.white
-        DiscoveredServicesColour.backgroundColor = UIColor.white
-        GatheringHistDataColour.backgroundColor = UIColor.white
-        GatheringLiveDataColour.backgroundColor = UIColor.white
-        BluemixColour.backgroundColor = UIColor.white
-        DisconnectedColour.backgroundColor = UIColor.white
-        FoundSensorColour.backgroundColor = UIColor.white
+        MainView.backgroundColor = UIColorFromRGB(rgbValue: 0xD0D0D0)
         
         UIView.animate(withDuration: 0.5, animations: {
             self.FoundSensorColour.backgroundColor = self.UIColorFromRGB(rgbValue: 0xD0D0D0)
