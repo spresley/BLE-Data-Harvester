@@ -48,6 +48,15 @@ class FirstViewController: UIViewController, CBCentralManagerDelegate, CBPeriphe
     @IBOutlet weak var DisconnectedColour: UIView!
     @IBOutlet var MainView: UIView!
     
+    @IBOutlet weak var ShowSensorInfo: UIButton!
+    @IBAction func ShowSensorInformation(_ sender: Any) {
+        let alertController = UIAlertController(title: "Current Sensor Info", message: "test message", preferredStyle: UIAlertControllerStyle.alert)
+        let okAction = UIAlertAction(title: "Done", style: UIAlertActionStyle.cancel, handler: nil)
+        alertController.addAction(okAction)
+        self.show(alertController, sender: self)
+
+    }
+    
     // MARK: Debugging Flags
     let debugHistoricalData = false
     let usePersistance = true

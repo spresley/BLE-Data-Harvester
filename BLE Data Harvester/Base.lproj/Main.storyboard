@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="16C60b" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="49e-Tb-3d3">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="16D30a" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="49e-Tb-3d3">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -219,6 +219,13 @@
                                     <constraint firstItem="cYs-4u-5gV" firstAttribute="top" secondItem="FzC-T8-jre" secondAttribute="top" constant="4" id="tsC-0D-KeW"/>
                                 </constraints>
                             </view>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DVu-Wn-d3r">
+                                <rect key="frame" x="16" y="504" width="176" height="30"/>
+                                <state key="normal" title="Show Current Sensor Info"/>
+                                <connections>
+                                    <action selector="ShowSensorInformation:" destination="9pv-A4-QxB" eventType="touchUpInside" id="7Mx-35-6Km"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
@@ -229,6 +236,7 @@
                             <constraint firstItem="FzC-T8-jre" firstAttribute="top" secondItem="Ia1-K6-d13" secondAttribute="bottom" constant="347" id="6al-3W-jYg"/>
                             <constraint firstAttribute="trailingMargin" secondItem="FmB-aT-Mgo" secondAttribute="trailing" id="7oa-Za-LLc"/>
                             <constraint firstAttribute="trailingMargin" secondItem="WeI-lL-xyl" secondAttribute="trailing" id="8fM-3u-jyp"/>
+                            <constraint firstItem="4ug-Mw-9AY" firstAttribute="top" secondItem="DVu-Wn-d3r" secondAttribute="bottom" constant="84" id="8yF-Cb-mRi"/>
                             <constraint firstAttribute="leadingMargin" secondItem="WeI-lL-xyl" secondAttribute="leading" id="9VD-o9-H23"/>
                             <constraint firstItem="2UP-JG-dYd" firstAttribute="top" secondItem="Ia1-K6-d13" secondAttribute="bottom" constant="91" id="9dg-x3-dDZ"/>
                             <constraint firstAttribute="trailingMargin" secondItem="FzC-T8-jre" secondAttribute="trailing" id="BTW-8b-k1H"/>
@@ -239,6 +247,7 @@
                             <constraint firstAttribute="leadingMargin" secondItem="EAt-Bg-Kdn" secondAttribute="leading" id="Gr5-kA-ZmU"/>
                             <constraint firstItem="WeI-lL-xyl" firstAttribute="top" secondItem="Ia1-K6-d13" secondAttribute="bottom" constant="233" id="Hhm-zj-KbT"/>
                             <constraint firstAttribute="leadingMargin" secondItem="quG-Zb-sCu" secondAttribute="leading" id="Jj5-F2-AYX"/>
+                            <constraint firstAttribute="leadingMargin" secondItem="DVu-Wn-d3r" secondAttribute="leading" id="LMn-1f-6SN"/>
                             <constraint firstItem="Pwr-k0-sla" firstAttribute="top" secondItem="Ia1-K6-d13" secondAttribute="bottom" constant="323" id="MFL-i8-f5M"/>
                             <constraint firstItem="nAK-mV-UFX" firstAttribute="top" secondItem="Ia1-K6-d13" secondAttribute="bottom" constant="148" id="OSK-3m-wRG"/>
                             <constraint firstAttribute="leadingMargin" secondItem="mqW-eP-Za1" secondAttribute="leading" id="OdH-Bg-hlr"/>
@@ -273,8 +282,10 @@
                         <outlet property="FoundSensorLabel" destination="Ufj-Td-fea" id="yme-j6-unb"/>
                         <outlet property="GatheringHistDataColour" destination="FmB-aT-Mgo" id="F4X-Op-ubN"/>
                         <outlet property="GatheringLiveDataColour" destination="hi0-u4-OOa" id="MyI-Gi-2x5"/>
+                        <outlet property="MainView" destination="tsR-hK-woN" id="bJv-ux-cw6"/>
                         <outlet property="ScanningIndicator" destination="zwm-Db-IbX" id="l2m-ZU-ien"/>
                         <outlet property="ScanningStatus" destination="2UP-JG-dYd" id="kla-vq-xFc"/>
+                        <outlet property="ShowSensorInfo" destination="DVu-Wn-d3r" id="NRW-Db-We2"/>
                         <outlet property="activityLevelLabel" destination="kiZ-f6-qbz" id="zhU-SD-SsD"/>
                         <outlet property="lightLevelLabel" destination="nAK-mV-UFX" id="vcA-Va-uaY"/>
                     </connections>
