@@ -54,28 +54,28 @@ class GraphViewController: UIViewController, UIPickerViewDelegate, UIPickerViewD
         let lasthour = Calendar.current.date(byAdding: .hour, value: -1, to: today)
         
         let historicDataObj = HistoricData()
-        if timeWindow==0{
+        if timeWindow==0{ //month
             historicDataObj.requestDataFromDB_byDate(startDate: (lastmonth?.iso8601)!, endDate: today.iso8601, selected_node: selected_node, completion: {
                 self.printHistDataObj(historicDataObj: historicDataObj)
-                self.dataDidParse(historicDataObj: historicDataObj)
+                self.dataDidParse(historicDataObj: historicDataObj, timeWindow: timeWindow)
             })
         }
-        if timeWindow==1{
+        if timeWindow==1{ //week
             historicDataObj.requestDataFromDB_byDate(startDate: (lastweek?.iso8601)!, endDate: today.iso8601, selected_node: selected_node, completion: {
                 self.printHistDataObj(historicDataObj: historicDataObj)
-                self.dataDidParse(historicDataObj: historicDataObj)
+                self.dataDidParse(historicDataObj: historicDataObj, timeWindow: timeWindow)
             })
         }
-        if timeWindow==2{
+        if timeWindow==2{ //day
             historicDataObj.requestDataFromDB_byDate(startDate: (yesterday?.iso8601)!, endDate: today.iso8601, selected_node: selected_node, completion: {
                 self.printHistDataObj(historicDataObj: historicDataObj)
-                self.dataDidParse(historicDataObj: historicDataObj)
+                self.dataDidParse(historicDataObj: historicDataObj, timeWindow: timeWindow)
             })
         }
-        if timeWindow==3{
+        if timeWindow==3{//hour
             historicDataObj.requestDataFromDB_byDate(startDate: (lasthour?.iso8601)!, endDate: today.iso8601, selected_node: selected_node, completion: {
                 self.printHistDataObj(historicDataObj: historicDataObj)
-                self.dataDidParse(historicDataObj: historicDataObj)
+                self.dataDidParse(historicDataObj: historicDataObj, timeWindow: timeWindow)
             })
         }
     }
@@ -86,7 +86,8 @@ class GraphViewController: UIViewController, UIPickerViewDelegate, UIPickerViewD
         }
     }
     
-    func dataDidParse(historicDataObj : HistoricData){
+    func dataDidParse(historicDataObj : HistoricData, timeWindow: Int){
+        
         print("Data parsed")
         let numDataPoints: Int = historicDataObj.sensorData.count
         print("numDataPoints:\(numDataPoints)")
@@ -127,22 +128,68 @@ class GraphViewController: UIViewController, UIPickerViewDelegate, UIPickerViewD
             
             let chartData = LineChartData(dataSets: [activityDataSet, lightDataSet])
             lineView.data = chartData
+            lineView.data?.setDrawValues(false)
             
             let xaxis = lineView.xAxis
             xaxis.valueFormatter = axisFormatDelegate
-            xaxis.setLabelCount(5, force: false)
-            xaxis.granularity = 59
             xaxis.labelPosition = XAxis.LabelPosition.bottom
             
+            xaxis.axisMaximum = Double(Date().timeIntervalSince1970)
+            
+
+            let today = Date()
+            let calendar = NSCalendar(calendarIdentifier: NSCalendar.Identifier.gregorian)!
+            var components = calendar.components([.year, .month, .day, .hour, .minute, .second], from: today)
+            
+            components.minute = 0
+            components.second = 0
+            
+            let last_hour = calendar.date(from: components)
+            let end_hour = Calendar.current.date(byAdding: .hour, value: 1, to: last_hour!)
+            
+            components.hour = 0
+
+            let today_start = calendar.date(from: components)
+            let today_end = Calendar.current.date(byAdding: .day, value: 1, to: today_start!)
+            let last_month = Calendar.current.date(byAdding: .month, value: -1, to: today_end!)
+            let last_week = Calendar.current.date(byAdding: .day, value: -7, to: today_end!)
+            xaxis.granularity = 59
+            
+            switch timeWindow {
+            case 0://month
+                xaxis.axisMinimum = Double((last_month?.timeIntervalSince1970)!)
+                xaxis.axisMaximum = Double((today_end?.timeIntervalSince1970)!)
+                //xaxis.setLabelCount(5, force: false)
+                //xaxis.granularity = Double(60*60)
+            case 1://week
+                xaxis.axisMinimum = Double((last_week?.timeIntervalSince1970)!)
+                xaxis.axisMaximum = Double((today_end?.timeIntervalSince1970)!)
+                //xaxis.granularity = Double(60*60)
+                //xaxis.setLabelCount(7, force: false)
+            case 2://day
+                xaxis.axisMinimum = Double((today_start?.timeIntervalSince1970)!)
+                xaxis.axisMaximum = Double((today_end?.timeIntervalSince1970)!)
+               // xaxis.granularity = Double(60)
+                //xaxis.setLabelCount(4, force: false)
+            case 3://hour
+                xaxis.axisMinimum = Double((last_hour?.timeIntervalSince1970)!)
+                xaxis.axisMaximum = Double((end_hour?.timeIntervalSince1970)!)
+                //xaxis.granularity = Double(60)
+                //xaxis.setLabelCount(4, force: false)
+            default:
+                print("Error default switch statement reached")
+            }
+
             //lineView.setVisibleXRangeMaximum(10)
             
             lineView.leftAxis.axisMinimum = 0
             lineView.rightAxis.axisMinimum = 0
             //lineView.rightAxis.enabled = false
             
-            lineView.chartDescription?.enabled=false
-            lineView.animate(xAxisDuration: 2.0, yAxisDuration: 2.0)
+            lineView.chartDescription?.enabled = false
+            lineView.xAxis.drawGridLinesEnabled = false
 
+            lineView.animate(xAxisDuration: 2.0, yAxisDuration: 2.0)
             
         }else{
             lineView.clear()
@@ -175,7 +222,7 @@ class GraphViewController: UIViewController, UIPickerViewDelegate, UIPickerViewD
             for datapoint in historicDataObj.sensorData{
                 print("node_id: \(datapoint.node_id), time_stamp: \(datapoint.time_stamp), activity_level: \(datapoint.activity_level), light_level: \(datapoint.light_level)")
             }
-            self.dataDidParse(historicDataObj: historicDataObj)
+            self.dataDidParse(historicDataObj: historicDataObj, timeWindow: 0)
         })
     }
 
@@ -348,9 +395,116 @@ class HistoricData{
 extension GraphViewController: IAxisValueFormatter {
     
     func stringForValue(_ value: Double, axis: AxisBase?) -> String {
+        
+        
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "EEE HH:mm"
+        
+        //let axisRange = (axis?.axisMaximum)! - (axis?.axisMinimum)!
+        let axisRange = lineView.highestVisibleX - lineView.lowestVisibleX
+        
+        print("axisRange \(axisRange)")
+        var timeWindow: Int
+        
+        if(axisRange<60*60){
+            timeWindow = 3
+        }else{
+            if(axisRange<24*60*60){
+                timeWindow = 2
+            }
+            else{
+                if(axisRange<7*24*60*60){
+                    timeWindow = 1
+
+                }else{
+                    if(axisRange<28*24*60*60){
+                        timeWindow = 0
+                    }
+                    else{
+                        timeWindow=0
+                    }
+                }
+            }
+        }
+        if(axisRange<60){ //1 minute
+            axis?.granularity = Double(10)//10 seconds
+        }else{
+            if(axisRange<5*60){ //5 minutes
+                axis?.granularity = Double(2*59.999)//2 minutes
+            }else{
+                if(axisRange<15*60){ //15 minutes
+                    axis?.granularity = Double(5*59.999)//5 minutes
+                }else{
+                    if(axisRange<30*60){ //30 minutes
+                        axis?.granularity = Double(10*60)//10 minutes
+                    }else{
+                        if(axisRange<60*60){ //1 hour
+                            axis?.granularity = Double(20*60)//20 minutes
+                        }else{
+                            if(axisRange<(2*60*60)){ //2 hours
+                                axis?.granularity = Double(60*30)//30 minutes
+                            }else{
+                                if(axisRange<4*60*60){ //4 hours
+                                    axis?.granularity = Double(1*60*60)//1 hour
+                                }else{
+                                    if(axisRange<6*60*60){ //6 hours
+                                        axis?.granularity = Double(2*60*60)//2 hour
+                                    }else{
+                                        if(axisRange<12*60*60){ //12 hours
+                                            axis?.granularity = Double(3*60*60)//3 hour
+                                        }else{
+                                            if(axisRange<24*60*60){ //24 hours
+                                                axis?.granularity = Double(4*60*60)//4 hour
+                                            }else{
+                                                if(axisRange<3*24*60*60){ //3 days
+                                                    axis?.granularity = Double(6*60*60)//6 hour
+                                                }else{
+                                                    if(axisRange<7*24*60*60){ //7 days
+                                                        axis?.granularity = Double(24*60*60)//1 day
+                                                    }else{
+                                                        if(axisRange<20*24*60*60){ //20 days
+                                                            axis?.granularity = Double(24*60*60)//1 day
+                                                        }else{
+                                                            if(axisRange<31*24*60*60){ //31 days
+                                                                axis?.granularity = Double(7*24*60*60)//1 week
+                                                            }else{
+                                                                axis?.granularity = Double(7*24*60*60)//1 week
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        
+        switch timeWindow {
+        case (3):
+            dateFormatter.dateFormat = "HH:mm"
+            //axis?.granularity = Double(59.9999)
+        case (2):
+            dateFormatter.dateFormat = "EEE HH:mm"
+            //axis?.granularity = Double(59.9999)
+            //granularity = 59*60
+        case (1):
+            dateFormatter.dateFormat = "EEE-dd"
+            //axis?.granularity = Double(60*59.9999)
+            //granularity = Double(24*59*60)
+        case (0):
+            dateFormatter.dateFormat = "dd-MMM"
+            //axis?.granularity = Double(24*60*59.9999)
+            //granularity = Double(7*24*59*60)
+        default:
+            print("Error: Default dateFormatter reached")
+        }
+        
         return dateFormatter.string(from: Date(timeIntervalSince1970: value))
     }
 }
+
 
