@@ -14,7 +14,11 @@ var pickerEntry: [String] = [String]()
 class GraphViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource {
 
     
+    @IBOutlet var activityLevelLabel: UILabel!
+    
+    @IBOutlet var lightLevelLabel: UILabel!
     @IBOutlet var lineView: LineChartView!
+    
     weak var axisFormatDelegate: IAxisValueFormatter?
 
     @IBOutlet var segmentControl: UISegmentedControl!
@@ -188,6 +192,13 @@ class GraphViewController: UIViewController, UIPickerViewDelegate, UIPickerViewD
             
             lineView.chartDescription?.enabled = false
             lineView.xAxis.drawGridLinesEnabled = false
+            lineView.leftAxis.drawGridLinesEnabled = false
+            lineView.rightAxis.drawGridLinesEnabled = false
+            lineView.leftAxis.axisMaximum = 3100
+            lineView.rightAxis.axisMaximum = 105
+            
+            lineView.scaleYEnabled = false
+            lineView.drawMarkers = false
 
             lineView.animate(xAxisDuration: 2.0, yAxisDuration: 2.0)
             
@@ -206,6 +217,9 @@ class GraphViewController: UIViewController, UIPickerViewDelegate, UIPickerViewD
         
         self.devicePicker.delegate = self
         self.devicePicker.dataSource = self
+        
+        self.activityLevelLabel.transform = CGAffineTransform(rotationAngle:  CGFloat.pi / 2);
+        self.lightLevelLabel.transform = CGAffineTransform(rotationAngle:  -CGFloat.pi / 2);
         
         pickerEntry = ["All"]
     
@@ -425,16 +439,18 @@ extension GraphViewController: IAxisValueFormatter {
                 }
             }
         }
-        if(axisRange<60){ //1 minute
-            axis?.granularity = Double(10)//10 seconds
+        axis?.setLabelCount(5, force: false)
+
+        if(axisRange<5*60){ //4 minute
+            axis?.granularity = Double(60)//60 seconds
         }else{
-            if(axisRange<5*60){ //5 minutes
-                axis?.granularity = Double(2*59.999)//2 minutes
+            if(axisRange<8*60){ //8 minutes
+                axis?.granularity = Double(2*60)//2 minutes
             }else{
-                if(axisRange<15*60){ //15 minutes
-                    axis?.granularity = Double(5*59.999)//5 minutes
+                if(axisRange<30*60){ //30 minutes
+                    axis?.granularity = Double(5*60)//5 minutes
                 }else{
-                    if(axisRange<30*60){ //30 minutes
+                    if(axisRange<50*60){ //50 minutes
                         axis?.granularity = Double(10*60)//10 minutes
                     }else{
                         if(axisRange<60*60){ //1 hour
@@ -447,7 +463,7 @@ extension GraphViewController: IAxisValueFormatter {
                                     axis?.granularity = Double(1*60*60)//1 hour
                                 }else{
                                     if(axisRange<6*60*60){ //6 hours
-                                        axis?.granularity = Double(2*60*60)//2 hour
+                                        axis?.granularity = Double(1*60*60)//2 hour
                                     }else{
                                         if(axisRange<12*60*60){ //12 hours
                                             axis?.granularity = Double(3*60*60)//3 hour
@@ -482,7 +498,7 @@ extension GraphViewController: IAxisValueFormatter {
                 }
             }
         }
-        
+        print("Granularity:\(axis?.granularity)")
         switch timeWindow {
         case (3):
             dateFormatter.dateFormat = "HH:mm"
