@@ -417,29 +417,10 @@ extension GraphViewController: IAxisValueFormatter {
         let axisRange = lineView.highestVisibleX - lineView.lowestVisibleX
         
         print("axisRange \(axisRange)")
-        var timeWindow: Int
-        
-        if(axisRange<60*60){
-            timeWindow = 3
-        }else{
-            if(axisRange<24*60*60){
-                timeWindow = 2
-            }
-            else{
-                if(axisRange<7*24*60*60){
-                    timeWindow = 1
 
-                }else{
-                    if(axisRange<28*24*60*60){
-                        timeWindow = 0
-                    }
-                    else{
-                        timeWindow=0
-                    }
-                }
-            }
-        }
         axis?.setLabelCount(5, force: false)
+
+        dateFormatter.dateFormat = "HH:mm"
 
         if(axisRange<5*60){ //4 minute
             axis?.granularity = Double(60)//60 seconds
@@ -468,15 +449,18 @@ extension GraphViewController: IAxisValueFormatter {
                                         if(axisRange<12*60*60){ //12 hours
                                             axis?.granularity = Double(3*60*60)//3 hour
                                         }else{
+                                            dateFormatter.dateFormat = "EEE HH:mm"
                                             if(axisRange<24*60*60){ //24 hours
                                                 axis?.granularity = Double(4*60*60)//4 hour
                                             }else{
+                                                dateFormatter.dateFormat = "EEE-dd"
                                                 if(axisRange<3*24*60*60){ //3 days
                                                     axis?.granularity = Double(6*60*60)//6 hour
                                                 }else{
                                                     if(axisRange<7*24*60*60){ //7 days
                                                         axis?.granularity = Double(24*60*60)//1 day
                                                     }else{
+                                                       dateFormatter.dateFormat = "dd-MMM"
                                                         if(axisRange<20*24*60*60){ //20 days
                                                             axis?.granularity = Double(24*60*60)//1 day
                                                         }else{
@@ -499,26 +483,7 @@ extension GraphViewController: IAxisValueFormatter {
             }
         }
         print("Granularity:\(axis?.granularity)")
-        switch timeWindow {
-        case (3):
-            dateFormatter.dateFormat = "HH:mm"
-            //axis?.granularity = Double(59.9999)
-        case (2):
-            dateFormatter.dateFormat = "EEE HH:mm"
-            //axis?.granularity = Double(59.9999)
-            //granularity = 59*60
-        case (1):
-            dateFormatter.dateFormat = "EEE-dd"
-            //axis?.granularity = Double(60*59.9999)
-            //granularity = Double(24*59*60)
-        case (0):
-            dateFormatter.dateFormat = "dd-MMM"
-            //axis?.granularity = Double(24*60*59.9999)
-            //granularity = Double(7*24*59*60)
-        default:
-            print("Error: Default dateFormatter reached")
-        }
-        
+
         return dateFormatter.string(from: Date(timeIntervalSince1970: value))
     }
 }
