@@ -163,32 +163,21 @@ class GraphViewController: UIViewController, UIPickerViewDelegate, UIPickerViewD
             case 0://month
                 xaxis.axisMinimum = Double((last_month?.timeIntervalSince1970)!)
                 xaxis.axisMaximum = Double((today_end?.timeIntervalSince1970)!)
-                //xaxis.setLabelCount(5, force: false)
-                //xaxis.granularity = Double(60*60)
             case 1://week
                 xaxis.axisMinimum = Double((last_week?.timeIntervalSince1970)!)
                 xaxis.axisMaximum = Double((today_end?.timeIntervalSince1970)!)
-                //xaxis.granularity = Double(60*60)
-                //xaxis.setLabelCount(7, force: false)
             case 2://day
                 xaxis.axisMinimum = Double((today_start?.timeIntervalSince1970)!)
                 xaxis.axisMaximum = Double((today_end?.timeIntervalSince1970)!)
-               // xaxis.granularity = Double(60)
-                //xaxis.setLabelCount(4, force: false)
             case 3://hour
                 xaxis.axisMinimum = Double((last_hour?.timeIntervalSince1970)!)
                 xaxis.axisMaximum = Double((end_hour?.timeIntervalSince1970)!)
-                //xaxis.granularity = Double(60)
-                //xaxis.setLabelCount(4, force: false)
             default:
                 print("Error default switch statement reached")
             }
-
-            //lineView.setVisibleXRangeMaximum(10)
             
             lineView.leftAxis.axisMinimum = 0
             lineView.rightAxis.axisMinimum = 0
-            //lineView.rightAxis.enabled = false
             
             lineView.chartDescription?.enabled = false
             lineView.xAxis.drawGridLinesEnabled = false
@@ -222,10 +211,6 @@ class GraphViewController: UIViewController, UIPickerViewDelegate, UIPickerViewD
         self.lightLevelLabel.transform = CGAffineTransform(rotationAngle:  -CGFloat.pi / 2);
         
         pickerEntry = ["All"]
-    
-        
-//        devicePicker.setValue(UIColor.white, forKey: "textColor")
-//        devicePicker.setValue(UIColor.black, forKey: "backgroundColor")
         devicePicker.isHidden = true
     
         // Do any additional setup after loading the view.
@@ -265,7 +250,6 @@ class GraphViewController: UIViewController, UIPickerViewDelegate, UIPickerViewD
         // The parameter named row and component represents what was selected.
         print("picker changed")
         selectedNode.text = pickerEntry[row]
-        //pickerView.isHidden = true
     }
 
     
@@ -406,6 +390,8 @@ class HistoricData{
 }
 
 // MARK: axisFormatDelegate
+// Provides dynamic restructuring of the x-axis labels and granularity of labels 
+// TODO: Refactor as a more elegant solution
 extension GraphViewController: IAxisValueFormatter {
     
     func stringForValue(_ value: Double, axis: AxisBase?) -> String {

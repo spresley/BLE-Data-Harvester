@@ -9,7 +9,8 @@
 import Foundation
 
 
-// creates a room monitor message
+//  Constructs and returns JSON string from raw sensor measurements.
+//
 func createRoomMonitorMessage(activity_level: Double,
                               light_level: Double,
                               time_stamp: String,

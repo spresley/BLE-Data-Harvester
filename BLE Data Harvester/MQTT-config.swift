@@ -5,13 +5,11 @@
 //  Created by Sam Presley on 02/12/2016.
 //  Copyright © 2016 ELEC6245. All rights reserved.
 //
+//  Contains the organisational host name and port number for connections to the projects instance of the IBM IoT Service
 
 import Foundation
-
-
 
 public class MQTTlogin{
     public static var host: String { return "f6z0bl.messaging.internetofthings.ibmcloud.com" }
     public static var port: UInt16 { return 1883 }
-    public static var clientID: String { return "d:f6z0bl:iPhone:E1B33293-EA45-4A84-BF4F-ED1D64C91E86" }
 }

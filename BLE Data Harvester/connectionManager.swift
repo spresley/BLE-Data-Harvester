@@ -4,6 +4,8 @@
 //
 //  Created by Sam Presley on 28/12/2016.
 //  Copyright © 2016 ELEC6245. All rights reserved.
+// 
+//  Based on the CocoaMQTT sample code, with additions made custom to this applicaton.
 //
 
 import Foundation
